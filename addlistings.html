@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product Listings</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .product-list { display: flex; flex-wrap: wrap; gap: 20px; }
+        .col-lg-2 { width: 200px; }
+    </style>
+</head>
+<body>
+
+    <h2>Add Product</h2>
+    <form id="productForm">
+        <input type="text" id="productName" placeholder="Product Name" required>
+        <input type="text" id="productDetails" placeholder="Details" required>
+        <input type="url" id="productImage" placeholder="Image URL (use a valid URL)" required>
+        <button type="submit" class="btn">Add Product</button>
+    </form>
+    
+    <h2>Product Listings</h2>
+    <div class="product-list" id="productList"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let productList = document.getElementById('productList');
+
+            // Load products from localStorage
+            let products = JSON.parse(localStorage.getItem('products')) || [];
+
+            // Display existing products
+            function displayProducts() {
+                productList.innerHTML = "";
+                products.forEach(product => {
+                    let productItem = document.createElement('div');
+                    productItem.classList.add('col-lg-2', 'col-md-4', 'wow', 'fadeInUp');
+                    productItem.setAttribute('data-wow-delay', '0.3s');
+                    productItem.innerHTML = `
+                        <div class="team-item">
+                            <div class="team-img position-relative overflow-hidden">
+                                <img class="img-fluid" src="${product.image}" alt="${product.name}">
+                                <div class="team-social">
+                                    <a class="btn btn-square" href="#"><i class="fa fa-shopping-cart"></i></a>
+                                </div>
+                            </div>
+                            <div class="bg-secondary text-center p-4">
+                                <h5 class="text-uppercase">${product.name}</h5>
+                                <span class="text-primary">${product.details}</span>
+                            </div>
+                        </div>
+                    `;
+                    productList.appendChild(productItem);
+                });
+            }
+
+            displayProducts();
+
+            document.getElementById('productForm').addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                let name = document.getElementById('productName').value.trim();
+                let details = document.getElementById('productDetails').value.trim();
+                let image = document.getElementById('productImage').value.trim();
+
+                // Validation
+                if (!name || !details || !image) {
+                    alert("Please fill out all fields correctly.");
+                    return;
+                }
+
+                let newProduct = { name, details, image };
+
+                console.log("Adding product:", newProduct);
+
+                // Add product to localStorage
+                products.push(newProduct);
+                localStorage.setItem('products', JSON.stringify(products));
+
+                // Update product display
+                displayProducts();
+
+                // Clear form
+                document.getElementById('productForm').reset();
+            });
+        });
+    </script>
+
+</body>
+</html>
