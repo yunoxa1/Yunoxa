@@ -14,37 +14,6 @@
 
 </head>
 
-<script>
-    async function addProduct(event) {
-        event.preventDefault(); // Prevent page reload
-
-        const name = document.getElementById('product-name').value;
-        const details = document.getElementById('product-description').value;
-        const image = document.getElementById('product-image').value;
-        const price = document.getElementById('product-price').value;
-
-        if (!name || !price || !image) {
-            alert('Please fill all required fields!');
-            return;
-        }
-
-        const productData = { name, details, image, price: parseFloat(price) };
-
-        const response = await fetch('/add-product', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(productData),
-        });
-
-        const result = await response.json();
-        if (result.success) {
-            alert('Product added successfully!');
-            window.location.href = 'team.html'; // Redirect to team.html
-        } else {
-            alert('Error adding product: ' + result.error);
-        }
-    }
-</script>
 
 
 <body>
@@ -71,15 +40,6 @@
     
 
     <h2>Add Product</h2>
-    <form id="productForm">
-        <input type="text" id="productName" placeholder="Product Name" required>
-        <input type="text" id="productDetails" placeholder="Details" required>
-        <input type="url" id="productImage" placeholder="Image URL (use a valid URL)" required>
-        <button type="submit" class="btn">Add Product</button>
-    </form>
-    
-    <h2>Product Listings</h2>
-    <div class="product-list" id="productList"></div>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
