@@ -10,24 +10,8 @@
         .product-list { display: flex; flex-wrap: wrap; gap: 20px; }
         .col-lg-2 { width: 200px; }
     </style>
-<script type="module" src="addProduct.js"></script> <!-- Link to JavaScript -->
-
 </head>
-
-
-
 <body>
-
-    <form onsubmit="addProduct(event)">
-        <input type="text" id="product-name" placeholder="Product Name" required>
-        <input type="text" id="product-description" placeholder="Product Description">
-        <input type="text" id="product-image" placeholder="Image URL" required>
-        <input type="number" id="product-price" placeholder="Price" required>
-        <button type="submit">Add Product</button>
-    </form>
-    
-
-
     <form id="addProductForm">
         <input type="text" id="productName" placeholder="Product Name" required>
         <input type="text" id="productDetails" placeholder="Product Details" required>
@@ -40,6 +24,15 @@
     
 
     <h2>Add Product</h2>
+    <form id="productForm">
+        <input type="text" id="productName" placeholder="Product Name" required>
+        <input type="text" id="productDetails" placeholder="Details" required>
+        <input type="url" id="productImage" placeholder="Image URL (use a valid URL)" required>
+        <button type="submit" class="btn">Add Product</button>
+    </form>
+    
+    <h2>Product Listings</h2>
+    <div class="product-list" id="productList"></div>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {

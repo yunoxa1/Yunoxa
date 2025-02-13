@@ -7,7 +7,6 @@ const supabase = createClient(
 );
 
 // Function to add product
-
 async function addProduct(productData) {
     const { data, error } = await supabase
         .from("products")
