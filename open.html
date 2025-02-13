@@ -11,7 +11,7 @@
     <!-- Favicon -->
     <link href="img/favicon.ico" rel="icon">
 
-    <!-- Google Web Fonts -->
+    <!-- Google Web Fonts --
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Oswald:wght@600&display=swap" rel="stylesheet">
@@ -124,6 +124,40 @@
                     }
                 </style>
                 
+
+                <script>// Initialize Supabase
+                    const supabase = supabase.createClient('https://your-supabase-url', 'your-anon-key');
+                    
+                    async function loadProductDetails() {
+                        // Get the product ID from the URL
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const productId = urlParams.get("productId");
+                    
+                        if (!productId) {
+                            console.error("No product ID found!");
+                            return;
+                        }
+                    
+                        // Fetch product details from Supabase
+                        const { data, error } = await supabase.from("products").select("*").eq("id", productId).single();
+                    
+                        if (error) {
+                            console.error("Error fetching product details:", error);
+                            return;
+                        }
+                    
+                        // Update the product details in the HTML
+                        document.getElementById("product-name").innerText = data.name;
+                        document.getElementById("product-description").innerText = data.description;
+                        document.getElementById("product-price").innerText = `LKR ${data.price}/=`;
+                        document.getElementById("product-image").src = data.image;
+                    }
+                    
+                    // Call the function to load details
+                    loadProductDetails();
+                    </script>
+
+
                 <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
                     <div id="imageCarousel" class="carousel slide" data-bs-ride="carousel">
                         <div class="carousel-inner">
@@ -146,6 +180,17 @@
                                 <img class="img-fluid h-100" src="img/products/p1/p6.jpg" alt="Image 6">
                             </div>
                         </div>
+
+                        <h1 class="text-uppercase mb-4" id="product-name"></h1>
+<div class="border-bottom py-2">
+    <h6 id="product-description"></h6>
+</div>
+<div class="border-bottom py-2">
+    <span id="product-price"></span>
+</div>
+<div class="carousel-item active">
+    <img id="product-image" src="" alt="Product Image">
+</div>
                         
                         <!-- Carousel Controls -->
                         <button class="carousel-control-prev" type="button" data-bs-target="#imageCarousel" data-bs-slide="prev">
