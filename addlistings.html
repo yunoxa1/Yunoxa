@@ -13,7 +13,52 @@
 <script type="module" src="addProduct.js"></script> <!-- Link to JavaScript -->
 
 </head>
+
+<script>
+    async function addProduct(event) {
+        event.preventDefault(); // Prevent page reload
+
+        const name = document.getElementById('product-name').value;
+        const details = document.getElementById('product-description').value;
+        const image = document.getElementById('product-image').value;
+        const price = document.getElementById('product-price').value;
+
+        if (!name || !price || !image) {
+            alert('Please fill all required fields!');
+            return;
+        }
+
+        const productData = { name, details, image, price: parseFloat(price) };
+
+        const response = await fetch('/add-product', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(productData),
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            alert('Product added successfully!');
+            window.location.href = 'team.html'; // Redirect to team.html
+        } else {
+            alert('Error adding product: ' + result.error);
+        }
+    }
+</script>
+
+
 <body>
+
+    <form onsubmit="addProduct(event)">
+        <input type="text" id="product-name" placeholder="Product Name" required>
+        <input type="text" id="product-description" placeholder="Product Description">
+        <input type="text" id="product-image" placeholder="Image URL" required>
+        <input type="number" id="product-price" placeholder="Price" required>
+        <button type="submit">Add Product</button>
+    </form>
+    
+
+
     <form id="addProductForm">
         <input type="text" id="productName" placeholder="Product Name" required>
         <input type="text" id="productDetails" placeholder="Product Details" required>
