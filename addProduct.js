@@ -1,21 +1,26 @@
-import supabase from "./supabase.js";
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-document.getElementById("addProductForm").addEventListener("submit", async (event) => {
-    event.preventDefault();
+const supabase = createClient(
+    "https://qopdjgfciakmvhlriixt.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFvcGRqZ2ZjaWFrbXZobHJpaXh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk0NDA2NDAsImV4cCI6MjA1NTAxNjY0MH0.5UAelwww7WpDUExqhc5dH2JhUWlGNgUNjh8fzxPNZvs"
+);
 
-    const name = document.getElementById("productName").value;
-    const details = document.getElementById("productDetails").value;
-    const image = document.getElementById("productImage").value;
-    const price = document.getElementById("productPrice").value;
-
-    const { data, error } = await supabase.from("products").insert([
-        { name, details, image, price }
-    ]);
+// Example function to insert product data
+async function addProduct(productData) {
+    const { data, error } = await supabase.from("products").insert([productData]);
 
     if (error) {
-        console.error("Error inserting product:", error);
+        console.error("Error adding product:", error);
     } else {
         console.log("Product added successfully:", data);
-        alert("Product added!");
     }
-});
+}
+
+// Example usage
+const newProduct = {
+    name: "Sample Product",
+    price: 100,
+    description: "This is a test product",
+};
+
+addProduct(newProduct);
