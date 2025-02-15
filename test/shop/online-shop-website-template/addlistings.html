@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+</head>
+<body>
+    <h2>Add Product</h2>
+    <form id="productForm">
+        <input type="text" id="name" placeholder="Product Name" required><br>
+        <input type="number" id="price" placeholder="Price" required><br>
+        <input type="text" id="image" placeholder="Image URL" required><br>
+        <textarea id="description" placeholder="Description" required></textarea><br>
+        <button type="submit">Add Product</button>
+    </form>
+
+    <h2>Products</h2>
+    <div id="productList"></div>
+
+    <script>
+        const supabaseUrl = "https://qopdjgfciakmvhlriixt.supabase.co";
+        const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFvcGRqZ2ZjaWFrbXZobHJpaXh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk0NDA2NDAsImV4cCI6MjA1NTAxNjY0MH0.5UAelwww7WpDUExqhc5dH2JhUWlGNgUNjh8fzxPNZvs";
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        document.getElementById('productForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const price = document.getElementById('price').value;
+            const image = document.getElementById('image').value;
+            const description = document.getElementById('description').value;
+
+            const { data, error } = await supabase.from('products').insert([
+                { name, price, image, description }
+            ]);
+
+            if (error) {
+                alert('Error adding product: ' + error.message);
+            } else {
+                alert('Product added successfully!');
+                document.getElementById('productForm').reset();
+                fetchProducts();
+            }
+        });
+
+        async function fetchProducts() {
+            const { data, error } = await supabase.from('products').select('*');
+            if (error) {
+                console.error('Error fetching products:', error);
+                return;
+            }
+            const productList = document.getElementById('productList');
+            productList.innerHTML = '';
+            data.forEach(product => {
+                const productElement = document.createElement('div');
+                productElement.innerHTML = `
+                    <h3>${product.name}</h3>
+                    <p>Price: $${product.price}</p>
+                    <img src="${product.image}" alt="${product.name}" width="100">
+                    <p>${product.description}</p>
+                    <hr>
+                `;
+                productList.appendChild(productElement);
+            });
+        }
+
+        fetchProducts();
+    </script>
+</body>
+</html>
