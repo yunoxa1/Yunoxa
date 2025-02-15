@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Product</title>
+    <style>
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <div class="page create">
+        <form id="productForm">
+            <label for="name">Title</label>
+            <input type="text" id="name">
+            
+            <label for="details">Details</label>
+            <input type="text" id="details">
+
+            <label for="price">Price</label>
+            <input type="number" id="price">
+
+            <label for="description">Description</label>
+            <input type="text" id="description">
+
+            <label for="image">Image URL</label>
+            <input type="url" id="image">
+
+            <button type="submit">Add Product</button>
+
+            <p id="formError" class="error"></p>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("productForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            // Get input values
+            let name = document.getElementById("name").value.trim();
+            let details = document.getElementById("details").value.trim();
+            let price = document.getElementById("price").value.trim();
+            let description = document.getElementById("description").value.trim();
+            let image = document.getElementById("image").value.trim();
+            let formError = document.getElementById("formError");
+
+            // Validate form fields
+            if (!name || !details || !price || !description || !image) {
+                formError.textContent = "Please fill in all the fields correctly.";
+                return;
+            } else {
+                formError.textContent = ""; // Clear previous error
+            }
+
+            // Log the entered data
+            console.log("Title:", name);
+            console.log("Details:", details);
+            console.log("Price:", price);
+            console.log("Description:", description);
+            console.log("Image:", image);
+            
+            alert("Product added successfully!");
+        });
+    </script>
+</body>
+</html>

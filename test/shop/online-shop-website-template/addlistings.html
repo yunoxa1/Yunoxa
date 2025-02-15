@@ -6,6 +6,8 @@
     <title>Add Product</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
+
+
 <body>
     <h2>Add Product</h2>
     <form id="productForm">
@@ -19,11 +21,21 @@
     <h2>Products</h2>
     <div id="productList"></div>
 
-    <script>
+    <!-- Include Supabase library first -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<!-- Your custom script to use Supabase -->
+<script>
+    
+    document.addEventListener('DOMContentLoaded', function () {
         const supabaseUrl = "https://qopdjgfciakmvhlriixt.supabase.co";
-        const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFvcGRqZ2ZjaWFrbXZobHJpaXh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk0NDA2NDAsImV4cCI6MjA1NTAxNjY0MH0.5UAelwww7WpDUExqhc5dH2JhUWlGNgUNjh8fzxPNZvs";
+        const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFvcGRqZ2ZjaWFrbXZobHJpaXh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk0NDA2NDAsImV4cCI6MjA1NTAxNjY0MH0.5UAelwww7WpDUExqhc5dH2JhUWlGNgUNjh8fzxPNZvs"; // Replace with your actual key
+
+        
+        // Initialize the Supabase client correctly
         const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
+        // Your form submission handler
         document.getElementById('productForm').addEventListener('submit', async (event) => {
             event.preventDefault();
             const name = document.getElementById('name').value;
@@ -44,6 +56,7 @@
             }
         });
 
+        // Fetch products function
         async function fetchProducts() {
             const { data, error } = await supabase.from('products').select('*');
             if (error) {
@@ -65,7 +78,13 @@
             });
         }
 
+        // Call the function to fetch products
         fetchProducts();
-    </script>
+    });
+</script>
+
+
+
+
 </body>
 </html>
