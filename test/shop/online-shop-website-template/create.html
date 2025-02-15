@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="css/create.css">
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Product</title>
@@ -33,7 +35,7 @@
     </div>
 
     <script>
-        document.getElementById("productForm").addEventListener("submit", function(event) {
+        document.getElementById("productForm").addEventListener("submit", async function(event) {
             event.preventDefault();
 
             // Get input values
@@ -52,14 +54,39 @@
                 formError.textContent = ""; // Clear previous error
             }
 
-            // Log the entered data
-            console.log("Title:", name);
-            console.log("Details:", details);
-            console.log("Price:", price);
-            console.log("Description:", description);
-            console.log("Image:", image);
-            
-            alert("Product added successfully!");
+            // Send data to Supabase
+            const SUPABASE_URL = "https://qopdjgfciakmvhlriixt.supabase.co";
+            const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFvcGRqZ2ZjaWFrbXZobHJpaXh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk0NDA2NDAsImV4cCI6MjA1NTAxNjY0MH0.5UAelwww7WpDUExqhc5dH2JhUWlGNgUNjh8fzxPNZvs"; // Replace with your Supabase Key
+            const SUPABASE_TABLE = "products"; // Replace with your table name
+
+            try {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/${SUPABASE_TABLE}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "apikey": SUPABASE_KEY,
+                        "Authorization": `Bearer ${SUPABASE_KEY}`
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        details: details,
+                        price: price,
+                        description: description,
+                        image: image
+                    })
+                });
+
+                if (response.ok) {
+                    alert("Product added successfully!");
+                    const responseText = await response.text();
+console.log("Product added:", responseText || "No content in response");
+                } else {
+                    throw new Error("Failed to add product");
+                }
+            } catch (error) {
+                formError.textContent = "Error adding product: " + error.message;
+                console.error("Error:", error);
+            }
         });
     </script>
 </body>
