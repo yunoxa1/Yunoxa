@@ -9720,3 +9720,117 @@ a.text-dark:hover, a.text-dark:focus {
 }
 
 /* Toast Notification Styles */
+
+
+:root {
+  --duration: 1.5s;
+  --container-size: 280px;
+  --box-size: 39px;
+  --box-border-radius: 15%;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+
+}
+
+.loading-container {
+  width: 100%;
+  height: 100vh; /* Full viewport height */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: #f0f0f0;
+  position: fixed; /* Fix the container to the viewport */
+  top: 0;
+  left: 0;
+  z-index: 1000; /* Ensure it's on top */
+}
+
+.container {
+  width: var(--container-size);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.📦 {
+  width: var(--box-size);
+  height: var(--box-size);
+  position: relative;
+  display: block;
+  transform-origin: center center; /* Centered transform origin */
+  border-radius: var(--box-border-radius);
+}
+
+.📦::after {
+  content: '';
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: yellow; /* Changed to yellow */
+  border-radius: var(--box-border-radius);
+  box-shadow: 0px 0px 10px 0px rgba(255, 235, 59, 0.4); /* Adjusted shadow for yellow */
+}
+
+.📦:nth-child(1) {
+  animation: slide var(--duration) ease-in-out infinite alternate;
+}
+
+.📦:nth-child(1)::after {
+  animation: color-change var(--duration) ease-in-out infinite alternate;
+}
+
+@for $i from 1 to 5 {
+  .📦:nth-child(#{$i + 1}) {
+      animation: flip-#{$i} var(--duration) ease-in-out infinite alternate;
+  }
+
+  .📦:nth-child(#{$i + 1})::after {
+      animation: squidge-#{$i} var(--duration) ease-in-out infinite alternate;
+  }
+}
+
+.📦:nth-child(2)::after { background-color: #FFD54F; } /* Yellow shades */
+.📦:nth-child(3)::after { background-color: #FFC107; }
+.📦:nth-child(4)::after { background-color: #FFB300; }
+.📦:nth-child(5)::after { background-color: #FFA000; }
+
+@keyframes slide {
+  0% { background-color: #FFD54F; transform: translateX(0); } /* Start from center */
+  100% { background-color: #FFA000; transform: translateX(calc(var(--container-size) - var(--box-size))); } /* Move to the right */
+}
+
+@keyframes color-change {
+  0% { background-color: #FFD54F; }
+  100% { background-color: #FFA000; }
+}
+
+@for $i from 1 to 5 {
+  @keyframes flip-#{$i} {
+      0%, #{$i * 15}% { transform: rotate(0); }
+      #{$i * 15 + 20}%, 100% { transform: rotate(-180deg); }
+  }
+
+  @keyframes squidge-#{$i} {
+      #{$i * 15 - 10}% { transform-origin: center bottom; transform: scalex(1) scaley(1); }
+      #{$i * 15}% { transform-origin: center bottom; transform: scalex(1.3) scaley(0.7); }
+      #{$i * 15 + 10}%, #{$i * 15 + 5}% { transform-origin: center bottom; transform: scalex(0.8) scaley(1.4); }
+      #{$i * 15 + 40}%, 100% { transform-origin: center top; transform: scalex(1) scaley(1); }
+      #{$i * 15 + 25}% { transform-origin: center top; transform: scalex(1.3) scaley(0.7); }
+  }
+}
+
+.loading-text {
+  margin-top: 20px;
+  font-size: 1.5em;
+  color: #333;
+  font-family: Arial, sans-serif;
+}
