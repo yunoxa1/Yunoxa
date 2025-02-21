@@ -310,61 +310,91 @@
 
     <!-- Add this script to cart.html -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        const cartItems = document.getElementById('cart-items');
-        let subtotal = 0;
-    
-        // Generate cart rows
-        cartItems.innerHTML = cart.map(item => `
-            <tr>
+document.addEventListener('DOMContentLoaded', () => {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const cartItems = document.getElementById('cart-items');
+
+    function renderCart() {
+        if (!cartItems) return;
+        
+        cartItems.innerHTML = cart.map((item, index) => `
+            <tr data-id="${item.id}">
                 <td class="align-middle">
                     <img src="${item.image}" alt="${item.name}" style="width: 50px;">
                     ${item.name}
                 </td>
-                <td class="align-middle">LKR ${item.price}</td>
+                <td class="align-middle">LKR ${parseFloat(item.price).toFixed(2)}</td>
                 <td class="align-middle">
                     <div class="input-group quantity mx-auto" style="width: 100px;">
                         <div class="input-group-btn">
-                            <button class="btn btn-sm btn-primary btn-minus">
+                            <button class="btn btn-sm btn-primary btn-minus" data-index="${index}">
                                 <i class="fa fa-minus"></i>
                             </button>
                         </div>
-                        <input type="text" class="form-control form-control-sm bg-secondary border-0 text-center" 
-                               value="${item.quantity}">
+                        <input type="text" class="form-control form-control-sm bg-secondary border-0 text-center quantity-input" 
+                               value="${item.quantity}" readonly>
                         <div class="input-group-btn">
-                            <button class="btn btn-sm btn-primary btn-plus">
+                            <button class="btn btn-sm btn-primary btn-plus" data-index="${index}">
                                 <i class="fa fa-plus"></i>
                             </button>
                         </div>
                     </div>
                 </td>
-                <td class="align-middle">LKR ${(item.price * item.quantity).toFixed(2)}</td>
+                <td class="align-middle">LKR ${(parseFloat(item.price) * item.quantity).toFixed(2)}</td>
                 <td class="align-middle">
-                    <button class="btn btn-sm btn-danger remove-item" data-id="${item.id}">
+                    <button class="btn btn-sm btn-danger remove-item" data-index="${index}">
                         <i class="fa fa-times"></i>
                     </button>
                 </td>
             </tr>
         `).join('');
-    
-        // Update totals
-        subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        
+        updateTotals();
+    }
+
+    function updateTotals() {
+        const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
+        const shipping = totalQuantity * 250; // Shipping = Total Quantity * 250
+        const total = subtotal + shipping;
+
         document.querySelector('.subtotal h6').textContent = `LKR ${subtotal.toFixed(2)}`;
-        const total = subtotal + 250; // Add shipping
         document.querySelector('.total h5').textContent = `LKR ${total.toFixed(2)}`;
 
-    
-    
-        // Add event listeners for quantity changes and removal
-        document.querySelectorAll('.btn-plus, .btn-minus, .remove-item').forEach(button => {
-            button.addEventListener('click', function() {
-                // Handle quantity updates or removal here
-                // (You'll need to implement this logic similarly to the example above)
-            });
-        });
+        // **✅ Update the correct shipping price inside the existing div**
+        const shippingDiv = document.querySelector('.d-flex.justify-content-between h6.font-weight-medium');
+        if (shippingDiv) {
+            shippingDiv.textContent = `LKR ${shipping.toFixed(2)}`;
+        }
+    }
+
+    cartItems.addEventListener('click', (e) => {
+        const button = e.target.closest('button');
+        if (!button) return;
+
+        const index = button.dataset.index;
+        if (index === undefined) return;
+
+        if (button.classList.contains('btn-plus')) {
+            cart[index].quantity += 1;
+        } else if (button.classList.contains('btn-minus')) {
+            if (cart[index].quantity > 1) {
+                cart[index].quantity -= 1;
+            }
+        } else if (button.classList.contains('remove-item')) {
+            cart.splice(index, 1);
+        }
+
+        localStorage.setItem('cart', JSON.stringify(cart));
+        renderCart();
     });
-    </script>
+
+    renderCart();
+});
+</script>
+
+        
+        
     <!-- Cart End -->
     <div class="bg-light p-30 mb-5">
     <div class="border-bottom pb-2">

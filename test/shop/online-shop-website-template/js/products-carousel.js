@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize Supabase client
     const supabaseUrl = 'https://qopdjgfciakmvhlriixt.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFvcGRqZ2ZjaWFrbXZobHJpaXh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk0NDA2NDAsImV4cCI6MjA1NTAxNjY0MH0.5UAelwww7WpDUExqhc5dH2JhUWlGNgUNjh8fzxPNZvs';
-    const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey); // Renamed variable
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFvcGRqZ2ZjaWFrbXZobHJpaXh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk0NDA2NDAsImV4cCI6MjA1NTAxNjY0MH0.5UAelwww7WpDUExqhc5dH2JhUWlGNgUNjh8fzxPNZvs';  // Never expose this in the frontend
+    const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey); 
 
     async function fetchProducts() {
         try {
@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (error) throw error;
             displayProducts(data);
         } catch (error) {
-            console.error('Error fetching products:', error);
+            console.error('Error fetching products:', error.message);
             showErrorToUser();
         }
     }
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="text-center py-4">
                 <a class="h6 text-decoration-none text-truncate" href="#">${product.name}</a>
                 <div class="d-flex align-items-center justify-content-center mt-2">
-                    <h5>$${product.price.toFixed(2)}</h5>
+                    <h5>$${(product.price || 0).toFixed(2)}</h5> <!-- Added a fallback to avoid errors -->
                 </div>
                 ${createRatingSection()}
             </div>
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function() {
             {icon: 'far fa-heart', action: 'wishlist'},
             {icon: 'fa-sync-alt', action: 'compare'},
             {icon: 'fa-search', action: 'quick-view'}
-        ].map(btn => `
+        ].map(btn => ` 
             <a class="btn btn-outline-dark btn-square" href="#" data-action="${btn.action}">
                 <i class="${btn.icon}"></i>
             </a>
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function initializeCarousel() {
         if (typeof $.fn.owlCarousel === 'function') {
-            $('.related-carousel').owlCarousel({
+            $('#product-carousel').owlCarousel({
                 loop: true,
                 margin: 20,
                 nav: true,
