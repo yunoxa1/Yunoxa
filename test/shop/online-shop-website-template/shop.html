@@ -24,85 +24,180 @@
 
     <!-- Customized Bootstrap Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
+
+    
     <script type="module">
         import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-
-        // Initialize Supabase client
+    
         const supabaseUrl = 'https://qopdjgfciakmvhlriixt.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFvcGRqZ2ZjaWFrbXZobHJpaXh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk0NDA2NDAsImV4cCI6MjA1NTAxNjY0MH0.5UAelwww7WpDUExqhc5dH2JhUWlGNgUNjh8fzxPNZvs';
         const supabase = createClient(supabaseUrl, supabaseKey);
-
+    
+        // Star rating function
         function generateStarRating() {
-    let rating = (Math.random() * (5 - 3.7) + 3.7).toFixed(1); // Random between 3.7 - 5.0
-    let fullStars = Math.floor(rating);
-    let halfStar = rating - fullStars >= 0.5 ? 1 : 0;
-    let emptyStars = 5 - (fullStars + halfStar);
+    // Generate random rating between 3.7 and 5.0
+    const rating = (Math.random() * (5 - 3.7) + 3.7).toFixed(1);
+    
+    // Calculate stars
+    const fullStars = Math.floor(rating);
+    const halfStar = (rating - fullStars) >= 0.5 ? 1 : 0;
+    const emptyStars = 5 - fullStars - halfStar;
 
+    // Build HTML
     let starHtml = '';
-    // Add full stars in yellow
     for (let i = 0; i < fullStars; i++) {
-        starHtml += `<small class="fa fa-star mr-1" style="color: #FFD700;"></small>`; // Yellow color
+        starHtml += '<small class="fa fa-star mr-1" style="color: #FFD700;"></small>';
     }
-    // Add half star in yellow
     if (halfStar) {
-        starHtml += `<small class="fa fa-star-half-alt mr-1" style="color: #FFD700;"></small>`; // Yellow color
+        starHtml += '<small class="fa fa-star-half-alt mr-1" style="color: #FFD700;"></small>';
     }
-    // Add empty stars in gray
     for (let i = 0; i < emptyStars; i++) {
-        starHtml += `<small class="far fa-star mr-1" style="color: #d3d3d3;"></small>`; // Gray color
+        starHtml += '<small class="far fa-star mr-1" style="color: #d3d3d3;"></small>';
     }
 
-    return { starHtml, rating };
+    // Return BOTH properties
+    return { starHtml, rating }; // This line was likely missing
 }
-
-
+    
         async function fetchProducts() {
             const { data, error } = await supabase.from('products').select('*');
-
+    
             if (error) {
-                console.error('Error fetching data:', error);
+                console.error("Supabase Error:", error);
                 return;
             }
-
+    
             const productsContainer = document.getElementById('products');
             productsContainer.innerHTML = '';
-
+    
             data.forEach(product => {
-                const imageUrl = product.image ? product.image : 'https://via.placeholder.com/250';
+                const imageUrl = product.image || 'https://via.placeholder.com/250';
                 const { starHtml, rating } = generateStarRating();
-
+    
                 const productElement = document.createElement('div');
-                productElement.classList.add('col-lg-4', 'col-md-8', 'col-sm-6', 'pb-1');
-
+                productElement.classList.add('col-lg-4', 'col-md-6', 'pb-1');
+    
                 productElement.innerHTML = `
-    <div class="product-item mb-4" style="background-color: white;">
-        <div class="product-img position-relative overflow-hidden">
-            <img class="img-fluid w-100" src="${imageUrl}" alt="${product.name}">
-            <div class="product-action">
-                <a class="btn btn-outline-dark btn-square" href="#"><i class="fa fa-shopping-cart"></i></a>
-                <a class="btn btn-outline-dark btn-square" href="#"><i class="far fa-heart"></i></a>
-                <a class="btn btn-outline-dark btn-square" href="#"><i class="fa fa-sync-alt"></i></a>
-                <a class="btn btn-outline-dark btn-square" href="#"><i class="fa fa-search"></i></a>
-            </div>
-        </div>
-        <div class="text-center py-4">
-            <a class="h6 text-decoration-none text-truncate" href="#">${product.name}</a>
-            <div class="d-flex align-items-center justify-content-center mt-2">
-                <h6>LKR.${product.price}/=</h6>
-            </div>
-            <div class="d-flex align-items-center justify-content-center mb-1">
-                ${starHtml} <small>(${rating})</small>
-            </div>
-        </div>
+  <div class="product-item mb-4" style="background-color: white;">
+    <div class="product-img position-relative overflow-hidden">
+      <img class="img-fluid w-100" src="${imageUrl}" alt="${product.name}">
+      <div class="product-action">
+        <a class="btn btn-outline-dark btn-square add-to-cart" 
+           data-product='${JSON.stringify(product)}'>
+          <i class="fa fa-shopping-cart"></i>
+        </a>
+      </div>
     </div>
+    <div class="text-center py-4">
+      <!-- Product Name -->
+      <a class="h6 text-decoration-none text-truncate d-block" href="open.html?id=${product.id}">
+        ${product.name}
+      </a>
+      <!-- Product Price -->
+      <div class="d-flex align-items-center justify-content-center mt-2">
+        <h6>LKR ${parseFloat(product.price).toFixed(2)}</h6> <!-- Changed $ to LKR -->
+      </div>
+      <!-- Star Rating -->
+      <div class="d-flex align-items-center justify-content-center mb-1">
+        ${starHtml} 
+        <small class="ml-1">(${rating})</small>
+      </div>
+    </div>
+  </div>
 `;
-
+    
                 productsContainer.appendChild(productElement);
             });
+    
+            // Add event listeners to "Add to Cart" buttons
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    const product = JSON.parse(button.dataset.product);
+                    addToCart(product);
+                });
+            });
         }
+    
+        // Cart Logic
+        function addToCart(product) {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const existingItem = cart.find(item => item.id === product.id);
 
-        window.onload = fetchProducts;
-    </script>  
+    // Ensure price is a number (remove $ if present)
+    const price = typeof product.price === 'string' 
+        ? parseFloat(product.price.replace('$', '')) 
+        : product.price;
+
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        cart.push({
+            id: product.id,
+            name: product.name,
+            price: price, // Use sanitized numeric price
+            quantity: 1,
+            image: product.image
+        });
+    }
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+}
+    
+        // Initialize when the DOM loads
+        document.addEventListener('DOMContentLoaded', fetchProducts);
+    </script> 
+    
+    <style>
+        /* Cart Notification Styles */
+        .custom-toast {
+            position: fixed;
+            bottom: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ffffff;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.5s ease;
+            z-index: 9999;
+            opacity: 0;
+        }
+    
+        .custom-toast.active {
+            bottom: 20px;
+            opacity: 1;
+        }
+    
+        .view-cart-btn {
+            background: #FFD700;
+            color: #000;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    
+        .close-btn {
+            color: #aaa;
+            cursor: pointer;
+            font-size: 20px;
+            line-height: 1;
+        }
+    
+        .close-btn:hover {
+            color: #888;
+        }
+        </style>
+    
+        <!-- Keep your existing stylesheet link -->
+        <link href="css/style.css" rel="stylesheet"> 
+    </head>
+    
 </head>
 
 <body>
@@ -165,7 +260,7 @@
             <div class="col-lg-4 col-6 text-left">
                 <form action="">
                     <div class="input-group">
-                        <input type="text" id="searchInput" class="form-control" placeholder="Search for products" oninput="searchProducts()">
+                        <input type="text" id="search-input" class="form-control" placeholder="Search for products" oninput="searchProducts()">
                         <div class="input-group-append">
                             <span class="input-group-text bg-transparent text-primary">
                                 <i class="fa fa-search"></i>
@@ -358,6 +453,107 @@
         </div>
     </div>
     <!-- Shop End -->
+<!-- Add this HTML where you want the notification to appear (usually at end of body) -->
+    <span class="toast-message">✅ Your product has been added to cart!</span>
+    <button class="view-cart-btn" onclick="window.location.href='cart.html'">View Cart</button>
+    <span class="close-btn" onclick="hideToast()">&times;</span>
+  </div>
+  
+
+  
+  
+  
+  
+  <script>
+  // Cart Notification Logic
+let toastTimeout;
+
+function showToast() {
+    const toast = document.getElementById('cartToast');
+    if (!toast) return;
+
+    // Reset animation
+    toast.classList.remove('active');
+    void toast.offsetWidth; // Trigger reflow
+    
+    // Show toast
+    toast.classList.add('active');
+    
+    // Auto-hide after 4 seconds
+    toastTimeout = setTimeout(() => {
+        hideToast();
+    }, 4000);
+}
+
+function hideToast() {
+    const toast = document.getElementById('cartToast');
+    if (toast) toast.classList.remove('active');
+}
+
+// Cart Management Logic
+function addToCart(product) {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const existingItem = cart.find(item => item.id === product.id);
+
+    // Sanitize price format
+    const price = typeof product.price === 'string' 
+        ? parseFloat(product.price.replace(/[^0-9.]/g, ''))
+        : product.price;
+
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        cart.push({
+            id: product.id,
+            name: product.name,
+            price: price,
+            quantity: 1,
+            image: product.image || 'img/default-product.jpg'
+        });
+    }
+
+    // Update storage and UI
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartCount();
+    showToast();
+}
+
+function updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    
+    // Update all cart badges
+    document.querySelectorAll('.fa-shopping-cart + .badge').forEach(badge => {
+        badge.textContent = totalItems;
+    });
+}
+
+// Event Listeners
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize cart count
+    updateCartCount();
+
+    // Toast controls
+    document.querySelector('.view-cart-btn')?.addEventListener('click', () => {
+        window.location.href = 'cart.html';
+    });
+
+    document.querySelector('.close-btn')?.addEventListener('click', hideToast);
+
+    // Click outside to close
+    document.addEventListener('click', (e) => {
+        const toast = document.getElementById('cartToast');
+        if (toast && !toast.contains(e.target) && toast.classList.contains('active')) {
+            hideToast();
+        }
+    });
+});
+
+// Initialize product fetching
+document.addEventListener('DOMContentLoaded', fetchProducts);
+  </script>
+
+
 
 
     <!-- Footer Start -->
@@ -429,6 +625,8 @@
             </div>
         </div>
     </div>
+         
+
     <!-- Footer End -->
 
 
@@ -448,6 +646,15 @@
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
+
+    <!-- Cart Notification Toast -->
+<div id="cartToast" class="custom-toast">
+    <span class="toast-message">✅ Product added to cart!</span>
+    <button class="view-cart-btn">View Cart</button>
+    <span class="close-btn">&times;</span>
+  </div>
+
+    
 </body>
 
 </html>

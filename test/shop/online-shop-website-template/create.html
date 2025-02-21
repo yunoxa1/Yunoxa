@@ -28,6 +28,21 @@
             <label for="image">Image URL</label>
             <input type="url" id="image">
 
+            <label for="image1">Image 1 URL(Optional)</label>
+            <input type="url" id="image1">
+
+            <label for="image2">Image 2 URL(Optional)</label>
+            <input type="url" id="image2">
+
+            <label for="image3">Image 3 URL(Optional)</label>
+            <input type="url" id="image3">
+
+            <label for="image4">Image 4 URL(Optional)</label>
+            <input type="url" id="image4">
+
+            <label for="image5">Image 5 URL(Optional)</label>
+            <input type="url" id="image5">
+
             <button type="submit">Add Product</button>
 
             <p id="formError" class="error"></p>
@@ -44,6 +59,11 @@
             let price = document.getElementById("price").value.trim();
             let description = document.getElementById("description").value.trim();
             let image = document.getElementById("image").value.trim();
+            let image1 = document.getElementById("image1").value.trim();
+            let image2 = document.getElementById("image2").value.trim();
+            let image3 = document.getElementById("image3").value.trim();
+            let image4 = document.getElementById("image4").value.trim();
+            let image5 = document.getElementById("image5").value.trim();
             let formError = document.getElementById("formError");
 
             // Validate form fields
@@ -72,7 +92,12 @@
                         details: details,
                         price: price,
                         description: description,
-                        image: image
+                        image: image,
+                        image1: image1,
+                        image2: image2,
+                        image3: image3,
+                        image4: image4,
+                        image5: image5
                     })
                 });
 

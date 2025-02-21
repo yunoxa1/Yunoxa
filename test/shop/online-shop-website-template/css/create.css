@@ -8,16 +8,16 @@
 
 /* Body */
 body {
-    /* Initial gradient with animation */
     background: linear-gradient(45deg, #fd006abb, #00c3ff);
     background-size: 400% 400%;
     animation: gradientShift 7s ease infinite;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
-    position: relative; /* To ensure shapes are above the gradient */
+    position: relative;
+    padding: 20px;
 }
 
 /* Gradient Animation */
@@ -33,25 +33,6 @@ body {
     }
 }
 
-/* Random Shape Animation */
-@keyframes randomShapes {
-    0% {
-        background-image: radial-gradient(circle at 10% 10%, rgba(226, 33, 33, 0.678), transparent 50%);
-    }
-    25% {
-        background-image: radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.3), transparent 50%);
-    }
-    50% {
-        background-image: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.3), transparent 50%);
-    }
-    75% {
-        background-image: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.3), transparent 50%);
-    }
-    100% {
-        background-image: radial-gradient(circle at 70% 70%, rgba(255, 255, 255, 0.3), transparent 50%);
-    }
-}
-
 /* Page Container */
 .page.create {
     width: 100%;
@@ -62,6 +43,9 @@ body {
     background: rgba(15, 127, 231, 0.9);
     position: relative;
     z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 /* Form Title */
@@ -107,6 +91,7 @@ button {
     border-radius: 8px;
     cursor: pointer;
     transition: background 0.3s ease;
+    margin-top: 10px;
 }
 
 button:hover {
@@ -121,9 +106,26 @@ button:hover {
 }
 
 /* Responsive Design */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+    .page.create {
+        padding: 30px;
+        max-width: 90%;
+    }
+
+    h1 {
+        font-size: 22px;
+    }
+
+    input, button {
+        font-size: 15px;
+        padding: 11px;
+    }
+}
+
+@media (max-width: 480px) {
     .page.create {
         padding: 20px;
+        max-width: 100%;
     }
 
     h1 {
@@ -134,4 +136,9 @@ button:hover {
         font-size: 14px;
         padding: 10px;
     }
+}
+
+/* Add spacing between buttons */
+#addMoreImagesBtn {
+    margin-bottom: 10px;
 }

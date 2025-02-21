@@ -9710,3 +9710,13 @@ a.text-dark:hover, a.text-dark:focus {
     transform: translateY(-15px);
   }
 }
+
+/* Force right alignment for price elements */
+.subtotal h6:last-child,
+.total h5:last-child,
+.font-weight-medium h6:last-child {
+    text-align: right !important;
+    width: 150px; /* Adjust width as needed */
+}
+
+/* Toast Notification Styles */
