@@ -75,38 +75,35 @@
                 const { starHtml, rating } = generateStarRating();
     
                 const productElement = document.createElement('div');
-                productElement.classList.add('col-lg-4', 'col-md-6', 'pb-1');
-    
-                productElement.innerHTML = `
-  <div class="product-item mb-4" style="background-color: white;">
-    <div class="product-img position-relative overflow-hidden">
-      <img class="img-fluid w-100" src="${imageUrl}" alt="${product.name}">
-      <div class="product-action">
-        <a class="btn btn-outline-dark btn-square add-to-cart" 
-           data-product='${JSON.stringify(product)}'>
-          <i class="fa fa-shopping-cart"></i>
-        </a>
-      </div>
+productElement.classList.add('col-lg-4', 'col-md-6', 'col-6', 'pb-1'); // Added col-6 for mobile
+
+productElement.innerHTML = `
+    <div class="product-item mb-4" style="background-color: white;">
+        <div class="product-img position-relative overflow-hidden">
+            <img class="img-fluid w-100" src="${imageUrl}" alt="${product.name}">
+            <div class="product-action">
+                <a class="btn btn-outline-dark btn-square add-to-cart" 
+                   data-product='${JSON.stringify(product)}'>
+                    <i class="fa fa-shopping-cart"></i>
+                </a>
+            </div>
+        </div>
+        <div class="text-center py-4">
+            <a class="h6 text-decoration-none text-truncate d-block" href="open.html?id=${product.id}">
+                ${product.name}
+            </a>
+            <div class="d-flex align-items-center justify-content-center mt-2">
+                <h6>LKR ${parseFloat(product.price).toFixed(2)}</h6>
+            </div>
+            <div class="d-flex align-items-center justify-content-center mb-1">
+                ${starHtml} 
+                <small class="ml-1">(${rating})</small>
+            </div>
+        </div>
     </div>
-    <div class="text-center py-4">
-      <!-- Product Name -->
-      <a class="h6 text-decoration-none text-truncate d-block" href="open.html?id=${product.id}">
-        ${product.name}
-      </a>
-      <!-- Product Price -->
-      <div class="d-flex align-items-center justify-content-center mt-2">
-        <h6>LKR ${parseFloat(product.price).toFixed(2)}</h6> <!-- Changed $ to LKR -->
-      </div>
-      <!-- Star Rating -->
-      <div class="d-flex align-items-center justify-content-center mb-1">
-        ${starHtml} 
-        <small class="ml-1">(${rating})</small>
-      </div>
-    </div>
-  </div>
 `;
-    
-                productsContainer.appendChild(productElement);
+
+productsContainer.appendChild(productElement);
             });
     
             // Add event listeners to "Add to Cart" buttons
@@ -170,35 +167,35 @@
         const { starHtml, rating } = generateStarRating();
 
         const productElement = document.createElement('div');
-        productElement.classList.add('col-lg-4', 'col-md-6', 'pb-1');
+productElement.classList.add('col-lg-4', 'col-md-6', 'col-6', 'pb-1'); // Added col-6 for mobile
 
-        productElement.innerHTML = `
-            <div class="product-item mb-4" style="background-color: white;">
-                <div class="product-img position-relative overflow-hidden">
-                    <img class="img-fluid w-100" src="${imageUrl}" alt="${product.name}">
-                    <div class="product-action">
-                        <a class="btn btn-outline-dark btn-square add-to-cart" 
-                           data-product='${JSON.stringify(product)}'>
-                            <i class="fa fa-shopping-cart"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="text-center py-4">
-                    <a class="h6 text-decoration-none text-truncate d-block" href="open.html?id=${product.id}">
-                        ${product.name}
-                    </a>
-                    <div class="d-flex align-items-center justify-content-center mt-2">
-                        <h6>LKR ${parseFloat(product.price).toFixed(2)}</h6>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-center mb-1">
-                        ${starHtml} 
-                        <small class="ml-1">(${rating})</small>
-                    </div>
-                </div>
+productElement.innerHTML = `
+    <div class="product-item mb-4" style="background-color: white;">
+        <div class="product-img position-relative overflow-hidden">
+            <img class="img-fluid w-100" src="${imageUrl}" alt="${product.name}">
+            <div class="product-action">
+                <a class="btn btn-outline-dark btn-square add-to-cart" 
+                   data-product='${JSON.stringify(product)}'>
+                    <i class="fa fa-shopping-cart"></i>
+                </a>
             </div>
-        `;
+        </div>
+        <div class="text-center py-4">
+            <a class="h6 text-decoration-none text-truncate d-block" href="open.html?id=${product.id}">
+                ${product.name}
+            </a>
+            <div class="d-flex align-items-center justify-content-center mt-2">
+                <h6>LKR ${parseFloat(product.price).toFixed(2)}</h6>
+            </div>
+            <div class="d-flex align-items-center justify-content-center mb-1">
+                ${starHtml} 
+                <small class="ml-1">(${rating})</small>
+            </div>
+        </div>
+    </div>
+`;
 
-        productsContainer.appendChild(productElement);
+productsContainer.appendChild(productElement);
     });
 
     // Add event listeners to "Add to Cart" buttons
@@ -512,6 +509,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="row px-xl-5">
                             <div class="col-lg-9 col-md-8">
                                 <div class="row pb-3" id="products">
+                                    <!-- Product items will be dynamically inserted here -->
                                     Loading products...
                                 </div>
                             </div>
