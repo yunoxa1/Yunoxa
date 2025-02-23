@@ -1,0 +1,187 @@
+/* General Styles */
+body {
+    font-family: 'Oswald', sans-serif;
+    background-color: var(--dark);
+    color: var(--light);
+    margin: 0;
+    padding: 0;
+}
+
+.container-fluid {
+    padding: 0;
+}
+
+/* Topbar Styles */
+.bg-secondary {
+    background-color: var(--secondary) !important;
+}
+
+.bg-light {
+    background-color: var(--light) !important;
+}
+
+.text-primary {
+    color: var(--primary) !important;
+}
+
+.text-dark {
+    color: var(--dark) !important;
+}
+
+.text-body {
+    color: var(--light) !important;
+}
+
+.btn-light {
+    background-color: var(--light);
+    color: var(--dark);
+}
+
+.btn-light:hover {
+    background-color: var(--primary);
+    color: var(--dark);
+}
+
+.dropdown-menu {
+    background-color: var(--secondary);
+    border: none;
+}
+
+.dropdown-item {
+    color: var(--light);
+}
+
+.dropdown-item:hover {
+    background-color: var(--primary);
+    color: var(--dark);
+}
+
+/* Form Styles */
+.page.create {
+    padding: 20px;
+    background-color: var(--dark);
+    color: var(--light);
+}
+
+#productForm {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: var(--secondary);
+    border-radius: 8px;
+}
+
+#productForm label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--yellow);
+}
+
+#productForm input[type="text"],
+#productForm input[type="number"],
+#productForm select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid var(--light);
+    border-radius: 4px;
+    background-color: var(--dark);
+    color: var(--light);
+}
+
+#productForm input[type="file"] {
+    margin-bottom: 20px;
+}
+
+#productForm button[type="submit"] {
+    background-color: var(--primary);
+    color: var(--dark);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+#productForm button[type="submit"]:disabled {
+    background-color: var(--light);
+    cursor: not-allowed;
+}
+
+#productForm button[type="submit"]:hover:not(:disabled) {
+    background-color: var(--primary);
+    opacity: 0.9;
+}
+
+/* Image Upload Styles */
+.image-upload-container {
+    margin-bottom: 20px;
+}
+
+.image-upload-container label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--light);
+}
+
+/* Cropper Styles */
+#cropperImage {
+    max-width: 100%;
+    display: none;
+}
+
+#cropButton {
+    background-color: var(--primary);
+    color: var(--dark);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+#cropButton:hover {
+    background-color: var(--primary);
+    opacity: 0.9;
+}
+
+/* Loading Indicator Styles */
+#loadingIndicator {
+    display: none;
+    color: var(--dark);
+    margin-bottom: 20px;
+}
+
+#loadingIndicator .fa-spinner {
+    margin-right: 10px;
+}
+
+/* Error Message Styles */
+.error {
+    color: var(--primary);
+    margin-bottom: 20px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .page.create {
+        padding: 10px;
+    }
+
+    #productForm {
+        padding: 15px;
+    }
+
+    #productForm input[type="text"],
+    #productForm input[type="number"],
+    #productForm select {
+        padding: 8px;
+    }
+
+    #productForm button[type="submit"] {
+        padding: 8px 16px;
+    }
+}

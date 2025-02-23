@@ -9834,3 +9834,70 @@ html, body {
   color: #333;
   font-family: Arial, sans-serif;
 }
+
+.cat-item img-zoom:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+}
+.loading-text {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #666;
+  margin-top: 20px;
+}
+.product-item {
+  transition: transform 0.3s ease;
+}
+.product-item:hover {
+  transform: translateY(-5px);
+}
+
+.loading-spinner {
+  display: none;
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Toast Notification */
+.custom-toast {
+  position: fixed;
+  bottom: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ffffff;
+  padding: 15px 25px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  transition: all 0.5s ease;
+  z-index: 9999;
+  opacity: 0;
+}
+
+.custom-toast.active {
+  bottom: 20px;
+  opacity: 1;
+}
+
+.view-cart-btn {
+  background: #FFD700;
+  color: #000;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.close-btn {
+  color: #aaa;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.close-btn:hover {
+  color: #888;
+}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Camera</title>
+    <style>
+        video {
+            width: 100%;
+            max-width: 600px;
+            border: 2px solid black;
+        }
+    </style>
+</head>
+<body>
+    <h1>Access Camera</h1>
+    <button id="start-camera">Start Camera</button>
+    <video id="video" autoplay></video>
+
+    <script>
+        const startButton = document.getElementById('start-camera');
+        const videoElement = document.getElementById('video');
+
+        startButton.addEventListener('click', () => {
+            // Request camera access
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => {
+                    // Set the video stream to the video element
+                    videoElement.srcObject = stream;
+                })
+                .catch(error => {
+                    console.error('Error accessing camera: ', error);
+                    alert('Could not access the camera. Please make sure you have granted permission.');
+                });
+        });
+    </script>
+</body>
+</html>

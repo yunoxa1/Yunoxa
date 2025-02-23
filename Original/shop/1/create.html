@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <link rel="stylesheet" href="css/create.css">
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Product</title>
@@ -14,33 +13,51 @@
     <div class="page create">
         <form id="productForm">
             <label for="name"><b>Title</b></label>
-            <input type="text" id="name">
+            <input type="text" id="name" required>
             
             <label for="details">Details</label>
-            <input type="text" id="details">
+            <input type="text" id="details" required>
 
             <label for="price">Price</label>
-            <input type="number" id="price">
+            <input type="number" id="price" required>
 
             <label for="description">Description</label>
-            <input type="text" id="description">
+            <input type="text" id="description" required>
+
+            <!-- Category Dropdown -->
+            <label for="category">Category</label>
+            <select id="category" required>
+                <option value="" disabled selected>Select a category</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Fashion">Fashion</option>
+                <option value="Home & Kitchen">Home & Kitchen</option>
+                <option value="Beauty & Personal Care">Beauty & Personal Care</option>
+                <option value="Health & Wellness">Health & Wellness</option>
+                <option value="Toys & Games">Toys & Games</option>
+                <option value="Sports & Outdoors">Sports & Outdoors</option>
+                <option value="Automotive">Automotive</option>
+                <option value="Books & Stationery">Books & Stationery</option>
+                <option value="Groceries & Gourmet Food">Groceries & Gourmet Food</option>
+                <option value="Baby & Kids">Baby & Kids</option>
+                <option value="Pet Supplies">Pet Supplies</option>
+            </select>
 
             <label for="image">Image URL</label>
-            <input type="url" id="image">
+            <input type="url" id="image" required>
 
-            <label for="image1">Image 1 URL(Optional)</label>
+            <label for="image1">Image 1 URL (Optional)</label>
             <input type="url" id="image1">
 
-            <label for="image2">Image 2 URL(Optional)</label>
+            <label for="image2">Image 2 URL (Optional)</label>
             <input type="url" id="image2">
 
-            <label for="image3">Image 3 URL(Optional)</label>
+            <label for="image3">Image 3 URL (Optional)</label>
             <input type="url" id="image3">
 
-            <label for="image4">Image 4 URL(Optional)</label>
+            <label for="image4">Image 4 URL (Optional)</label>
             <input type="url" id="image4">
 
-            <label for="image5">Image 5 URL(Optional)</label>
+            <label for="image5">Image 5 URL (Optional)</label>
             <input type="url" id="image5">
 
             <button type="submit">Add Product</button>
@@ -58,6 +75,7 @@
             let details = document.getElementById("details").value.trim();
             let price = document.getElementById("price").value.trim();
             let description = document.getElementById("description").value.trim();
+            let category = document.getElementById("category").value.trim();
             let image = document.getElementById("image").value.trim();
             let image1 = document.getElementById("image1").value.trim();
             let image2 = document.getElementById("image2").value.trim();
@@ -67,8 +85,8 @@
             let formError = document.getElementById("formError");
 
             // Validate form fields
-            if (!name || !details || !price || !description || !image) {
-                formError.textContent = "Please fill in all the fields correctly.";
+            if (!name || !details || !price || !description || !category || !image) {
+                formError.textContent = "Please fill in all the required fields correctly.";
                 return;
             } else {
                 formError.textContent = ""; // Clear previous error
@@ -92,6 +110,7 @@
                         details: details,
                         price: price,
                         description: description,
+                        category: category,
                         image: image,
                         image1: image1,
                         image2: image2,
@@ -104,7 +123,7 @@
                 if (response.ok) {
                     alert("Product added successfully!");
                     const responseText = await response.text();
-console.log("Product added:", responseText || "No content in response");
+                    console.log("Product added:", responseText || "No content in response");
                 } else {
                     throw new Error("Failed to add product");
                 }
