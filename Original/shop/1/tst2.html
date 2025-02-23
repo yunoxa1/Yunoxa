@@ -9,7 +9,7 @@
     <title>Create Product</title>
     <!-- Cropper.js -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    <script src=""></script>
     <!-- Font Awesome for spinner -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
@@ -113,7 +113,7 @@
 
             <!-- Image Uploads -->
             <div class="image-upload-container" id="imageUpload1Container">
-                <label for="imageUpload1">Upload Image 1 (Required)</label>
+                <label for="imageUpload1">Upload Image 1 (Minimum 3 Images Required)</label>
                 <input type="file" id="imageUpload1" accept="image/*">
             </div>
 
@@ -236,120 +236,158 @@
         });
 
         // Crop and upload the image
-        cropButton.addEventListener("click", async function () {
-            if (!cropper) return;
+        // Crop and upload the image
+        let uploadedImageCount = 0; // Counter to track uploaded images
 
-            const canvas = cropper.getCroppedCanvas({
-                width: 1280,
-                height: 720,
-                fillColor: "#fff",
-            });
+// Crop and upload the image
+// Function to update the "Add Product" button style
+function updateAddProductButton() {
+    if (uploadedImageCount >= 3) {
+        // Enable the button and change color to green
+        submitButton.disabled = false;
+        submitButton.classList.remove("add-product-disabled");
+        submitButton.classList.add("add-product-enabled");
+    } else {
+        // Disable the button and change color to gray
+        submitButton.disabled = true;
+        submitButton.classList.remove("add-product-enabled");
+        submitButton.classList.add("add-product-disabled");
+    }
+}
 
-            // Show loading indicator
-            const loadingIndicator = document.getElementById("loadingIndicator");
-            loadingIndicator.style.display = "block";
-            cropButton.disabled = true; // Disable the crop button during upload
+// Initialize the button state on page load
+updateAddProductButton();
 
-            // Convert to JPEG format
-            canvas.toBlob(async (blob) => {
-                if (blob.size > 2 * 1024 * 1024) { // 2MB limit
-                    uploadError.textContent = "File is too large! Please crop a smaller area.";
-                    loadingIndicator.style.display = "none"; // Hide loading indicator
-                    cropButton.disabled = false; // Re-enable the crop button
-                    return;
-                }
+// Crop and upload the image
+cropButton.addEventListener("click", async function () {
+    if (!cropper) return;
 
-                const fileName = `product-${Date.now()}-${currentImageUpload.id}.jpg`;
-                const { data, error } = await supabase.storage.from("product-images").upload(fileName, blob, {
-                    cacheControl: "3600",
-                    contentType: "image/jpeg",
-                });
+    const canvas = cropper.getCroppedCanvas({
+        width: 1280,
+        height: 720,
+        fillColor: "#fff",
+    });
 
-                // Hide loading indicator
-                loadingIndicator.style.display = "none";
-                cropButton.disabled = false; // Re-enable the crop button
+    // Show loading indicator
+    const loadingIndicator = document.getElementById("loadingIndicator");
+    loadingIndicator.style.display = "block";
+    cropButton.disabled = true; // Disable the crop button during upload
 
-                if (error) {
-                    uploadError.textContent = "Error uploading image: " + error.message;
-                    return;
-                }
+    // Convert to JPEG format
+    canvas.toBlob(async (blob) => {
+        if (blob.size > 2 * 1024 * 1024) { // 2MB limit
+            uploadError.textContent = "File is too large! Please crop a smaller area.";
+            loadingIndicator.style.display = "none"; // Hide loading indicator
+            cropButton.disabled = false; // Re-enable the crop button
+            return;
+        }
 
-                // Get public URL
-                const imageUrl = `${SUPABASE_URL}/storage/v1/object/public/product-images/${fileName}`;
-                console.log("Uploaded Image URL:", imageUrl);
-
-                // Store the image URL in the corresponding field of the form
-                currentImageUpload.dataset.imageUrl = imageUrl;
-
-                // Show next image upload button if available
-                const nextImageContainer = imageContainers[imageUploads.indexOf(currentImageUpload) + 1];
-                if (nextImageContainer) {
-                    nextImageContainer.style.display = "block";
-                }
-
-                // Enable the "Add Product" button after all images are uploaded
-                if (imageUploads.every(upload => upload.dataset.imageUrl)) {
-                    submitButton.disabled = false;
-                }
-
-                alert(`${currentImageUpload.id} uploaded successfully!`);
-            }, "image/jpeg");
+        const fileName = `product-${Date.now()}-${currentImageUpload.id}.jpg`;
+        const { data, error } = await supabase.storage.from("product-images").upload(fileName, blob, {
+            cacheControl: "3600",
+            contentType: "image/jpeg",
         });
+
+        // Hide loading indicator
+        loadingIndicator.style.display = "none";
+        cropButton.disabled = false; // Re-enable the crop button
+
+        if (error) {
+            uploadError.textContent = "Error uploading image: " + error.message;
+            return;
+        }
+
+        // Get public URL
+        const imageUrl = `${SUPABASE_URL}/storage/v1/object/public/product-images/${fileName}`;
+        console.log("Uploaded Image URL:", imageUrl);
+
+        // Store the image URL in the corresponding field of the form
+        currentImageUpload.dataset.imageUrl = imageUrl;
+
+        // Increment the uploaded image counter
+        uploadedImageCount++;
+
+        // Show next image upload button if available and less than 6 images are uploaded
+        if (uploadedImageCount < 6) {
+            const nextImageContainer = imageContainers[imageUploads.indexOf(currentImageUpload) + 1];
+            if (nextImageContainer) {
+                nextImageContainer.style.display = "block";
+            }
+        }
+
+        // Update the "Add Product" button state
+        updateAddProductButton();
+
+        // Reset the UI for the next image
+        cropperImage.src = ""; // Clear the image source
+        cropperImage.style.display = "none"; // Hide the image preview
+        cropButton.style.display = "none"; // Hide the crop button
+        if (cropper) {
+            cropper.destroy(); // Destroy the cropper instance
+            cropper = null; // Clear the cropper reference
+        }
+
+        alert(`${currentImageUpload.id} uploaded successfully!`);
+    }, "image/jpeg");
+
+});
 
         // Handle form submission
         async function submitProductForm() {
-            const name = document.getElementById("name").value.trim();
-            const details = document.getElementById("details").value.trim();
-            const price = parseFloat(document.getElementById("price").value.trim());
-            const description = document.getElementById("description").value.trim();
-            const category = document.getElementById("category").value.trim();
+    const name = document.getElementById("name").value.trim();
+    const details = document.getElementById("details").value.trim();
+    const price = parseFloat(document.getElementById("price").value.trim());
+    const description = document.getElementById("description").value.trim();
+    const category = document.getElementById("category").value.trim();
 
-            // Gather image URLs from the dataset
-            const imageUrls = imageUploads.map(upload => upload.dataset.imageUrl);
+    // Gather image URLs from the dataset
+    const imageUrls = imageUploads
+        .filter((upload, index) => index < uploadedImageCount) // Only include uploaded images
+        .map(upload => upload.dataset.imageUrl);
 
-            // Check if all images are uploaded
-            if (imageUrls.includes(undefined)) {
-                document.getElementById("formError").textContent = "Please upload all images!";
-                return;
+    // Check if at least 3 images are uploaded
+    if (imageUrls.length < 3) {
+        document.getElementById("formError").textContent = "Please upload at least 3 images!";
+        return;
+    }
+
+    console.log("Submitting product data:", {
+        name,
+        details,
+        price,
+        description,
+        category,
+        imageUrls,
+    });
+
+    // Insert product data into Supabase
+    const { data, error } = await supabase
+        .from("products")
+        .insert([
+            {
+                name: name,
+                details: details,
+                price: price,
+                description: description,
+                category: category,
+                image: imageUrls[0],  // image
+                image1: imageUrls[1], // image1
+                image2: imageUrls[2], // image2
+                image3: imageUrls[3], // image3 (optional)
+                image4: imageUrls[4], // image4 (optional)
+                image5: imageUrls[5], // image5 (optional)
             }
+        ]);
 
-            console.log("Submitting product data:", {
-                name,
-                details,
-                price,
-                description,
-                category,
-                imageUrls,
-            });
+    if (error) {
+        console.error("Error adding product:", error);
+        document.getElementById("formError").textContent = "Error adding product: " + error.message;
+        return;
+    }
 
-            // Insert product data into Supabase
-            const { data, error } = await supabase
-                .from("products")
-                .insert([
-                    {
-                        name: name,
-                        details: details,
-                        price: price,
-                        description: description,
-                        category: category,
-                        image: imageUrls[0],  // image
-                        image1: imageUrls[1], // image1
-                        image2: imageUrls[2], // image2
-                        image3: imageUrls[3], // image3
-                        image4: imageUrls[4], // image4
-                        image5: imageUrls[5], // image5
-                    }
-                ]);
-
-            if (error) {
-                console.error("Error adding product:", error);
-                document.getElementById("formError").textContent = "Error adding product: " + error.message;
-                return;
-            }
-
-            console.log("Product added successfully:", data);
-            alert("Product added successfully!");
-        }
+    console.log("Product added successfully:", data);
+    alert("Product added successfully!");
+}
 
         // Submit the product form when all images are uploaded
         document.getElementById("productForm").addEventListener("submit", function(event) {

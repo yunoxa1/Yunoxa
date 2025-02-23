@@ -185,3 +185,19 @@ body {
         padding: 8px 16px;
     }
 }
+
+/* Green button for enabled state */
+.add-product-enabled {
+    background-color: green;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+/* Gray button for disabled state */
+.add-product-disabled {
+    background-color: gray;
+    color: white;
+    border: none;
+    cursor: not-allowed;
+}

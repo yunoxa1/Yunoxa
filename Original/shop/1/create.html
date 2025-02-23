@@ -1,20 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="css/create.css">
+    
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/create2.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Product</title>
+    <!-- Cropper.js -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
+    <script src=""></script>
+    <!-- Font Awesome for spinner -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <style>
         .error { color: red; }
+        .image-upload-container { margin-bottom: 20px; }
     </style>
 </head>
 <body>
+
+    <div class="container-fluid">
+        <div class="row bg-secondary py-1 px-xl-5">
+            <div class="col-lg-6 d-none d-lg-block">
+                <div class="d-inline-flex align-items-center h-100">
+                    <a class="text-body mr-3" href="">About</a>
+                    <a class="text-body mr-3" href="">Contact</a>
+                    <a class="text-body mr-3" href="">Help</a>
+                    <a class="text-body mr-3" href="">FAQs</a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center text-lg-right">
+                <div class="d-inline-flex align-items-center">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">My Account</button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <button class="dropdown-item" type="button">Sign in</button>
+                            <button class="dropdown-item" type="button">Sign up</button>
+                        </div>
+                    </div>
+                    <div class="btn-group mx-2">
+                        <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">USD</button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <button class="dropdown-item" type="button">EUR</button>
+                            <button class="dropdown-item" type="button">GBP</button>
+                            <button class="dropdown-item" type="button">CAD</button>
+                        </div>
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">EN</button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <button class="dropdown-item" type="button">FR</button>
+                            <button class="dropdown-item" type="button">AR</button>
+                            <button class="dropdown-item" type="button">RU</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-inline-flex align-items-center d-block d-lg-none">
+                    <a href="" class="btn px-0 ml-2">
+                        <i class="fas fa-heart text-dark"></i>
+                        <span class="badge text-dark border border-dark rounded-circle" style="padding-bottom: 2px;">0</span>
+                    </a>
+                    <a href="" class="btn px-0 ml-2">
+                        <i class="fas fa-shopping-cart text-dark"></i>
+                        <span class="badge text-dark border border-dark rounded-circle" style="padding-bottom: 2px;">0</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="row align-items-center bg-light py-3 px-xl-5 d-flex">
+            <div class="col-lg-4 col-12 text-center text-lg-left mb-3 mb-lg-0">
+                <a href="" class="text-decoration-none">
+                    <span class="h1 text-uppercase text-primary bg-dark px-2">YU</span>
+                    <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">NOXA</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- Topbar End -->
+
     <div class="page create">
         <form id="productForm">
             <label for="name"><b>Title</b></label>
             <input type="text" id="name" required>
-            
+
             <label for="details">Details</label>
             <input type="text" id="details" required>
 
@@ -42,96 +111,361 @@
                 <option value="Pet Supplies">Pet Supplies</option>
             </select>
 
-            <label for="image">Image URL</label>
-            <input type="url" id="image" required>
+            <!-- Image Uploads -->
+            <div class="image-upload-container" id="imageUpload1Container">
+                <label for="imageUpload1">Upload Image 1 (Minimum 3 Images Required)</label>
+                <input type="file" id="imageUpload1" accept="image/*">
+            </div>
 
-            <label for="image1">Image 1 URL (Optional)</label>
-            <input type="url" id="image1">
+            <div class="image-upload-container" id="imageUpload2Container" style="display:none;">
+                <label for="imageUpload2">Upload Image 2</label>
+                <input type="file" id="imageUpload2" accept="image/*">
+            </div>
 
-            <label for="image2">Image 2 URL (Optional)</label>
-            <input type="url" id="image2">
+            <div class="image-upload-container" id="imageUpload3Container" style="display:none;">
+                <label for="imageUpload3">Upload Image 3</label>
+                <input type="file" id="imageUpload3" accept="image/*">
+            </div>
 
-            <label for="image3">Image 3 URL (Optional)</label>
-            <input type="url" id="image3">
+            <div class="image-upload-container" id="imageUpload4Container" style="display:none;">
+                <label for="imageUpload4">Upload Image 4</label>
+                <input type="file" id="imageUpload4" accept="image/*">
+            </div>
 
-            <label for="image4">Image 4 URL (Optional)</label>
-            <input type="url" id="image4">
+            <div class="image-upload-container" id="imageUpload5Container" style="display:none;">
+                <label for="imageUpload5">Upload Image 5</label>
+                <input type="file" id="imageUpload5" accept="image/*">
+            </div>
 
-            <label for="image5">Image 5 URL (Optional)</label>
-            <input type="url" id="image5">
+            <div class="image-upload-container" id="imageUpload6Container" style="display:none;">
+                <label for="imageUpload6">Upload Image 6</label>
+                <input type="file" id="imageUpload6" accept="image/*">
+            </div>
 
-            <button type="submit">Add Product</button>
+            <!-- Image preview and cropping -->
+            <div>
+                <img id="cropperImage" style="max-width: 100%; display: none;">
+            </div>
+            <button type="button" id="cropButton" style="display: none;">Crop & Upload</button>
+
+            <!-- Loading Indicator -->
+            <div id="loadingIndicator" style="display: none;">
+                <p><i class="fas fa-spinner fa-spin"></i> Uploading image... Please wait.</p>
+            </div>
+
+            <p id="uploadError" class="error"></p>
+
+            <button type="submit" id="submitButton" disabled>Add Product</button>
 
             <p id="formError" class="error"></p>
         </form>
     </div>
 
-    <script>
-        document.getElementById("productForm").addEventListener("submit", async function(event) {
-            event.preventDefault();
+    <script type="module">
+        import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-            // Get input values
-            let name = document.getElementById("name").value.trim();
-            let details = document.getElementById("details").value.trim();
-            let price = document.getElementById("price").value.trim();
-            let description = document.getElementById("description").value.trim();
-            let category = document.getElementById("category").value.trim();
-            let image = document.getElementById("image").value.trim();
-            let image1 = document.getElementById("image1").value.trim();
-            let image2 = document.getElementById("image2").value.trim();
-            let image3 = document.getElementById("image3").value.trim();
-            let image4 = document.getElementById("image4").value.trim();
-            let image5 = document.getElementById("image5").value.trim();
-            let formError = document.getElementById("formError");
+        const SUPABASE_URL = "https://qopdjgfciakmvhlriixt.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFvcGRqZ2ZjaWFrbXZobHJpaXh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk0NDA2NDAsImV4cCI6MjA1NTAxNjY0MH0.5UAelwww7WpDUExqhc5dH2JhUWlGNgUNjh8fzxPNZvs";  // Replace with your actual Supabase key
+        const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
+            db: {
+                schema: 'public',
+            },
+            auth: {
+                persistSession: true,
+            },
+            global: {
+                headers: {
+                    'apikey': SUPABASE_KEY,
+                },
+            },
+            debug: true, // Enable debugging
+        });
 
-            // Validate form fields
-            if (!name || !details || !price || !description || !category || !image) {
-                formError.textContent = "Please fill in all the required fields correctly.";
-                return;
-            } else {
-                formError.textContent = ""; // Clear previous error
-            }
+        let cropper;
+        let currentImageUpload = null;  // To track which image is currently being uploaded
+        const cropperImage = document.getElementById("cropperImage");
+        const cropButton = document.getElementById("cropButton");
+        const submitButton = document.getElementById("submitButton");
 
-            // Send data to Supabase
-            const SUPABASE_URL = "https://qopdjgfciakmvhlriixt.supabase.co";
-            const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFvcGRqZ2ZjaWFrbXZobHJpaXh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk0NDA2NDAsImV4cCI6MjA1NTAxNjY0MH0.5UAelwww7WpDUExqhc5dH2JhUWlGNgUNjh8fzxPNZvs"; // Replace with your Supabase Key
-            const SUPABASE_TABLE = "products"; // Replace with your table name
+        const imageUploads = [
+            document.getElementById("imageUpload1"),
+            document.getElementById("imageUpload2"),
+            document.getElementById("imageUpload3"),
+            document.getElementById("imageUpload4"),
+            document.getElementById("imageUpload5"),
+            document.getElementById("imageUpload6"),
+        ];
 
-            try {
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/${SUPABASE_TABLE}`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "apikey": SUPABASE_KEY,
-                        "Authorization": `Bearer ${SUPABASE_KEY}`
-                    },
-                    body: JSON.stringify({
-                        name: name,
-                        details: details,
-                        price: price,
-                        description: description,
-                        category: category,
-                        image: image,
-                        image1: image1,
-                        image2: image2,
-                        image3: image3,
-                        image4: image4,
-                        image5: image5
-                    })
-                });
+        const imageContainers = [
+            document.getElementById("imageUpload1Container"),
+            document.getElementById("imageUpload2Container"),
+            document.getElementById("imageUpload3Container"),
+            document.getElementById("imageUpload4Container"),
+            document.getElementById("imageUpload5Container"),
+            document.getElementById("imageUpload6Container"),
+        ];
 
-                if (response.ok) {
-                    alert("Product added successfully!");
-                    const responseText = await response.text();
-                    console.log("Product added:", responseText || "No content in response");
-                } else {
-                    throw new Error("Failed to add product");
+        const uploadError = document.getElementById("uploadError");
+
+        // Function to handle image selection and cropping
+        imageUploads.forEach((imageUpload, index) => {
+            imageUpload.addEventListener("change", function (event) {
+                const file = event.target.files[0];
+
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        cropperImage.src = e.target.result;
+                        cropperImage.style.display = "block";
+                        currentImageUpload = imageUpload;  // Track the current file input being used
+
+                        // Destroy existing cropper if present
+                        if (cropper) cropper.destroy();
+
+                        // Initialize Cropper.js with 16:9 aspect ratio
+                        cropper = new Cropper(cropperImage, {
+                            aspectRatio: 16 / 9,
+                            viewMode: 1,
+                        });
+
+                        cropButton.style.display = "block";
+                    };
+                    reader.readAsDataURL(file);
                 }
-            } catch (error) {
-                formError.textContent = "Error adding product: " + error.message;
-                console.error("Error:", error);
+            });
+        });
+
+        // Crop and upload the image
+        // Crop and upload the image
+        let uploadedImageCount = 0; // Counter to track uploaded images
+
+// Crop and upload the image
+// Function to update the "Add Product" button style
+function updateAddProductButton() {
+    if (uploadedImageCount >= 3) {
+        // Enable the button and change color to green
+        submitButton.disabled = false;
+        submitButton.classList.remove("add-product-disabled");
+        submitButton.classList.add("add-product-enabled");
+    } else {
+        // Disable the button and change color to gray
+        submitButton.disabled = true;
+        submitButton.classList.remove("add-product-enabled");
+        submitButton.classList.add("add-product-disabled");
+    }
+}
+
+// Initialize the button state on page load
+updateAddProductButton();
+
+// Crop and upload the image
+cropButton.addEventListener("click", async function () {
+    if (!cropper) return;
+
+    const canvas = cropper.getCroppedCanvas({
+        width: 1280,
+        height: 720,
+        fillColor: "#fff",
+    });
+
+    // Show loading indicator
+    const loadingIndicator = document.getElementById("loadingIndicator");
+    loadingIndicator.style.display = "block";
+    cropButton.disabled = true; // Disable the crop button during upload
+
+    // Convert to JPEG format
+    canvas.toBlob(async (blob) => {
+        if (blob.size > 2 * 1024 * 1024) { // 2MB limit
+            uploadError.textContent = "File is too large! Please crop a smaller area.";
+            loadingIndicator.style.display = "none"; // Hide loading indicator
+            cropButton.disabled = false; // Re-enable the crop button
+            return;
+        }
+
+        const fileName = `product-${Date.now()}-${currentImageUpload.id}.jpg`;
+        const { data, error } = await supabase.storage.from("product-images").upload(fileName, blob, {
+            cacheControl: "3600",
+            contentType: "image/jpeg",
+        });
+
+        // Hide loading indicator
+        loadingIndicator.style.display = "none";
+        cropButton.disabled = false; // Re-enable the crop button
+
+        if (error) {
+            uploadError.textContent = "Error uploading image: " + error.message;
+            return;
+        }
+
+        // Get public URL
+        const imageUrl = `${SUPABASE_URL}/storage/v1/object/public/product-images/${fileName}`;
+        console.log("Uploaded Image URL:", imageUrl);
+
+        // Store the image URL in the corresponding field of the form
+        currentImageUpload.dataset.imageUrl = imageUrl;
+
+        // Increment the uploaded image counter
+        uploadedImageCount++;
+
+        // Show next image upload button if available and less than 6 images are uploaded
+        if (uploadedImageCount < 6) {
+            const nextImageContainer = imageContainers[imageUploads.indexOf(currentImageUpload) + 1];
+            if (nextImageContainer) {
+                nextImageContainer.style.display = "block";
             }
+        }
+
+        // Update the "Add Product" button state
+        updateAddProductButton();
+
+        // Reset the UI for the next image
+        cropperImage.src = ""; // Clear the image source
+        cropperImage.style.display = "none"; // Hide the image preview
+        cropButton.style.display = "none"; // Hide the crop button
+        if (cropper) {
+            cropper.destroy(); // Destroy the cropper instance
+            cropper = null; // Clear the cropper reference
+        }
+
+        alert(`${currentImageUpload.id} uploaded successfully!`);
+    }, "image/jpeg");
+
+});
+
+        // Handle form submission
+        async function submitProductForm() {
+    const name = document.getElementById("name").value.trim();
+    const details = document.getElementById("details").value.trim();
+    const price = parseFloat(document.getElementById("price").value.trim());
+    const description = document.getElementById("description").value.trim();
+    const category = document.getElementById("category").value.trim();
+
+    // Gather image URLs from the dataset
+    const imageUrls = imageUploads
+        .filter((upload, index) => index < uploadedImageCount) // Only include uploaded images
+        .map(upload => upload.dataset.imageUrl);
+
+    // Check if at least 3 images are uploaded
+    if (imageUrls.length < 3) {
+        document.getElementById("formError").textContent = "Please upload at least 3 images!";
+        return;
+    }
+
+    console.log("Submitting product data:", {
+        name,
+        details,
+        price,
+        description,
+        category,
+        imageUrls,
+    });
+
+    // Insert product data into Supabase
+    const { data, error } = await supabase
+        .from("products")
+        .insert([
+            {
+                name: name,
+                details: details,
+                price: price,
+                description: description,
+                category: category,
+                image: imageUrls[0],  // image
+                image1: imageUrls[1], // image1
+                image2: imageUrls[2], // image2
+                image3: imageUrls[3], // image3 (optional)
+                image4: imageUrls[4], // image4 (optional)
+                image5: imageUrls[5], // image5 (optional)
+            }
+        ]);
+
+    if (error) {
+        console.error("Error adding product:", error);
+        document.getElementById("formError").textContent = "Error adding product: " + error.message;
+        return;
+    }
+
+    console.log("Product added successfully:", data);
+    alert("Product added successfully!");
+}
+
+        // Submit the product form when all images are uploaded
+        document.getElementById("productForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            submitProductForm();
         });
     </script>
+<!-- Footer Start -->
+<div class="container-fluid bg-dark text-secondary mt-5 pt-5">
+    <div class="row px-xl-5 pt-5">
+        <div class="col-lg-4 col-md-12 mb-5 pr-3 pr-xl-5">
+            <h5 class="text-secondary text-uppercase mb-4">Get In Touch</h5>
+            <p class="mb-4">Yunoxa is a free online store where anyone can sell their products and enjoy island-wide delivery. We connect sellers with customers, making buying and selling simple and accessible for everyone. Join us today!</p>
+            <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>Online Store</p>
+            <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>yunoxaofficial@gmail.com</p>
+            <p class="mb-0"><i class="fa fa-phone-alt text-primary mr-3"></i>+94 76 708 7651</p>
+        </div>
+        <div class="col-lg-8 col-md-12">
+            <div class="row">
+                <div class="col-md-4 mb-5">
+                    <h5 class="text-secondary text-uppercase mb-4">Quick Shop</h5>
+                    <div class="d-flex flex-column justify-content-start">
+                        <a class="text-secondary mb-2" href="index.html"><i class="fa fa-angle-right mr-2"></i>Home</a>
+                        <a class="text-secondary mb-2" href="shop.html"><i class="fa fa-angle-right mr-2"></i>Our Shop</a>
+                        <a class="text-secondary mb-2" href="shop.html"><i class="fa fa-angle-right mr-2"></i>Shop Detail</a>
+                        <a class="text-secondary mb-2" href="cart.html"><i class="fa fa-angle-right mr-2"></i>Shopping Cart</a>
+                        <a class="text-secondary mb-2" href="invoice.html"><i class="fa fa-angle-right mr-2"></i>Checkout</a>
+                        <a class="text-secondary" href="https://wa.me/94767087651"><i class="fa fa-angle-right mr-2"></i>Contact Us</a>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-5">
+                    <h5 class="text-secondary text-uppercase mb-4">My Account</h5>
+                    <div class="d-flex flex-column justify-content-start">
+                        <a class="text-secondary mb-2" href="index.html"><i class="fa fa-angle-right mr-2"></i>Home</a>
+                        <a class="text-secondary mb-2" href="shop.html"><i class="fa fa-angle-right mr-2"></i>Our Shop</a>
+                        <a class="text-secondary mb-2" href="shop.html"><i class="fa fa-angle-right mr-2"></i>Shop Detail</a>
+                        <a class="text-secondary mb-2" href="cart.html"><i class="fa fa-angle-right mr-2"></i>Shopping Cart</a>
+                        <a class="text-secondary mb-2" href="invoice.html"><i class="fa fa-angle-right mr-2"></i>Checkout</a>
+                        <a class="text-secondary" href="https://wa.me/94767087651"><i class="fa fa-angle-right mr-2"></i>Contact Us</a>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-5">
+                    <h5 class="text-secondary text-uppercase mb-4"></h5>
+                    <p></p>
+                    <form action="">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Your Email Address">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary">Sign Up</button>
+                            </div>
+                        </div>
+                    </form>
+                    <h6 class="text-secondary text-uppercase mt-4 mb-3">Follow Us</h6>
+                    <div class="d-flex">
+                        <a class="btn btn-primary btn-square mr-2" href="#"><i class="fab fa-twitter"></i></a>
+                        <a class="btn btn-primary btn-square mr-2" href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-primary btn-square mr-2" href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a class="btn btn-primary btn-square" href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row border-top mx-xl-5 py-4" style="border-color: rgba(256, 256, 256, .1) !important;">
+        <div class="col-md-6 px-xl-0">
+            <p class="mb-md-0 text-center text-md-left text-secondary">
+                &copy; <a class="text-primary" href="index.html">Yunoxa</a>. All Rights Reserved. Designed
+                by
+                <a class="text-primary" href="https://htmlcodex.com">HTML Codex</a>
+            </p>
+        </div>
+        <div class="col-md-6 px-xl-0 text-center text-md-right">
+            <img class="img-fluid" src="img/payments.png" alt="">
+        </div>
+    </div>
+</div>
+     
+
+<!-- Footer End -->
 </body>
 </html>
