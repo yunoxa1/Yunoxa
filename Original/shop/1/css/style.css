@@ -9901,3 +9901,19 @@ html, body {
 .close-btn:hover {
   color: #888;
 }
+
+/* Add this to your existing CSS */
+#products {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -5px; /* Negative margin to pull items closer */
+}
+
+.col-lg-4, .col-md-6, .col-6 {
+  padding: 5px; /* Reduced padding between columns */
+}
+
+.product-item {
+  margin-bottom: 10px; /* Reduced margin between rows */
+  padding: 10px; /* Reduced internal padding */
+}

@@ -224,7 +224,7 @@
 
                         // Initialize Cropper.js with 16:9 aspect ratio
                         cropper = new Cropper(cropperImage, {
-                            aspectRatio: 16 / 9,
+                            aspectRatio: 1,
                             viewMode: 1,
                         });
 
@@ -263,8 +263,8 @@ cropButton.addEventListener("click", async function () {
     if (!cropper) return;
 
     const canvas = cropper.getCroppedCanvas({
-        width: 1280,
-        height: 720,
+        width: 640,
+        height: 640,
         fillColor: "#fff",
     });
 
