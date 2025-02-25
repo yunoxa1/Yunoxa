@@ -9902,7 +9902,44 @@ html, body {
   color: #888;
 }
 
-/* Add this to your existing CSS */
+/* Square image container (Grid View Only) */
+#products:not(.list-view) .product-img {
+  position: relative;
+  padding-top: 100%; /* 1:1 aspect ratio (square) */
+  background-color: #f8f9fa; /* Optional: Add a background color */
+}
+
+#products:not(.list-view) .product-img img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensure the image covers the container without distortion */
+}
+
+/* List View Image Container */
+#products.list-view .product-img {
+  flex: 0 0 150px; /* Fixed width for the image container */
+  margin-right: 15px; /* Space between image and details */
+  height: 150px; /* Fixed height for the image container */
+}
+
+#products.list-view .product-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Fit the image without cropping */
+}
+
+/* Position the "Add to Cart" button */
+.product-action {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 10px; /* Adjust padding as needed */
+}
+
+/* Reduce the gap between products */
 #products {
   display: flex;
   flex-wrap: wrap;
@@ -9910,10 +9947,122 @@ html, body {
 }
 
 .col-lg-4, .col-md-6, .col-6 {
-  padding: 5px; /* Reduced padding between columns */
+  padding: 5px; /* Reduce padding between columns */
 }
 
 .product-item {
-  margin-bottom: 10px; /* Reduced margin between rows */
-  padding: 10px; /* Reduced internal padding */
+  margin-bottom: 10px; /* Reduce margin between rows */
+}
+
+/* Default Grid View */
+#products {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -5px; /* Negative margin to pull items closer */
+}
+
+.col-lg-4, .col-md-6, .col-6 {
+  padding: 3px; /* Reduce padding between columns */
+}
+
+.product-item {
+  margin-bottom: 10px; /* Reduce margin between rows */
+  background-color: white;
+  border: 1px solid #e0e0e0; /* Optional: Add a border for better separation */
+}
+
+/* List View */
+#products.list-view {
+  display: block; /* Change flex to block for list layout */
+}
+
+#products.list-view .col-lg-4, 
+#products.list-view .col-md-6, 
+#products.list-view .col-6 {
+  width: 100%; /* Full width for list items */
+  padding: 5px; /* Adjust padding as needed */
+}
+
+/* List View */
+#products.list-view {
+  display: block; /* Change flex to block for list layout */
+  margin: 0 !important; /* Remove margin */
+  padding: 0 !important; /* Remove padding */
+}
+
+#products.list-view .col-lg-4, 
+#products.list-view .col-md-6, 
+#products.list-view .col-6 {
+  width: 100% !important; /* Force full width for list items */
+  padding: 1 !important; /* Remove padding between columns */
+  max-width: 100% !important; /* Ensure no max-width constraint */
+  flex: 0 0 100% !important; /* Override Bootstrap's flex behavior */
+  margin: 0 !important; /* Remove margin */
+}
+
+#products.list-view .product-item {
+  display: flex; /* Flex layout for list items */
+  align-items: center; /* Center items vertically */
+  margin: 0 !important; /* Remove margin */
+  padding: 5px !important; /* Minimal padding inside the product item */
+  width: 100%; /* Ensure the product item takes full width */
+  max-width: 100%; /* Ensure no max-width constraint */
+  box-sizing: border-box; /* Include padding in the width calculation */
+  border: 1px solid #e0e0e0; /* Optional: Add a border for better separation */
+}
+
+#products.list-view .product-img {
+  flex: 0 0 150px; /* Fixed width for the image container */
+  margin-right: 10px; /* Reduce space between image and details */
+}
+
+#products.list-view .product-img img {
+  width: 100%; /* Ensure the image fits within the container */
+  height: 150px; /* Fixed height for the image */
+  object-fit: contain; /* Fit the image without cropping */
+}
+
+#products.list-view .text-center {
+  text-align: left; /* Align text to the left */
+  flex: 1; /* Take remaining space */
+  margin: 0 !important; /* Remove margin */
+  padding: 0 !important; /* Remove padding */
+}
+
+/* Hide description in grid view */
+.list-view-description {
+  display: none; /* Hide description by default */
+}
+
+/* Show description in list view */
+#products.list-view .list-view-description {
+  display: block; /* Show description in list view */
+}
+
+/* Style the description in list view */
+#products.list-view .description {
+  display: -webkit-box; /* Enable line clamping */
+  -webkit-line-clamp: 2; /* Limit to 2 lines */
+  -webkit-box-orient: vertical; /* Vertical orientation */
+  overflow: hidden; /* Hide overflow */
+  text-overflow: ellipsis; /* Show ellipsis for overflow */
+  white-space: normal; /* Allow text to wrap */
+  line-height: 1.5; /* Adjust line height for better readability */
+  max-height: 3em; /* Limit height to 2 lines (1.5em per line) */
+  margin-top: 10px; /* Add some space above the description */
+  text-align: left; /* Align text to the left */
+}
+
+/* Reduce left and right margins of the page */
+.container, .container-fluid {
+  padding-left: 8px; /* Adjust as needed */
+  padding-right: 7px; /* Adjust as needed */
+}
+
+/* Optional: Reduce margins for smaller screens */
+@media (max-width: 76px) {
+  .container, .container-fluid {
+      padding-left: 5%; /* Adjust as needed */
+      padding-right: 5%; /* Adjust as needed */
+  }
 }
