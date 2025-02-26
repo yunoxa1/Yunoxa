@@ -9,7 +9,7 @@
     <meta content="Free HTML Templates" name="description">
 
     <!-- Favicon -->
-    <link href="img/favicon.ico" rel="icon">
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -26,198 +26,7 @@
     <link href="css/style.css" rel="stylesheet">
 
     
-    <script type="module">
-        import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-    
-        const supabaseUrl = 'https://qopdjgfciakmvhlriixt.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFvcGRqZ2ZjaWFrbXZobHJpaXh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk0NDA2NDAsImV4cCI6MjA1NTAxNjY0MH0.5UAelwww7WpDUExqhc5dH2JhUWlGNgUNjh8fzxPNZvs';
-        const supabase = createClient(supabaseUrl, supabaseKey);
-    
-        // Star rating function
-        function generateStarRating() {
-    // Generate random rating between 3.7 and 5.0
-    const rating = (Math.random() * (5 - 3.7) + 3.7).toFixed(1);
-    
-    // Calculate stars
-    const fullStars = Math.floor(rating);
-    const halfStar = (rating - fullStars) >= 0.5 ? 1 : 0;
-    const emptyStars = 5 - fullStars - halfStar;
-
-    // Build HTML
-    let starHtml = '';
-    for (let i = 0; i < fullStars; i++) {
-        starHtml += '<small class="fa fa-star mr-1" style="color: #FFD700;"></small>';
-    }
-    if (halfStar) {
-        starHtml += '<small class="fa fa-star-half-alt mr-1" style="color: #FFD700;"></small>';
-    }
-    for (let i = 0; i < emptyStars; i++) {
-        starHtml += '<small class="far fa-star mr-1" style="color: #d3d3d3;"></small>';
-    }
-
-    // Return BOTH properties
-    return { starHtml, rating }; // This line was likely missing
-}
-    
-        async function fetchProducts() {
-            const { data, error } = await supabase.from('products').select('*');
-    
-            if (error) {
-                console.error("Supabase Error:", error);
-                return;
-            }
-    
-            const productsContainer = document.getElementById('products');
-            productsContainer.innerHTML = '';
-    
-            data.forEach(product => {
-                const imageUrl = product.image || 'https://via.placeholder.com/250';
-                const { starHtml, rating } = generateStarRating();
-    
-                const productElement = document.createElement('div');
-productElement.classList.add('col-lg-4', 'col-md-6', 'col-6', 'pb-1'); // Added col-6 for mobile
-
-productElement.innerHTML = `
-    <div class="product-item mb-4" style="background-color: white;">
-    <div class="product-img position-relative overflow-hidden">
-        <img class="img-fluid w-100" src="${imageUrl}" alt="${product.name}">
-        <div class="product-action">
-            <a class="btn btn-outline-dark btn-square add-to-cart" 
-               data-product='${JSON.stringify(product)}'>
-                <i class="fa fa-shopping-cart"></i>
-            </a>
-        </div>
-    </div>
-    <div class="text-center py-4">
-        <a class="h6 text-decoration-none text-truncate d-block" href="open.html?id=${product.id}">
-            ${product.name}
-        </a>
-        <div class="d-flex align-items-center justify-content-center mt-2">
-            <h6>LKR ${parseFloat(product.price).toFixed(2)}</h6>
-        </div>
-        <div class="d-flex align-items-center justify-content-center mb-1">
-            ${starHtml} 
-            <small class="ml-1">(${rating})</small>
-        </div>
-        <!-- Add the description here (visible only in list view) -->
-        <div class="list-view-description">
-            <p class="description">
-                ${product.description} <!-- Replace with your product description -->
-            </p>
-        </div>
-    </div>
-</div>
-`;
-
-productsContainer.appendChild(productElement);
-            });
-    
-            // Add event listeners to "Add to Cart" buttons
-            document.querySelectorAll('.add-to-cart').forEach(button => {
-                button.addEventListener('click', (event) => {
-                    event.preventDefault();
-                    const product = JSON.parse(button.dataset.product);
-                    addToCart(product);
-                });
-            });
-        }
-    
-        // Cart Logic
-        function addToCart(product) {
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        const existingItem = cart.find(item => item.id === product.id);
-
-        // Ensure price is a number
-        const price = typeof product.price === 'string' 
-            ? parseFloat(product.price.replace('$', '')) 
-            : product.price;
-
-        if (existingItem) {
-            existingItem.quantity += 1;
-        } else {
-            cart.push({
-                id: product.id,
-                name: product.name,
-                price: price,
-                quantity: 1,
-                image: product.image
-            });
-        }
-
-        localStorage.setItem('cart', JSON.stringify(cart));
-        window.updateCartCount(); // Call global function
-        window.showToast(); // Call global function
-    }
-    
-        // Initialize when the DOM loads
-        document.addEventListener('DOMContentLoaded', fetchProducts);
-
-        async function searchProducts() {
-    const searchQuery = document.getElementById('search-input').value.toLowerCase();
-    const { data, error } = await supabase.from('products').select('*');
-
-    if (error) {
-        console.error("Supabase Error:", error);
-        return;
-    }
-
-    const filteredProducts = data.filter(product => 
-        product.name.toLowerCase().includes(searchQuery)
-    );
-
-    const productsContainer = document.getElementById('products');
-    productsContainer.innerHTML = '';
-
-    filteredProducts.forEach(product => {
-        const imageUrl = product.image || 'https://via.placeholder.com/250';
-        const { starHtml, rating } = generateStarRating();
-
-        const productElement = document.createElement('div');
-productElement.classList.add('col-lg-4', 'col-md-6', 'col-6', 'pb-1'); // Added col-6 for mobile
-
-productElement.innerHTML = `
-    <div class="product-item mb-4" style="background-color: white;">
-        <div class="product-img position-relative overflow-hidden">
-            <img class="img-fluid w-100" src="${imageUrl}" alt="${product.name}">
-            <div class="product-action">
-                <a class="btn btn-outline-dark btn-square add-to-cart" 
-                   data-product='${JSON.stringify(product)}'>
-                    <i class="fa fa-shopping-cart"></i>
-                </a>
-            </div>
-        </div>
-        <div class="text-center py-4">
-            <a class="h6 text-decoration-none text-truncate d-block" href="open.html?id=${product.id}">
-                ${product.name}
-            </a>
-            <div class="d-flex align-items-center justify-content-center mt-2">
-                <h6>LKR ${parseFloat(product.price).toFixed(2)}</h6>
-            </div>
-            <div class="d-flex align-items-center justify-content-center mb-1">
-                ${starHtml} 
-                <small class="ml-1">(${rating})</small>
-            </div>
-        </div>
-    </div>
-`;
-
-productsContainer.appendChild(productElement);
-    });
-
-    // Add event listeners to "Add to Cart" buttons
-    document.querySelectorAll('.add-to-cart').forEach(button => {
-        button.addEventListener('click', (event) => {
-            event.preventDefault();
-            const product = JSON.parse(button.dataset.product);
-            addToCart(product);
-        });
-    });
-} 
-document.addEventListener('DOMContentLoaded', () => {
-    fetchProducts(); // Fetch and display all products initially
-    document.getElementById('search-input').addEventListener('input', searchProducts);
-});
-    </script> 
+    <script type="module" src="js/products.js"></script> 
     
     <style>
         /* Cart Notification Styles */
@@ -295,17 +104,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="btn-group mx-2">
                         <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">USD</button>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <button class="dropdown-item" type="button">EUR</button>
-                            <button class="dropdown-item" type="button">GBP</button>
-                            <button class="dropdown-item" type="button">CAD</button>
+                            <button class="dropdown-item" type="button">LKR</button>
                         </div>
                     </div>
                     <div class="btn-group">
                         <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">EN</button>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <button class="dropdown-item" type="button">FR</button>
-                            <button class="dropdown-item" type="button">AR</button>
-                            <button class="dropdown-item" type="button">RU</button>
+                            <button class="dropdown-item" type="button">ENG</button>
                         </div>
                     </div>
                 </div>
@@ -314,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <i class="fas fa-heart text-dark"></i>
                         <span class="badge text-dark border border-dark rounded-circle" style="padding-bottom: 2px;">0</span>
                     </a>
-                    <a href="" class="btn px-0 ml-2">
+                    <a href="cart.html" class="btn px-0 ml-2">
                         <i class="fas fa-shopping-cart text-dark"></i>
                         <span class="badge text-dark border border-dark rounded-circle" style="padding-bottom: 2px;">0</span>
                     </a>
@@ -322,13 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         </div>
         <div class="row align-items-center bg-light py-3 px-xl-5 d-flex">
-    <!-- Logo -->
-    <div class="col-lg-4 col-12 text-center text-lg-left mb-3 mb-lg-0">
-        <a href="" class="text-decoration-none">
-            <span class="h1 text-uppercase text-primary bg-dark px-2">YO</span>
-            <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">NOXA</span>
-        </a>
-    </div>
+    
     <!-- Search Bar -->
     
     
@@ -349,20 +148,20 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="nav-item dropdown dropright">
                             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Dresses <i class="fa fa-angle-right float-right mt-1"></i></a>
                             <div class="dropdown-menu position-absolute rounded-0 border-0 m-0">
-                                <a href="" class="dropdown-item">Men's Dresses</a>
-                                <a href="" class="dropdown-item">Women's Dresses</a>
-                                <a href="" class="dropdown-item">Baby's Dresses</a>
+                                <a href="" class="dropdown-item"></a>
+                                <a href="" class="dropdown-item"> </a>
+                                <a href="" class="dropdown-item"></a>
                             </div>
                         </div>
-                        <a href="" class="nav-item nav-link">Shirts</a>
-                        <a href="" class="nav-item nav-link">Jeans</a>
-                        <a href="" class="nav-item nav-link">Swimwear</a>
-                        <a href="" class="nav-item nav-link">Sleepwear</a>
-                        <a href="" class="nav-item nav-link">Sportswear</a>
-                        <a href="" class="nav-item nav-link">Jumpsuits</a>
-                        <a href="" class="nav-item nav-link">Blazers</a>
-                        <a href="" class="nav-item nav-link">Jackets</a>
-                        <a href="" class="nav-item nav-link">Shoes</a>
+                        <a href="" class="nav-item nav-link"></a>
+                        <a href="" class="nav-item nav-link"></a>
+                        <a href="" class="nav-item nav-link"></a>
+                        <a href="" class="nav-item nav-link"></a>
+                        <a href="" class="nav-item nav-link"></a>
+                        <a href="" class="nav-item nav-link"></a>
+                        <a href="" class="nav-item nav-link"></a>
+                        <a href="" class="nav-item nav-link"></a>
+                        <a href="" class="nav-item nav-link"></a>
                     </div>
                 </nav>
             </div>
@@ -378,8 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                         <div class="navbar-nav mr-auto py-0">
                             <a href="index.html" class="nav-item nav-link">Home</a>
-                            <a href="shop.html" class="nav-item nav-link active">Shop</a>
-                            <a href="detail.html" class="nav-item nav-link">Shop Detail</a>
+                            <a href="shop.html" class="nav-item nav-link active">Shop</a> 
                             <div class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages <i class="fa fa-angle-down mt-1"></i></a>
                                 <div class="dropdown-menu bg-primary rounded-0 border-0 m-0">
@@ -412,8 +210,8 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="row px-xl-5">
             <div class="col-12">
                 <nav class="breadcrumb bg-light mb-30">
-                    <a class="breadcrumb-item text-dark" href="#">Home</a>
-                    <a class="breadcrumb-item text-dark" href="#">Shop</a>
+                    <a class="breadcrumb-item text-dark" href="index.html">Home</a>
+                    <a class="breadcrumb-item text-dark" href="shop.html">Shop</a>
                     <span class="breadcrumb-item active">Shop List</span>
                 </nav>
             </div>
