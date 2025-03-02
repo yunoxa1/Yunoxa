@@ -201,3 +201,54 @@ body {
     border: none;
     cursor: not-allowed;
 }
+
+.image-preview-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.cropper-section {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#cropperImage {
+    max-width: 100%;
+    height: auto;
+    display: none; /* Hidden by default */
+}
+
+#cropButton {
+    display: none; /* Hidden by default */
+    margin-top: 10px;
+}
+
+.small-previews {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.small-previews img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.small-previews img.selected {
+    border-color: #007bff;
+}
+
+#loadingIndicator {
+    display: none;
+    margin-top: 10px;
+}
+
+.error {
+    color: red;
+    margin-top: 10px;
+}
