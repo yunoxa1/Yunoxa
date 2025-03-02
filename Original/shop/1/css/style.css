@@ -10067,3 +10067,46 @@ html, body {
   }
 }
 
+
+/* Default styles for product items */
+
+
+/* Product title styles */
+.product-item .text-center .h6 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%; /* Ensure the title doesn't overflow */
+    display: block;
+    margin: 0 auto;
+}
+
+/* List view specific styles */
+.list-view .product-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+}
+
+
+
+.list-view .product-item .text-center {
+    text-align: left;
+    flex: 1;
+}
+
+.list-view .product-item .h6 {
+    max-width: 150px; /* Adjust based on your container width */
+}
+
+.list-view .product-item .list-view-description {
+    display: block; /* Show description only in list view */
+    margin-top: 0.5rem;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Hide description in grid view */
+.product-item .list-view-description {
+    display: none;
+}

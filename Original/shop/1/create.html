@@ -112,257 +112,256 @@
             </select>
 
             <!-- Image Upload -->
-            <div class="image-upload-container">
-                <label for="imageUpload">Upload Images (3-6 Images Required)</label>
-                <input type="file" id="imageUpload" accept="image/*" multiple>
-            </div>
-    
-            <!-- Image Previews -->
-            <div class="image-preview-container">
-                <div class="cropper-section">
-                    <img id="cropperImage">
-                    <button type="button" id="cropButton">Crop & Upload</button>
-                </div>
-                <div class="small-previews" id="imagePreview"></div>
-            </div>
-    
-            <!-- Loading Indicator -->
-            <div id="loadingIndicator">
-                <p><i class="fas fa-spinner fa-spin"></i> Uploading image... Please wait.</p>
-            </div>
-    
-            <p id="uploadError" class="error"></p>
-    
-            <button type="submit" id="submitButton" disabled>Add Product</button>
-    
-            <p id="formError" class="error"></p>
-        </form>
-    
-        <!-- Success Message -->
-        <p id="successMessage" class="success"></p>
+<div class="image-upload-container">
+    <label for="imageUpload">Upload Images (3-6 Images Required)</label>
+    <input type="file" id="imageUpload" accept="image/*" multiple>
+</div>
+
+<!-- Image Previews -->
+<div class="image-preview-container">
+    <div class="cropper-section">
+        <img id="cropperImage">
+        <button type="button" id="cropButton">Crop & Upload</button>
     </div>
+    <div class="small-previews" id="imagePreview"></div>
+</div>
 
-    <!-- Cropper.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
-    <!-- Supabase -->
-    <script type="module">
-        import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+<!-- Loading Indicator -->
+<div id="loadingIndicator">
+    <p><i class="fas fa-spinner fa-spin"></i> Uploading image... Please wait.</p>
+</div>
 
-const SUPABASE_URL = "https://qopdjgfciakmvhlriixt.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFvcGRqZ2ZjaWFrbXZobHJpaXh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk0NDA2NDAsImV4cCI6MjA1NTAxNjY0MH0.5UAelwww7WpDUExqhc5dH2JhUWlGNgUNjh8fzxPNZvs";
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+<p id="uploadError" class="error"></p>
 
-let cropper;
-let uploadedImages = []; // Array to store cropped image URLs
-let imageFiles = []; // Array to store uploaded files
-let currentImageIndex = 0; // Track the current image being cropped
+<button type="submit" id="submitButton" disabled>Add Product</button>
 
-const imageUpload = document.getElementById("imageUpload");
-const imagePreview = document.getElementById("imagePreview");
-const cropperImage = document.getElementById("cropperImage");
-const cropButton = document.getElementById("cropButton");
-const loadingIndicator = document.getElementById("loadingIndicator");
-const uploadError = document.getElementById("uploadError");
-const submitButton = document.getElementById("submitButton");
-const successMessage = document.getElementById("successMessage"); // Success message element
+<p id="formError" class="error"></p>
 
-// Handle image selection
-imageUpload.addEventListener("change", function (event) {
-    const files = event.target.files;
+<!-- Success Message -->
+<p id="successMessage" class="success"></p>
 
-    if (files.length < 3 || files.length > 6) {
-        uploadError.textContent = "Please upload between 3 and 6 images!";
-        return;
-    }
+<!-- Cropper.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+<!-- Supabase -->
+<script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-    // Check file sizes (up to 5MB)
-    for (const file of files) {
-        if (file.size > 5 * 1024 * 1024) { // 5MB limit
-            uploadError.textContent = "Each image must be less than 5MB!";
+    const SUPABASE_URL = "https://qopdjgfciakmvhlriixt.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFvcGRqZ2ZjaWFrbXZobHJpaXh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk0NDA2NDAsImV4cCI6MjA1NTAxNjY0MH0.5UAelwww7WpDUExqhc5dH2JhUWlGNgUNjh8fzxPNZvs";
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let cropper;
+    let uploadedImages = []; // Array to store cropped image URLs
+    let imageFiles = []; // Array to store uploaded files
+    let currentImageIndex = 0; // Track the current image being cropped
+
+    const imageUpload = document.getElementById("imageUpload");
+    const imagePreview = document.getElementById("imagePreview");
+    const cropperImage = document.getElementById("cropperImage");
+    const cropButton = document.getElementById("cropButton");
+    const loadingIndicator = document.getElementById("loadingIndicator");
+    const uploadError = document.getElementById("uploadError");
+    const submitButton = document.getElementById("submitButton");
+    const successMessage = document.getElementById("successMessage");
+
+    // Handle image selection
+    imageUpload.addEventListener("change", function (event) {
+        const files = event.target.files;
+
+        if (files.length < 3 || files.length > 6) {
+            uploadError.textContent = "Please upload between 3 and 6 images!";
             return;
         }
-    }
 
-    imageFiles = Array.from(files); // Store files for later use
-    imagePreview.innerHTML = ""; // Clear previous previews
-    uploadedImages = []; // Reset uploaded images array
-    submitButton.disabled = true; // Disable submit button initially
-    successMessage.style.display = "none"; // Hide success message
-
-    // Display small previews
-    let loadedImages = 0;
-    imageFiles.forEach((file, index) => {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            const img = document.createElement("img");
-            img.src = e.target.result;
-            img.dataset.index = index;
-            img.addEventListener("click", () => openCropper(img, index));
-            imagePreview.appendChild(img);
-
-            loadedImages++;
-            if (loadedImages === imageFiles.length) {
-                // All images loaded, open the first image for cropping
-                openCropper(imagePreview.children[0], 0);
+        // Check file sizes (up to 5MB)
+        for (const file of files) {
+            if (file.size > 5 * 1024 * 1024) { // 5MB limit
+                uploadError.textContent = "Each image must be less than 5MB!";
+                return;
             }
-        };
+        }
 
-        reader.onerror = function () {
-            uploadError.textContent = `Failed to load image ${index + 1}. Please try again.`;
-        };
+        imageFiles = Array.from(files); // Store files for later use
+        imagePreview.innerHTML = ""; // Clear previous previews
+        uploadedImages = []; // Reset uploaded images array
+        submitButton.disabled = true; // Disable submit button initially
+        successMessage.style.display = "none"; // Hide success message
 
-        reader.readAsDataURL(file);
+        // Display small previews
+        let loadedImages = 0;
+        imageFiles.forEach((file, index) => {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = document.createElement("img");
+                img.src = e.target.result;
+                img.dataset.index = index;
+                img.addEventListener("click", () => openCropper(img, index));
+                imagePreview.appendChild(img);
+
+                loadedImages++;
+                if (loadedImages === imageFiles.length) {
+                    // All images loaded, open the first image for cropping
+                    openCropper(imagePreview.children[0], 0);
+                }
+            };
+
+            reader.onerror = function () {
+                uploadError.textContent = `Failed to load image ${index + 1}. Please try again.`;
+            };
+
+            reader.readAsDataURL(file);
+        });
     });
-});
 
-// Open Cropper for a specific image
-function openCropper(img, index) {
-    if (!img.src) {
-        uploadError.textContent = `Image ${index + 1} could not be loaded. Please try again.`;
-        return;
+    // Open Cropper for a specific image
+    function openCropper(img, index) {
+        if (!img.src) {
+            uploadError.textContent = `Image ${index + 1} could not be loaded. Please try again.`;
+            return;
+        }
+
+        // Hide the small previews while cropping
+        imagePreview.style.display = "none";
+
+        cropperImage.src = img.src;
+        cropperImage.style.display = "block";
+        currentImageIndex = index;
+
+        if (cropper) cropper.destroy(); // Destroy existing cropper instance
+
+        cropper = new Cropper(cropperImage, {
+            aspectRatio: 1,
+            viewMode: 1,
+        });
+
+        cropButton.style.display = "block";
     }
 
-    // Hide the small previews while cropping
-    imagePreview.style.display = "none";
+    // Crop the current image and move to the next
+    cropButton.addEventListener("click", async function () {
+        if (!cropper) return;
 
-    cropperImage.src = img.src;
-    cropperImage.style.display = "block";
-    currentImageIndex = index;
+        const canvas = cropper.getCroppedCanvas({
+            width: 640,
+            height: 640,
+            fillColor: "#fff",
+        });
 
-    if (cropper) cropper.destroy(); // Destroy existing cropper instance
+        loadingIndicator.style.display = "block";
+        cropButton.disabled = true;
 
-    cropper = new Cropper(cropperImage, {
-        aspectRatio: 1,
-        viewMode: 1,
-    });
+        // Convert the canvas to JPEG format and compress to less than 120KB
+        canvas.toBlob(async (blob) => {
+            if (blob.size > 120 * 1024) { // 120KB limit
+                uploadError.textContent = "Cropped image is too large! Please crop a smaller area.";
+                loadingIndicator.style.display = "none";
+                cropButton.disabled = false;
+                return;
+            }
 
-    cropButton.style.display = "block";
-}
+            // Store the cropped image in the uploadedImages array
+            uploadedImages[currentImageIndex] = blob;
 
-// Crop the current image and move to the next
-cropButton.addEventListener("click", async function () {
-    if (!cropper) return;
+            // Mark the preview as selected
+            const previewImg = imagePreview.querySelector(`img[data-index="${currentImageIndex}"]`);
+            previewImg.classList.add("selected");
 
-    const canvas = cropper.getCroppedCanvas({
-        width: 640,
-        height: 640,
-        fillColor: "#fff",
-    });
+            // Move to the next image
+            if (currentImageIndex < imageFiles.length - 1) {
+                currentImageIndex++;
+                openCropper(imagePreview.children[currentImageIndex], currentImageIndex);
+            } else {
+                // All images cropped
+                cropperImage.style.display = "none";
+                cropButton.style.display = "none";
+                if (cropper) {
+                    cropper.destroy();
+                    cropper = null;
+                }
 
-    loadingIndicator.style.display = "block";
-    cropButton.disabled = true;
+                // Hide the image previews after all images are cropped
+                imagePreview.style.display = "none";
 
-    // Convert the canvas to AVIF format
-    canvas.toBlob(async (blob) => {
-        if (blob.size > 5 * 1024 * 1024) { // 5MB limit
-            uploadError.textContent = "Cropped image is too large! Please crop a smaller area.";
+                alert("All images cropped! Ready to upload.");
+                submitButton.disabled = false; // Enable the submit button
+            }
+
             loadingIndicator.style.display = "none";
             cropButton.disabled = false;
-            return;
-        }
+        }, "image/jpeg", 0.8); // Convert to JPEG with 80% quality
+    });
 
-        // Store the cropped image in the uploadedImages array
-        uploadedImages[currentImageIndex] = blob;
+    // Handle form submission
+    document.getElementById("productForm").addEventListener("submit", async function (event) {
+        event.preventDefault();
 
-        // Mark the preview as selected
-        const previewImg = imagePreview.querySelector(`img[data-index="${currentImageIndex}"]`);
-        previewImg.classList.add("selected");
+        // Upload all cropped images to Supabase
+        loadingIndicator.style.display = "block";
+        submitButton.disabled = true;
 
-        // Move to the next image
-        if (currentImageIndex < imageFiles.length - 1) {
-            currentImageIndex++;
-            openCropper(imagePreview.children[currentImageIndex], currentImageIndex);
-        } else {
-            // All images cropped
-            cropperImage.style.display = "none";
-            cropButton.style.display = "none";
-            if (cropper) {
-                cropper.destroy();
-                cropper = null;
+        const imageUrls = [];
+        for (let i = 0; i < uploadedImages.length; i++) {
+            const fileName = `product-${Date.now()}-${i}.jpg`;
+            const { data, error } = await supabase.storage
+                .from("product-images")
+                .upload(fileName, uploadedImages[i], {
+                    cacheControl: "3600",
+                    contentType: "image/jpeg",
+                });
+
+            if (error) {
+                uploadError.textContent = "Error uploading image: " + error.message;
+                loadingIndicator.style.display = "none";
+                submitButton.disabled = false;
+                return;
             }
+            
 
-            // Hide the image previews after all images are cropped
-            imagePreview.style.display = "none";
-
-            alert("All images cropped! Ready to upload.");
-            submitButton.disabled = false; // Enable the submit button
+            const imageUrl = `${SUPABASE_URL}/storage/v1/object/public/product-images/${fileName}`;
+            imageUrls.push(imageUrl);
         }
+
+        // Submit product data with image URLs
+        const name = document.getElementById("name").value.trim();
+        const details = document.getElementById("details").value.trim();
+        const price = parseFloat(document.getElementById("price").value.trim());
+        const description = document.getElementById("description").value.trim();
+        const category = document.getElementById("category").value.trim();
+
+        const { data, error } = await supabase
+            .from("products")
+            .insert([
+                {
+                    name,
+                    details,
+                    price,
+                    description,
+                    category,
+                    image: imageUrls[0],
+                    image1: imageUrls[1],
+                    image2: imageUrls[2],
+                    image3: imageUrls[3],
+                    image4: imageUrls[4],
+                    image5: imageUrls[5],
+                }
+            ]);
 
         loadingIndicator.style.display = "none";
-        cropButton.disabled = false;
-    }, "image/avif"); // Convert to AVIF format
-});
-
-// Handle form submission
-document.getElementById("productForm").addEventListener("submit", async function (event) {
-    event.preventDefault();
-
-    // Upload all cropped images to Supabase
-    loadingIndicator.style.display = "block";
-    submitButton.disabled = true;
-
-    const imageUrls = [];
-    for (let i = 0; i < uploadedImages.length; i++) {
-        const fileName = `product-${Date.now()}-${i}.avif`;
-        const { data, error } = await supabase.storage
-            .from("product-images")
-            .upload(fileName, uploadedImages[i], {
-                cacheControl: "3600",
-                contentType: "image/avif",
-            });
 
         if (error) {
-            uploadError.textContent = "Error uploading image: " + error.message;
-            loadingIndicator.style.display = "none";
+            document.getElementById("formError").textContent = "Error adding product: " + error.message;
             submitButton.disabled = false;
             return;
         }
 
-        const imageUrl = `${SUPABASE_URL}/storage/v1/object/public/product-images/${fileName}`;
-        imageUrls.push(imageUrl);
-    }
+        // Display success message
+        successMessage.textContent = "Successfully images have been uploaded!";
+        successMessage.style.display = "block";
 
-    // Submit product data with image URLs
-    const name = document.getElementById("name").value.trim();
-    const details = document.getElementById("details").value.trim();
-    const price = parseFloat(document.getElementById("price").value.trim());
-    const description = document.getElementById("description").value.trim();
-    const category = document.getElementById("category").value.trim();
-
-    const { data, error } = await supabase
-        .from("products")
-        .insert([
-            {
-                name,
-                details,
-                price,
-                description,
-                category,
-                image: imageUrls[0],
-                image1: imageUrls[1],
-                image2: imageUrls[2],
-                image3: imageUrls[3],
-                image4: imageUrls[4],
-                image5: imageUrls[5],
-            }
-        ]);
-
-    loadingIndicator.style.display = "none";
-
-    if (error) {
-        document.getElementById("formError").textContent = "Error adding product: " + error.message;
-        submitButton.disabled = false;
-        return;
-    }
-
-    // Display success message
-    successMessage.textContent = "Successfully images have been uploaded!";
-    successMessage.style.display = "block";
-
-    alert("Product added successfully!");
-    window.location.reload(); // Reload the page to reset the form
-});
-    </script>
+        alert("Product added successfully!");
+        window.location.reload(); // Reload the page to reset the form
+    });
+</script>
 
 
 <!-- Footer Start -->

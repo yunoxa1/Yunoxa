@@ -71,7 +71,7 @@ productElement.innerHTML = `
             ${starHtml} 
             <small class="ml-1">(${rating})</small>
         </div>
-        <!-- Add the description here (visible only in list view) -->
+        <!-- Description (visible only in list view) -->
         <div class="list-view-description">
             <p class="description">
                 ${product.description} <!-- Replace with your product description -->
