@@ -117,14 +117,14 @@
                 <input type="file" id="imageUpload" accept="image/*" multiple>
             </div>
     
-            <!-- Cropper Section -->
-            <div class="cropper-section">
-                <img id="cropperImage">
-                <button type="button" id="cropButton">Crop & Upload</button>
-            </div>
-    
             <!-- Image Previews -->
-            <div class="small-previews" id="imagePreview"></div>
+            <div class="image-preview-container">
+                <div class="cropper-section">
+                    <img id="cropperImage">
+                    <button type="button" id="cropButton">Crop & Upload</button>
+                </div>
+                <div class="small-previews" id="imagePreview"></div>
+            </div>
     
             <!-- Loading Indicator -->
             <div id="loadingIndicator">
@@ -137,6 +137,9 @@
     
             <p id="formError" class="error"></p>
         </form>
+    
+        <!-- Success Message -->
+        <p id="successMessage" class="success"></p>
     </div>
 
     <!-- Cropper.js -->
@@ -161,6 +164,7 @@ const cropButton = document.getElementById("cropButton");
 const loadingIndicator = document.getElementById("loadingIndicator");
 const uploadError = document.getElementById("uploadError");
 const submitButton = document.getElementById("submitButton");
+const successMessage = document.getElementById("successMessage"); // Success message element
 
 // Handle image selection
 imageUpload.addEventListener("change", function (event) {
@@ -171,10 +175,22 @@ imageUpload.addEventListener("change", function (event) {
         return;
     }
 
+    // Check file sizes (up to 5MB)
+    for (const file of files) {
+        if (file.size > 5 * 1024 * 1024) { // 5MB limit
+            uploadError.textContent = "Each image must be less than 5MB!";
+            return;
+        }
+    }
+
     imageFiles = Array.from(files); // Store files for later use
     imagePreview.innerHTML = ""; // Clear previous previews
+    uploadedImages = []; // Reset uploaded images array
+    submitButton.disabled = true; // Disable submit button initially
+    successMessage.style.display = "none"; // Hide success message
 
     // Display small previews
+    let loadedImages = 0;
     imageFiles.forEach((file, index) => {
         const reader = new FileReader();
         reader.onload = function (e) {
@@ -183,16 +199,32 @@ imageUpload.addEventListener("change", function (event) {
             img.dataset.index = index;
             img.addEventListener("click", () => openCropper(img, index));
             imagePreview.appendChild(img);
+
+            loadedImages++;
+            if (loadedImages === imageFiles.length) {
+                // All images loaded, open the first image for cropping
+                openCropper(imagePreview.children[0], 0);
+            }
         };
+
+        reader.onerror = function () {
+            uploadError.textContent = `Failed to load image ${index + 1}. Please try again.`;
+        };
+
         reader.readAsDataURL(file);
     });
-
-    // Open the first image for cropping
-    openCropper(imagePreview.children[0], 0);
 });
 
 // Open Cropper for a specific image
 function openCropper(img, index) {
+    if (!img.src) {
+        uploadError.textContent = `Image ${index + 1} could not be loaded. Please try again.`;
+        return;
+    }
+
+    // Hide the small previews while cropping
+    imagePreview.style.display = "none";
+
     cropperImage.src = img.src;
     cropperImage.style.display = "block";
     currentImageIndex = index;
@@ -220,9 +252,10 @@ cropButton.addEventListener("click", async function () {
     loadingIndicator.style.display = "block";
     cropButton.disabled = true;
 
+    // Convert the canvas to AVIF format
     canvas.toBlob(async (blob) => {
-        if (blob.size > 5 * 1024 * 1024) {
-            uploadError.textContent = "File is too large! Please crop a smaller area.";
+        if (blob.size > 5 * 1024 * 1024) { // 5MB limit
+            uploadError.textContent = "Cropped image is too large! Please crop a smaller area.";
             loadingIndicator.style.display = "none";
             cropButton.disabled = false;
             return;
@@ -247,13 +280,17 @@ cropButton.addEventListener("click", async function () {
                 cropper.destroy();
                 cropper = null;
             }
+
+            // Hide the image previews after all images are cropped
+            imagePreview.style.display = "none";
+
             alert("All images cropped! Ready to upload.");
             submitButton.disabled = false; // Enable the submit button
         }
 
         loadingIndicator.style.display = "none";
         cropButton.disabled = false;
-    }, "image/jpeg");
+    }, "image/avif"); // Convert to AVIF format
 });
 
 // Handle form submission
@@ -266,12 +303,12 @@ document.getElementById("productForm").addEventListener("submit", async function
 
     const imageUrls = [];
     for (let i = 0; i < uploadedImages.length; i++) {
-        const fileName = `product-${Date.now()}-${i}.jpg`;
+        const fileName = `product-${Date.now()}-${i}.avif`;
         const { data, error } = await supabase.storage
             .from("product-images")
             .upload(fileName, uploadedImages[i], {
                 cacheControl: "3600",
-                contentType: "image/jpeg",
+                contentType: "image/avif",
             });
 
         if (error) {
@@ -318,10 +355,16 @@ document.getElementById("productForm").addEventListener("submit", async function
         return;
     }
 
+    // Display success message
+    successMessage.textContent = "Successfully images have been uploaded!";
+    successMessage.style.display = "block";
+
     alert("Product added successfully!");
     window.location.reload(); // Reload the page to reset the form
 });
     </script>
+
+
 <!-- Footer Start -->
 <div class="container-fluid bg-dark text-secondary mt-5 pt-5">
     <div class="row px-xl-5 pt-5">

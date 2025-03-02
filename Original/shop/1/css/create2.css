@@ -252,3 +252,10 @@ body {
     color: red;
     margin-top: 10px;
 }
+
+.success {
+    color: rgb(0, 175, 0);
+    font-weight: bold;
+    margin-top: 20px;
+    display: none; /* Hidden by default */
+}
