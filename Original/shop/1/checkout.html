@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>MultiShop - Online Shop Website Template</title>
+    <title>Yunoxa</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="Free HTML Templates" name="keywords">
     <meta content="Free HTML Templates" name="description">
@@ -79,8 +79,8 @@
         <div class="row align-items-center bg-light py-3 px-xl-5 d-none d-lg-flex">
             <div class="col-lg-4">
                 <a href="" class="text-decoration-none">
-                    <span class="h1 text-uppercase text-primary bg-dark px-2">Multi</span>
-                    <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">Shop</span>
+                    <span class="h1 text-uppercase text-primary bg-dark px-2">YU</span>
+                    <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">NOXA</span>
                 </a>
             </div>
             <div class="col-lg-4 col-6 text-left">
@@ -137,8 +137,8 @@
             <div class="col-lg-9">
                 <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-3 py-lg-0 px-0">
                     <a href="" class="text-decoration-none d-block d-lg-none">
-                        <span class="h1 text-uppercase text-dark bg-light px-2">Multi</span>
-                        <span class="h1 text-uppercase text-light bg-primary px-2 ml-n1">Shop</span>
+                        <span class="h1 text-uppercase text-dark bg-light px-2">YU</span>
+                        <span class="h1 text-uppercase text-light bg-primary px-2 ml-n1">NOXA</span>
                     </a>
                     <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                         <span class="navbar-toggler-icon"></span>
@@ -193,29 +193,30 @@
     <!-- Checkout Start -->
     <div class="container-fluid">
         <div class="row px-xl-5">
+            <!-- Billing Address -->
             <div class="col-lg-8">
                 <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Billing Address</span></h5>
                 <div class="bg-light p-30 mb-5">
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label>First Name</label>
-                            <input class="form-control" type="text" placeholder="John">
+                            <input class="form-control" type="text" placeholder="John" required>
                         </div>
                         <div class="col-md-6 form-group">
                             <label>Last Name</label>
-                            <input class="form-control" type="text" placeholder="Doe">
+                            <input class="form-control" type="text" placeholder="Doe" required>
                         </div>
                         <div class="col-md-6 form-group">
                             <label>E-mail</label>
-                            <input class="form-control" type="text" placeholder="example@email.com">
+                            <input class="form-control" type="email" placeholder="example@email.com" required>
                         </div>
                         <div class="col-md-6 form-group">
                             <label>Mobile No</label>
-                            <input class="form-control" type="text" placeholder="+123 456 789">
+                            <input class="form-control" type="tel" placeholder="+123 456 789" required>
                         </div>
                         <div class="col-md-6 form-group">
                             <label>Address Line 1</label>
-                            <input class="form-control" type="text" placeholder="123 Street">
+                            <input class="form-control" type="text" placeholder="123 Street" required>
                         </div>
                         <div class="col-md-6 form-group">
                             <label>Address Line 2</label>
@@ -223,24 +224,23 @@
                         </div>
                         <div class="col-md-6 form-group">
                             <label>Country</label>
-                            <select class="custom-select">
-                                <option selected>United States</option>
-                                <option>Afghanistan</option>
-                                <option>Albania</option>
-                                <option>Algeria</option>
+                            <select class="custom-select" required>
+                                <option selected>Sri Lanka</option>
+                                <option>Sri Lanka</option>
+                                
                             </select>
                         </div>
                         <div class="col-md-6 form-group">
                             <label>City</label>
-                            <input class="form-control" type="text" placeholder="New York">
+                            <input class="form-control" type="text" placeholder="New York" required>
                         </div>
                         <div class="col-md-6 form-group">
                             <label>State</label>
-                            <input class="form-control" type="text" placeholder="New York">
+                            <input class="form-control" type="text" placeholder="New York" required>
                         </div>
                         <div class="col-md-6 form-group">
                             <label>ZIP Code</label>
-                            <input class="form-control" type="text" placeholder="123">
+                            <input class="form-control" type="text" placeholder="123" required>
                         </div>
                         <div class="col-md-12 form-group">
                             <div class="custom-control custom-checkbox">
@@ -250,12 +250,13 @@
                         </div>
                         <div class="col-md-12">
                             <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="shipto">
-                                <label class="custom-control-label" for="shipto"  data-toggle="collapse" data-target="#shipping-address">Ship to different address</label>
+                                <input type="checkbox" class="custom-control-input" id="shipto" data-toggle="collapse" data-target="#shipping-address">
+                                <label class="custom-control-label" for="shipto">Ship to different address</label>
                             </div>
                         </div>
                     </div>
                 </div>
+                <!-- Shipping Address -->
                 <div class="collapse mb-5" id="shipping-address">
                     <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Shipping Address</span></h5>
                     <div class="bg-light p-30">
@@ -287,10 +288,9 @@
                             <div class="col-md-6 form-group">
                                 <label>Country</label>
                                 <select class="custom-select">
-                                    <option selected>United States</option>
-                                    <option>Afghanistan</option>
-                                    <option>Albania</option>
-                                    <option>Algeria</option>
+                                    <option selected>Sri Lanka</option>
+                                    <option>Sri Lanka</option>
+                                    
                                 </select>
                             </div>
                             <div class="col-md-6 form-group">
@@ -309,41 +309,34 @@
                     </div>
                 </div>
             </div>
+            <!-- Order Summary -->
             <div class="col-lg-4">
                 <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Order Total</span></h5>
                 <div class="bg-light p-30 mb-5">
                     <div class="border-bottom">
                         <h6 class="mb-3">Products</h6>
-                        <div class="d-flex justify-content-between">
-                            <p>Product Name 1</p>
-                            <p>$150</p>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <p>Product Name 2</p>
-                            <p>$150</p>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <p>Product Name 3</p>
-                            <p>$150</p>
+                        <div id="order-summary">
+                            <!-- Products will be dynamically inserted here -->
                         </div>
                     </div>
                     <div class="border-bottom pt-3 pb-2">
                         <div class="d-flex justify-content-between mb-3">
                             <h6>Subtotal</h6>
-                            <h6>$150</h6>
+                            <h6 id="subtotal">$0.00</h6>
                         </div>
                         <div class="d-flex justify-content-between">
                             <h6 class="font-weight-medium">Shipping</h6>
-                            <h6 class="font-weight-medium">$10</h6>
+                            <h6 class="font-weight-medium" id="shipping">$10.00</h6>
                         </div>
                     </div>
                     <div class="pt-2">
                         <div class="d-flex justify-content-between mt-2">
                             <h5>Total</h5>
-                            <h5>$160</h5>
+                            <h5 id="total">$0.00</h5>
                         </div>
                     </div>
                 </div>
+                <!-- Payment Method -->
                 <div class="mb-5">
                     <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Payment</span></h5>
                     <div class="bg-light p-30">
@@ -365,12 +358,115 @@
                                 <label class="custom-control-label" for="banktransfer">Bank Transfer</label>
                             </div>
                         </div>
-                        <button class="btn btn-block btn-primary font-weight-bold py-3">Place Order</button>
+                        <button class="btn btn-block btn-primary font-weight-bold py-3" id="place-order">Place Order</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const orderSummary = document.getElementById('order-summary');
+    const subtotalElement = document.getElementById('subtotal');
+    const shippingElement = document.getElementById('shipping');
+    const totalElement = document.getElementById('total');
+
+    // Render Order Summary
+    function renderOrderSummary() {
+        if (!orderSummary) return;
+
+        // Clear previous content
+        orderSummary.innerHTML = '';
+
+        // Render each cart item
+        cart.forEach(item => {
+            const itemTotal = item.price * item.quantity;
+            orderSummary.innerHTML += `
+                <div class="d-flex justify-content-between">
+                    <p>${item.name} (x${item.quantity})</p>
+                    <p>LKR ${itemTotal.toFixed(2)}</p>
+                </div>
+            `;
+        });
+
+        // Calculate subtotal
+        const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+        // Calculate shipping (LKR 250 per product)
+        const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
+        const shipping = totalQuantity * 250;
+
+        // Calculate total
+        const total = subtotal + shipping;
+
+        // Update displayed values
+        subtotalElement.textContent = `LKR ${subtotal.toFixed(2)}`;
+        shippingElement.textContent = `LKR ${shipping.toFixed(2)}`;
+        totalElement.textContent = `LKR ${total.toFixed(2)}`;
+    }
+
+    // Place Order Button
+    document.getElementById('place-order').addEventListener('click', () => {
+        // Collect form data
+        const firstName = document.querySelector('input[placeholder="John"]').value;
+        const lastName = document.querySelector('input[placeholder="Doe"]').value;
+        const email = document.querySelector('input[placeholder="example@email.com"]').value;
+        const mobileNo = document.querySelector('input[placeholder="+123 456 789"]').value;
+        const addressLine1 = document.querySelector('input[placeholder="123 Street"]').value;
+        const addressLine2 = document.querySelector('input[placeholder="123 Street"]').value;
+        const country = document.querySelector('.custom-select').value;
+        const city = document.querySelector('input[placeholder="New York"]').value;
+        const state = document.querySelector('input[placeholder="New York"]').value;
+        const zipCode = document.querySelector('input[placeholder="123"]').value;
+
+        // Generate product details
+        let productDetails = '';
+        cart.forEach(item => {
+            productDetails += `
+                - ${item.name} (ID: ${item.id}, Quantity: ${item.quantity}, Link: https://smrider.github.io/Yunoxa/Original/shop/1/open.html?id=${item.id})\n`;
+        });
+
+        // Calculate totals
+        const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
+        const shipping = totalQuantity * 250;
+        const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const total = subtotal + shipping;
+
+        // Compose WhatsApp message
+        const message = `
+            *Order Details*\n
+            *Customer Information*\n
+            First Name: ${firstName}\n
+            Last Name: ${lastName}\n
+            Email: ${email}\n
+            Mobile No: ${mobileNo}\n
+            Address: ${addressLine1}, ${addressLine2}\n
+            Country: ${country}\n
+            City: ${city}\n
+            State: ${state}\n
+            ZIP Code: ${zipCode}\n\n
+            *Product Details*\n
+            ${productDetails}\n
+            *Shipping Cost:* LKR ${shipping.toFixed(2)}\n
+            *Total Price:* LKR ${total.toFixed(2)}
+        `;
+
+        // Encode message for URL
+        const encodedMessage = encodeURIComponent(message);
+
+        // Generate WhatsApp link
+        const whatsappLink = `https://wa.me/94767087651?text=${encodedMessage}`;
+
+        // Redirect to WhatsApp
+        window.open(whatsappLink, '_blank');
+    });
+
+    // Initial render
+    renderOrderSummary();
+});
+    </script>
     <!-- Checkout End -->
 
 

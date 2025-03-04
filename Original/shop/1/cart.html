@@ -298,13 +298,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const cartItems = document.getElementById('cart-items');
 
     function renderCart() {
-        if (!cartItems) return;
-        
-        cartItems.innerHTML = cart.map((item, index) => `
+    if (!cartItems) return;
+    
+    cartItems.innerHTML = cart.map((item, index) => {
+        // Split the product name into words and take the first two
+        const nameWords = item.name.split(' ');
+        const truncatedName = nameWords.length > 2 
+            ? `${nameWords[0]} ${nameWords[1]}...` 
+            : item.name;
+
+        return `
             <tr data-id="${item.id}">
                 <td class="align-middle">
                     <img src="${item.image}" alt="${item.name}" style="width: 50px;">
-                    ${item.name}
+                    ${truncatedName}
                 </td>
                 <td class="align-middle">LKR ${parseFloat(item.price).toFixed(2)}</td>
                 <td class="align-middle">
@@ -330,9 +337,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     </button>
                 </td>
             </tr>
-        `).join('');
-        
-        updateTotals();
+        `;
+    }).join('');
+    
+    updateTotals();
+
     }
 
     function updateTotals() {
