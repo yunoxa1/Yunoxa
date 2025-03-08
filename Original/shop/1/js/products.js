@@ -45,43 +45,43 @@
             data.forEach(product => {
                 const imageUrl = product.image || 'https://via.placeholder.com/250';
                 const { starHtml, rating } = generateStarRating();
-    
+            
                 const productElement = document.createElement('div');
-productElement.classList.add('col-lg-4', 'col-md-6', 'col-6', 'pb-1'); // Added col-6 for mobile
-
-productElement.innerHTML = `
-    <div class="product-item mb-4" style="background-color: white;">
-    <div class="product-img position-relative overflow-hidden">
-        <img class="img-fluid w-100" src="${imageUrl}" alt="${product.name}">
-        <div class="product-action">
-            <a class="btn btn-outline-dark btn-square add-to-cart" 
-               data-product='${JSON.stringify(product)}'>
-                <i class="fa fa-shopping-cart"></i>
-            </a>
-        </div>
-    </div>
-    <div class="text-center py-4">
-        <a class="h6 text-decoration-none text-truncate d-block" href="open.html?id=${product.id}">
-            ${product.name}
-        </a>
-        <div class="d-flex align-items-center justify-content-center mt-2">
-            <h6>LKR ${parseFloat(product.price).toFixed(2)}</h6>
-        </div>
-        <div class="d-flex align-items-center justify-content-center mb-1">
-            ${starHtml} 
-            <small class="ml-1">(${rating})</small>
-        </div>
-        <!-- Description (visible only in list view) -->
-        <div class="list-view-description">
-            <p class="description">
-                ${product.description} <!-- Replace with your product description -->
-            </p>
-        </div>
-    </div>
-</div>
-`;
-
-productsContainer.appendChild(productElement);
+                productElement.classList.add('col-lg-4', 'col-md-6', 'col-6', 'pb-1');
+            
+                productElement.innerHTML = `
+                    <div class="product-item mb-4" style="background-color: white;">
+                        <div class="product-img position-relative overflow-hidden">
+                            <img class="img-fluid w-100" src="${imageUrl}" alt="${product.name}">
+                            <div class="product-action">
+                                <a class="btn btn-outline-dark btn-square add-to-cart" 
+                                   data-product='${JSON.stringify(product).replace(/'/g, "&apos;")}'>
+                                    <i class="fa fa-shopping-cart"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="text-center py-4">
+                            <a class="h6 text-decoration-none text-truncate d-block" href="open.html?id=${product.id}">
+                                ${product.name}
+                            </a>
+                            <div class="d-flex align-items-center justify-content-center mt-2">
+                                <h6>LKR ${parseFloat(product.price).toFixed(2)}</h6>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-center mb-1">
+                                ${starHtml} 
+                                <small class="ml-1">(${rating})</small>
+                            </div>
+                            <!-- Description (visible only in list view) -->
+                            <div class="list-view-description">
+                                <p class="description">
+                                    ${product.description}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            
+                productsContainer.appendChild(productElement);
             });
     
             // Add event listeners to "Add to Cart" buttons

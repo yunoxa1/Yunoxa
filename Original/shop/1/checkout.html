@@ -421,6 +421,12 @@
         const state = document.querySelector('input[placeholder="New York"]').value;
         const zipCode = document.querySelector('input[placeholder="123"]').value;
 
+        // Validate form data
+        if (!firstName || !lastName || !email || !mobileNo || !addressLine1 || !country || !city || !state || !zipCode) {
+            alert('Please fill out all required fields.');
+            return;
+        }
+
         // Generate product details
         let productDetails = '';
         cart.forEach(item => {
@@ -458,6 +464,9 @@
 
         // Generate WhatsApp link
         const whatsappLink = `https://wa.me/94767087651?text=${encodedMessage}`;
+
+        // Clear the cart
+        localStorage.removeItem('cart');
 
         // Redirect to WhatsApp
         window.open(whatsappLink, '_blank');
