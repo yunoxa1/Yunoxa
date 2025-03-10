@@ -1,4 +1,6 @@
 const io = require('socket.io')(server);
+const socket = io('https://your-heroku-app.herokuapp.com');
+
 
 let meetings = {}; // Store meetings with ID and password
 

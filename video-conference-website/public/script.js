@@ -19,7 +19,8 @@ const configuration = {
     ]
 };
 
-const socket = io(); // Connect to the signaling server
+const socket = io('https://your-app-name.herokuapp.com');  // Use the actual deployed URL of your backend
+
 
 let meetingId = null;
 let meetingPassword = null;
