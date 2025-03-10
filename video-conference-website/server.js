@@ -1,5 +1,42 @@
-const io = require('socket.io')(server);
+
 const socket = io('https://your-heroku-app.herokuapp.com');
+
+const express = require('express');
+const http = require('http');
+const { Server } = require('socket.io');
+const cors = require('cors'); // Import cors package
+
+const app = express();
+const server = http.createServer(app);
+
+// Enable CORS for your frontend URL (GitHub Pages URL)
+app.use(cors({
+    origin: 'https://yunoxa1.github.io',  // Allow only this origin
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type'],
+}));
+
+const io = new Server(server, {
+    cors: {
+        origin: 'https://yunoxa1.github.io',  // Allow only this origin
+        methods: ['GET', 'POST'],
+    }
+});
+
+// Your Socket.IO logic here
+io.on('connection', (socket) => {
+    console.log('a user connected');
+    socket.on('disconnect', () => {
+        console.log('user disconnected');
+    });
+});
+
+// Start the server
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+});
+
 
 
 let meetings = {}; // Store meetings with ID and password
