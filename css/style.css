@@ -61,7 +61,7 @@ body {
   line-height: 1.5;
   color: #6C757D;
   text-align: left;
-  background-color: #F5F5F5;
+  background-color: #cff8fa;
 }
 
 [tabindex="-1"]:focus:not(:focus-visible) {
@@ -6164,7 +6164,7 @@ button.bg-light:focus {
 }
 
 .bg-dark {
-  background-color: #3D464D !important;
+  background-color: #3D464f !important;
 }
 
 a.bg-dark:hover, a.bg-dark:focus,
@@ -10110,3 +10110,4 @@ html, body {
 .product-item .list-view-description {
     display: none;
 }
+
