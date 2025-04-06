@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Product - Yunoxa</title>
+    <!-- Cropper.js -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --temu-red: #e02b20;
+            --temu-dark-red: #c5261c;
+            --temu-yellow: #ffd700;
+            --temu-light-gray: #f5f5f5;
+            --temu-dark-gray: #333333;
+            --yunoxa-blue: #2563eb;
+            --yunoxa-dark-blue: #1d4ed8;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--temu-light-gray);
+            color: var(--temu-dark-gray);
+            margin: 0;
+            padding: 0;
+        }
+        
+        .error { color: var(--temu-red); }
+        .success { color: #28a745; }
+        .image-upload-container { margin-bottom: 20px; }
+        
+        #productForm {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        #productForm label {
+            display: block;
+            margin: 15px 0 5px;
+            font-weight: 600;
+        }
+        
+        #productForm input[type="text"],
+        #productForm input[type="number"],
+        #productForm input[type="url"],
+        #productForm select,
+        #productForm textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+        }
+        
+        #productForm textarea {
+            min-height: 100px;
+        }
+        
+        .form-button {
+            background-color: var(--yunoxa-blue);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: background-color 0.2s;
+        }
+        
+        .form-button:hover {
+            background-color: var(--yunoxa-dark-blue);
+        }
+        
+        .form-button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        
+        .form-button.secondary {
+            background-color: #6b7280;
+        }
+        
+        .form-button.secondary:hover {
+            background-color: #4b5563;
+        }
+        
+        .image-preview-container {
+            margin-top: 20px;
+        }
+        
+        .small-previews {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .small-previews img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        
+        .small-previews img:hover {
+            border-color: var(--yunoxa-blue);
+            transform: scale(1.05);
+        }
+        
+        .small-previews img.selected {
+            border-color: var(--yunoxa-blue);
+        }
+        
+        .small-previews img.thumbnail {
+            border-color: var(--temu-yellow);
+            border-width: 3px;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        
+        .thumbnail-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--temu-yellow);
+            color: var(--temu-dark-gray);
+            font-size: 10px;
+            font-weight: bold;
+            padding: 2px 5px;
+            border-radius: 10px;
+            z-index: 1;
+        }
+        
+        .cropper-section {
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        #cropperImage {
+            max-width: 100%;
+            max-height: 400px;
+            display: none;
+        }
+        
+        #cropButton {
+            background-color: var(--yunoxa-blue);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        #cropButton:hover {
+            background-color: var(--yunoxa-dark-blue);
+        }
+        
+        #loadingIndicator {
+            display: none;
+            text-align: center;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        
+        .price-container {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .price-field {
+            flex: 1;
+        }
+        
+        .discount-badge {
+            background-color: var(--temu-red);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 5px;
+        }
+        
+        .thumbnail-selection-container {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .thumbnail-selection-container h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: var(--temu-dark-gray);
+        }
+        
+        .thumbnail-instruction {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        
+        .thumbnail-button {
+            background-color: var(--temu-yellow);
+            color: var(--temu-dark-gray);
+            border: none;
+            padding: 8px 15px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.2s;
+        }
+        
+        .thumbnail-button:hover {
+            background-color: #e6c200;
+        }
+        
+        .import-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f0f7ff;
+            border-radius: 8px;
+            border: 1px solid #dbeafe;
+        }
+        
+        .import-section h3 {
+            margin-top: 0;
+            color: var(--yunoxa-blue);
+        }
+        
+        .preview-container {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            display: none;
+        }
+        
+        .preview-container h4 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: var(--temu-dark-gray);
+        }
+        
+        .preview-image {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        
+        .preview-images {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .preview-images img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .preview-details {
+            margin-top: 15px;
+        }
+        
+        .preview-details p {
+            margin: 5px 0;
+        }
+        
+        .tab-container {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #6b7280;
+        }
+        
+        .tab.active {
+            color: var(--yunoxa-blue);
+            border-bottom-color: var(--yunoxa-blue);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .price-breakdown {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f8fafc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .price-breakdown p {
+            margin: 5px 0;
+            color: #4b5563;
+        }
+        
+        .price-breakdown .total {
+            font-weight: bold;
+            color: var(--temu-dark-gray);
+        }
+        
+        .edit-field {
+            margin-top: 10px;
+        }
+        
+        .edit-field input,
+        .edit-field textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .image-options {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+        
+        .image-options h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        
+        .image-option-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .image-option-button {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .image-option-button:hover {
+            border-color: var(--yunoxa-blue);
+            background-color: #f0f7ff;
+        }
+        
+        .image-option-button.selected {
+            border-color: var(--yunoxa-blue);
+            background-color: #e0f2fe;
+        }
+    </style>
+</head>
+<body>
+    <div class="page create">
+        <form id="productForm">
+            <div class="tab-container">
+                <div class="tab active" data-tab="import">Import from AliExpress</div>
+                <div class="tab" data-tab="manual">Manual Entry</div>
+            </div>
+            
+            <div class="tab-content active" id="import-tab">
+                <div class="import-section">
+                    <h3>Import Product from AliExpress</h3>
+                    <label for="aliexpressUrl">AliExpress Product URL</label>
+                    <input type="url" id="aliexpressUrl" placeholder="https://www.aliexpress.com/item/...">
+                    <button type="button" class="form-button secondary" id="fetchButton">Fetch Product Details</button>
+                    
+                    <div class="preview-container" id="aliexpressPreview">
+                        <h4>Product Preview</h4>
+                        <img class="preview-image" id="previewImage">
+                        
+                        <div class="preview-images" id="previewImages"></div>
+                        
+                        <div class="preview-details">
+                            <p><strong id="previewTitle">Product Title</strong></p>
+                            <p id="previewPrice">Price: $0.00</p>
+                            <p id="previewShipping">Shipping: $0.00</p>
+                            <div class="price-breakdown">
+                                <p>AliExpress Price: <span id="aliexpressPrice">$0.00</span></p>
+                                <p>+ Shipping: <span id="aliexpressShipping">$0.00</span></p>
+                                <p>+ Yunoxa Fee: LKR 500.00</p>
+                                <p class="total">Your Price: <span id="calculatedPrice">LKR 0.00</span></p>
+                            </div>
+                            
+                            <div class="edit-field">
+                                <label for="editTitle">Edit Title</label>
+                                <input type="text" id="editTitle">
+                            </div>
+                            
+                            <div class="edit-field">
+                                <label for="editDescription">Edit Description</label>
+                                <textarea id="editDescription" rows="3"></textarea>
+                            </div>
+                            
+                            <div class="edit-field">
+                                <label for="editPrice">Adjust Price (LKR)</label>
+                                <input type="number" id="editPrice">
+                            </div>
+                            
+                            <div class="image-options">
+                                <h4>Image Options</h4>
+                                <p>Choose how to handle product images:</p>
+                                <div class="image-option-buttons">
+                                    <button type="button" class="image-option-button selected" id="useAliImages">Use AliExpress Images</button>
+                                    <button type="button" class="image-option-button" id="uploadCustomImages">Upload Custom Images</button>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="form-button secondary" id="useAliExpressDetails">Use These Details</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="manual-tab">
+                <label for="name"><b>Title</b></label>
+                <input type="text" id="name" required placeholder="Enter product title">
+
+                <label for="details">Details</label>
+                <textarea id="details" rows="5" required placeholder="Enter product details (features, specifications, etc.)"></textarea>
+
+                <div class="price-container">
+                    <div class="price-field">
+                        <label for="price">Price (LKR)</label>
+                        <input type="number" id="price" required placeholder="Enter price">
+                    </div>
+                    <div class="price-field">
+                        <label for="discount">Discount (%) <span class="discount-badge">SAVE</span></label>
+                        <input type="number" id="discount" min="0" max="100" placeholder="Enter discount percentage">
+                    </div>
+                </div>
+
+                <label for="description">Description</label>
+                <textarea id="description" rows="5" required placeholder="Enter detailed product description"></textarea>
+
+                <label for="categorize">Category</label>
+                <select id="categorize" required>
+                    <option value="" disabled selected>Select a category</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Fashion">Fashion</option>
+                    <option value="Home & Kitchen">Home & Kitchen</option>
+                    <option value="Beauty & Personal Care">Beauty & Personal Care</option>
+                    <option value="Health & Wellness">Health & Wellness</option>
+                    <option value="Toys & Games">Toys & Games</option>
+                    <option value="Sports & Outdoors">Sports & Outdoors</option>
+                    <option value="Automotive">Automotive</option>
+                    <option value="Books & Stationery">Books & Stationery</option>
+                    <option value="Groceries & Gourmet Food">Groceries & Gourmet Food</option>
+                    <option value="Baby & Kids">Baby & Kids</option>
+                    <option value="Pet Supplies">Pet Supplies</option>
+                </select>
+                
+                <!-- Image Upload -->
+                <div class="image-upload-container" id="manualImageUpload">
+                    <label for="imageUpload">Upload Images (3-6 Images Required)</label>
+                    <input type="file" id="imageUpload" accept="image/*" multiple>
+                </div>
+
+                <!-- Image Previews -->
+                <div class="image-preview-container">
+                    <div class="cropper-section">
+                        <img id="cropperImage">
+                        <button type="button" id="cropButton">Crop & Upload</button>
+                    </div>
+                    <div class="small-previews" id="imagePreview"></div>
+                </div>
+
+                <!-- Thumbnail Selection -->
+                <div class="thumbnail-selection-container" id="thumbnailSelection">
+                    <h4>Select Thumbnail Image</h4>
+                    <p class="thumbnail-instruction">Click on an image below to set it as the thumbnail (main image)</p>
+                    <div class="small-previews" id="thumbnailPreview"></div>
+                    <button type="button" class="thumbnail-button" id="confirmThumbnail">Confirm Thumbnail</button>
+                </div>
+            </div>
+
+            <!-- Loading Indicator -->
+            <div id="loadingIndicator">
+                <p><i class="fas fa-spinner fa-spin"></i> Processing... Please wait.</p>
+            </div>
+
+            <p id="uploadError" class="error"></p>
+
+            <button type="submit" class="form-button" id="submitButton" disabled>Add Product</button>
+
+            <p id="formError" class="error"></p>
+            <p id="successMessage" class="success"></p>
+        </form>
+    </div>
+
+<!-- Cropper.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+<!-- Supabase -->
+<script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+    const SUPABASE_URL = "https://qopdjgfciakmvhlriixt.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFvcGRqZ2ZjaWFrbXZobHJpaXh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk0NDA2NDAsImV4cCI6MjA1NTAxNjY0MH0.5UAelwww7WpDUExqhc5dH2JhUWlGNgUNjh8fzxPNZvs";
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let cropper;
+    let uploadedImages = []; // Array to store cropped image URLs
+    let imageFiles = []; // Array to store uploaded files
+    let currentImageIndex = 0; // Track the current image being cropped
+    let selectedThumbnailIndex = 0; // Track the selected thumbnail index
+    let croppedImageBlobs = []; // Array to store cropped image blobs
+    let aliExpressImageUrls = []; // Array to store AliExpress image URLs
+    let useAliExpressImages = true; // Default to using AliExpress images
+
+    // DOM Elements
+    const imageUpload = document.getElementById("imageUpload");
+    const imagePreview = document.getElementById("imagePreview");
+    const thumbnailPreview = document.getElementById("thumbnailPreview");
+    const cropperImage = document.getElementById("cropperImage");
+    const cropButton = document.getElementById("cropButton");
+    const loadingIndicator = document.getElementById("loadingIndicator");
+    const uploadError = document.getElementById("uploadError");
+    const submitButton = document.getElementById("submitButton");
+    const successMessage = document.getElementById("successMessage");
+    const thumbnailSelection = document.getElementById("thumbnailSelection");
+    const confirmThumbnail = document.getElementById("confirmThumbnail");
+    const aliexpressUrl = document.getElementById("aliexpressUrl");
+    const fetchButton = document.getElementById("fetchButton");
+    const aliexpressPreview = document.getElementById("aliexpressPreview");
+    const previewImage = document.getElementById("previewImage");
+    const previewImages = document.getElementById("previewImages");
+    const previewTitle = document.getElementById("previewTitle");
+    const previewPrice = document.getElementById("previewPrice");
+    const previewShipping = document.getElementById("previewShipping");
+    const aliexpressPrice = document.getElementById("aliexpressPrice");
+    const aliexpressShipping = document.getElementById("aliexpressShipping");
+    const calculatedPrice = document.getElementById("calculatedPrice");
+    const useAliExpressDetails = document.getElementById("useAliExpressDetails");
+    const editTitle = document.getElementById("editTitle");
+    const editDescription = document.getElementById("editDescription");
+    const editPrice = document.getElementById("editPrice");
+    const tabs = document.querySelectorAll(".tab");
+    const tabContents = document.querySelectorAll(".tab-content");
+    const useAliImages = document.getElementById("useAliImages");
+    const uploadCustomImages = document.getElementById("uploadCustomImages");
+    const manualImageUpload = document.getElementById("manualImageUpload");
+
+    // Tab switching
+    tabs.forEach(tab => {
+        tab.addEventListener("click", () => {
+            tabs.forEach(t => t.classList.remove("active"));
+            tabContents.forEach(c => c.classList.remove("active"));
+            
+            tab.classList.add("active");
+            document.getElementById(`${tab.dataset.tab}-tab`).classList.add("active");
+        });
+    });
+
+    // Image option selection
+    useAliImages.addEventListener("click", function() {
+        useAliImages.classList.add("selected");
+        uploadCustomImages.classList.remove("selected");
+        useAliExpressImages = true;
+        manualImageUpload.style.display = "none";
+    });
+
+    uploadCustomImages.addEventListener("click", function() {
+        uploadCustomImages.classList.add("selected");
+        useAliImages.classList.remove("selected");
+        useAliExpressImages = false;
+        manualImageUpload.style.display = "block";
+    });
+
+    // Fetch AliExpress product details
+    fetchButton.addEventListener("click", async function() {
+        const url = aliexpressUrl.value.trim();
+        
+        if (!url || !url.includes("aliexpress.com/item/")) {
+            uploadError.textContent = "Please enter a valid AliExpress product URL";
+            return;
+        }
+
+        loadingIndicator.style.display = "block";
+        fetchButton.disabled = true;
+        uploadError.textContent = "";
+
+        try {
+            // Changed to GET request with URL parameter as your Flask expects
+            const apiUrl = `http://localhost:5000/scrape?url=${encodeURIComponent(url)}`;
+            const response = await fetch(apiUrl);
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            if (data) {
+                // Store all image URLs from AliExpress
+                aliExpressImageUrls = [];
+                if (data.main_image) {
+                    aliExpressImageUrls.push(data.main_image);
+                }
+                if (data.images && data.images.length > 0) {
+                    // Add other images (excluding duplicates of main image)
+                    data.images.forEach(imgUrl => {
+                        if (!aliExpressImageUrls.includes(imgUrl)) {
+                            aliExpressImageUrls.push(imgUrl);
+                        }
+                    });
+                }
+                
+                // Display basic product info
+                const mainImage = data.main_image || data.images?.[0];
+                if (mainImage) {
+                    previewImage.src = mainImage;
+                }
+                
+                if (data.title) {
+                    previewTitle.textContent = data.title;
+                    editTitle.value = data.title;
+                }
+                
+                // Handle price (remove non-numeric characters except decimal point)
+                if (data.price) {
+                    const priceValue = parseFloat(data.price.replace(/[^\d.]/g, ''));
+                    if (!isNaN(priceValue)) {
+                        previewPrice.textContent = `Price: LKR${priceValue.toFixed(2)}`;
+                        editPrice.value = priceValue.toFixed(2);
+                    }
+                }
+                
+                // Create description from title and specifications
+                let description = data.title || '';
+                if (data.specifications && data.specifications.length > 0) {
+                    description += "\n\nSpecifications:\n";
+                    data.specifications.forEach(spec => {
+                        if (spec.title && spec.description) {
+                            description += `- ${spec.title}: ${spec.description}\n`;
+                        }
+                    });
+                }
+                editDescription.value = description;
+                
+                // Display up to 5 product images (excluding main image if it's in the array)
+                previewImages.innerHTML = "";
+                if (data.images && data.images.length > 0) {
+                    const imagesToShow = [...data.images];
+                    // Remove main image from thumbnails if it exists in the array
+                    if (mainImage) {
+                        const mainImageIndex = imagesToShow.indexOf(mainImage);
+                        if (mainImageIndex !== -1) {
+                            imagesToShow.splice(mainImageIndex, 1);
+                        }
+                    }
+                    // Limit to 5 images
+                    imagesToShow.slice(0, 5).forEach(imgUrl => {
+                        const imgContainer = document.createElement("div");
+                        imgContainer.className = "product-image-thumbnail";
+                        
+                        const img = document.createElement("img");
+                        img.src = imgUrl;
+                        img.addEventListener("click", () => previewImage.src = imgUrl);
+                        
+                        imgContainer.appendChild(img);
+                        previewImages.appendChild(imgContainer);
+                    });
+                }
+                
+                aliexpressPreview.style.display = "block";
+            } else {
+                uploadError.textContent = "Failed to fetch product details";
+            }
+        } catch (error) {
+            console.error('Fetch error:', error);
+            uploadError.textContent = "Error fetching product details. Make sure the Python scraper is running!";
+        } finally {
+            loadingIndicator.style.display = "none";
+            fetchButton.disabled = false;
+        }
+    });
+
+    // Use AliExpress details in form
+    useAliExpressDetails.addEventListener("click", function() {
+    if (!aliexpressPreview.style.display || aliexpressPreview.style.display === "none") {
+        uploadError.textContent = "No product details to use";
+        return;
+    }
+
+    // Fill form with edited details
+    document.getElementById("name").value = editTitle.value;
+    document.getElementById("details").value = "Please note that the actual product may differ slightly from the images shown. Variations in lighting, exposure, or screen settings can affect how the product appears. Rest assured, all items are carefully inspected before shipping.";
+    document.getElementById("description").value = editDescription.value;
+    document.getElementById("price").value = editPrice.value;
+    
+    // Set category if it matches
+    const categorySelect = document.getElementById("categorize");
+    const categoryOptions = Array.from(categorySelect.options);
+    const aliCategory = "Electronics"; // In real implementation, get from actual data
+    
+    const matchingOption = categoryOptions.find(option => 
+        option.value.toLowerCase() === aliCategory.toLowerCase()
+    );
+    
+    if (matchingOption) {
+        matchingOption.selected = true;
+    }
+
+    // If using AliExpress images, show the thumbnail selection
+    if (useAliExpressImages && aliExpressImageUrls.length > 0) {
+        showThumbnailSelectionForUrls(aliExpressImageUrls);
+        // Enable the submit button since we have images
+        submitButton.disabled = false;
+    }
+
+    // Switch to manual tab to show filled form
+    document.querySelector('.tab[data-tab="manual"]').click();
+});
+
+    // Show thumbnail selection for URL images
+    function showThumbnailSelectionForUrls(imageUrls) {
+    thumbnailSelection.style.display = "block";
+    thumbnailPreview.innerHTML = "";
+
+    // Create thumbnail previews
+    imageUrls.forEach((imgSrc, index) => {
+        const img = document.createElement("img");
+        img.src = imgSrc;
+        img.dataset.index = index;
+        
+        // Highlight the first image by default
+        if (index === 0) {
+            img.classList.add("thumbnail");
+            const badge = document.createElement("span");
+            badge.className = "thumbnail-badge";
+            badge.textContent = "Thumbnail";
+            img.appendChild(badge);
+            selectedThumbnailIndex = 0;
+        }
+        
+        img.addEventListener("click", () => selectThumbnail(index));
+        thumbnailPreview.appendChild(img);
+    });
+
+    // Enable the submit button since we have images
+    submitButton.disabled = false;
+}
+
+    // Handle image selection for manual upload
+    imageUpload.addEventListener("change", function (event) {
+        const files = event.target.files;
+
+        if (files.length < 3 || files.length > 6) {
+            uploadError.textContent = "Please upload between 3 and 6 images!";
+            return;
+        }
+
+        // Check file sizes (up to 5MB)
+        for (const file of files) {
+            if (file.size > 5 * 1024 * 1024) { // 5MB limit
+                uploadError.textContent = "Each image must be less than 5MB!";
+                return;
+            }
+        }
+
+        imageFiles = Array.from(files); // Store files for later use
+        imagePreview.innerHTML = ""; // Clear previous previews
+        thumbnailPreview.innerHTML = ""; // Clear thumbnail previews
+        uploadedImages = []; // Reset uploaded images array
+        croppedImageBlobs = []; // Reset cropped image blobs
+        submitButton.disabled = true; // Disable submit button initially
+        successMessage.style.display = "none"; // Hide success message
+        thumbnailSelection.style.display = "none"; // Hide thumbnail selection initially
+
+        // Display small previews
+        let loadedImages = 0;
+        imageFiles.forEach((file, index) => {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = document.createElement("img");
+                img.src = e.target.result;
+                img.dataset.index = index;
+                img.addEventListener("click", () => openCropper(img, index));
+                imagePreview.appendChild(img);
+
+                loadedImages++;
+                if (loadedImages === imageFiles.length) {
+                    // All images loaded, open the first image for cropping
+                    openCropper(imagePreview.children[0], 0);
+                }
+            };
+
+            reader.onerror = function () {
+                uploadError.textContent = `Failed to load image ${index + 1}. Please try again.`;
+            };
+
+            reader.readAsDataURL(file);
+        });
+    });
+
+    // Open Cropper for a specific image
+    function openCropper(img, index) {
+        if (!img.src) {
+            uploadError.textContent = `Image ${index + 1} could not be loaded. Please try again.`;
+            return;
+        }
+
+        // Hide the small previews while cropping
+        imagePreview.style.display = "none";
+
+        cropperImage.src = img.src;
+        cropperImage.style.display = "block";
+        currentImageIndex = index;
+
+        if (cropper) cropper.destroy(); // Destroy existing cropper instance
+
+        cropper = new Cropper(cropperImage, {
+            aspectRatio: 1,
+            viewMode: 1,
+        });
+
+        // Show the cropper section and crop button
+        document.querySelector('.cropper-section').style.display = 'block';
+        cropButton.style.display = "block";
+    }
+
+    // Crop the current image and move to the next
+    cropButton.addEventListener("click", async function () {
+        if (!cropper) return;
+
+        const canvas = cropper.getCroppedCanvas({
+            width: 640,
+            height: 640,
+            fillColor: "#fff",
+        });
+
+        loadingIndicator.style.display = "block";
+        cropButton.disabled = true;
+
+        // Convert the canvas to JPEG format and compress to less than 120KB
+        canvas.toBlob(async (blob) => {
+            if (blob.size > 120 * 1024) { // 120KB limit
+                uploadError.textContent = "Cropped image is too large! Please crop a smaller area.";
+                loadingIndicator.style.display = "none";
+                cropButton.disabled = false;
+                return;
+            }
+
+            // Store the cropped image blob
+            croppedImageBlobs[currentImageIndex] = blob;
+
+            // Create a preview URL for the cropped image
+            const previewUrl = URL.createObjectURL(blob);
+            uploadedImages[currentImageIndex] = previewUrl;
+
+            // Update the preview image
+            const previewImg = imagePreview.querySelector(`img[data-index="${currentImageIndex}"]`);
+            previewImg.src = previewUrl;
+            previewImg.classList.add("selected");
+
+            // Move to the next image
+            if (currentImageIndex < imageFiles.length - 1) {
+                currentImageIndex++;
+                openCropper(imagePreview.children[currentImageIndex], currentImageIndex);
+            } else {
+                // All images cropped
+                cropperImage.style.display = "none";
+                cropButton.style.display = "none";
+                document.querySelector('.cropper-section').style.display = 'none';
+                if (cropper) {
+                    cropper.destroy();
+                    cropper = null;
+                }
+
+                // Show the image previews again
+                imagePreview.style.display = "flex";
+
+                // Show thumbnail selection
+                showThumbnailSelection();
+            }
+
+            loadingIndicator.style.display = "none";
+            cropButton.disabled = false;
+        }, "image/jpeg", 0.8); // Convert to JPEG with 80% quality
+    });
+
+    // Show thumbnail selection interface
+    function showThumbnailSelection() {
+        thumbnailSelection.style.display = "block";
+        thumbnailPreview.innerHTML = "";
+
+        // Create thumbnail previews
+        uploadedImages.forEach((imgSrc, index) => {
+            const img = document.createElement("img");
+            img.src = imgSrc;
+            img.dataset.index = index;
+            
+            // Highlight the first image by default
+            if (index === 0) {
+                img.classList.add("thumbnail");
+                const badge = document.createElement("span");
+                badge.className = "thumbnail-badge";
+                badge.textContent = "Thumbnail";
+                img.appendChild(badge);
+                selectedThumbnailIndex = 0;
+            }
+            
+            img.addEventListener("click", () => selectThumbnail(index));
+            thumbnailPreview.appendChild(img);
+        });
+    }
+
+    // Handle thumbnail selection
+    function selectThumbnail(index) {
+        // Remove thumbnail class from all images
+        const thumbnails = thumbnailPreview.querySelectorAll("img");
+        thumbnails.forEach((img, i) => {
+            img.classList.remove("thumbnail");
+            
+            // Remove any existing badge
+            const existingBadge = img.querySelector(".thumbnail-badge");
+            if (existingBadge) {
+                img.removeChild(existingBadge);
+            }
+            
+            // Add class and badge to selected image
+            if (i === index) {
+                img.classList.add("thumbnail");
+                const badge = document.createElement("span");
+                badge.className = "thumbnail-badge";
+                badge.textContent = "Thumbnail";
+                img.appendChild(badge);
+                selectedThumbnailIndex = index;
+            }
+        });
+    }
+
+    // Confirm thumbnail selection
+    confirmThumbnail.addEventListener("click", function() {
+        thumbnailSelection.style.display = "none";
+        submitButton.disabled = false; // Enable the submit button
+    });
+
+    // Handle form submission
+    document.getElementById("productForm").addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        // Upload all cropped images to Supabase or use AliExpress URLs
+        loadingIndicator.style.display = "block";
+        submitButton.disabled = true;
+
+        let imageUrls = [];
+        
+        if (useAliExpressImages && aliExpressImageUrls.length > 0) {
+            // Use AliExpress image URLs directly
+            imageUrls = aliExpressImageUrls;
+            
+            // Reorder images so the thumbnail is first
+            const reorderedImageUrls = [
+                imageUrls[selectedThumbnailIndex], // Thumbnail first
+                ...imageUrls.slice(0, selectedThumbnailIndex),
+                ...imageUrls.slice(selectedThumbnailIndex + 1)
+            ];
+            
+            await submitProductData(reorderedImageUrls);
+        } else if (croppedImageBlobs.length > 0) {
+            // Upload manually cropped images
+            for (let i = 0; i < croppedImageBlobs.length; i++) {
+                const fileName = `product-${Date.now()}-${i}.jpg`;
+                const { data, error } = await supabase.storage
+                    .from("product-images")
+                    .upload(fileName, croppedImageBlobs[i], {
+                        cacheControl: "3600",
+                        contentType: "image/jpeg",
+                    });
+
+                if (error) {
+                    uploadError.textContent = "Error uploading image: " + error.message;
+                    loadingIndicator.style.display = "none";
+                    submitButton.disabled = false;
+                    return;
+                }
+                
+                const imageUrl = `${SUPABASE_URL}/storage/v1/object/public/product-images/${fileName}`;
+                imageUrls.push(imageUrl);
+            }
+
+            // Reorder images so the thumbnail is first
+            const reorderedImageUrls = [
+                imageUrls[selectedThumbnailIndex], // Thumbnail first
+                ...imageUrls.slice(0, selectedThumbnailIndex),
+                ...imageUrls.slice(selectedThumbnailIndex + 1)
+            ];
+            
+            await submitProductData(reorderedImageUrls);
+        } else {
+            uploadError.textContent = "No images available for the product";
+            loadingIndicator.style.display = "none";
+            submitButton.disabled = false;
+            return;
+        }
+    });
+
+    // Submit product data to Supabase
+    async function submitProductData(imageUrls) {
+        const name = document.getElementById("name").value.trim();
+        const details = document.getElementById("details").value.trim();
+        const price = parseFloat(document.getElementById("price").value.trim());
+        const discount = parseFloat(document.getElementById("discount").value.trim()) || 0;
+        const description = document.getElementById("description").value.trim();
+        const categorize = document.getElementById("categorize").value.trim();
+
+        const { data, error } = await supabase
+            .from("products")
+            .insert([
+                {
+                    name,
+                    details,
+                    price,
+                    discount,
+                    description,
+                    categorize,
+                    image: imageUrls[0], // Thumbnail (main image)
+                    image1: imageUrls[1] || null,
+                    image2: imageUrls[2] || null,
+                    image3: imageUrls[3] || null,
+                    image4: imageUrls[4] || null,
+                    image5: imageUrls[5] || null,
+                }
+            ]);
+
+        loadingIndicator.style.display = "none";
+
+        if (error) {
+            document.getElementById("formError").textContent = "Error adding product: " + error.message;
+            submitButton.disabled = false;
+            return;
+        }
+
+        // Display success message
+        successMessage.textContent = "Product added successfully!";
+        successMessage.style.display = "block";
+
+        alert("Product added successfully!");
+        window.location.reload(); // Reload the page to reset the form
+    }
+</script>
+</body>
+</html>

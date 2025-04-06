@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Yunoxa - Shopping Cart</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta name="description" content="Your shopping cart - Amazing deals every day!">
+
+    <!-- Favicon -->
+    <link rel="icon" href="https://img.kwcdn.com/product/open/2023-09-19/1695100220116-7e3a8b7a3a1e4b1d8f8f5a0a5d1a9a7a-goods.jpeg?imageView2/2/w/800/q/70/format/webp" type="image/jpeg">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/cart.css" rel="stylesheet">
+
+    
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="yunoxa-header">
+        <div class="header-top">
+            <div class="logo">Yunoxa<span>!</span></div>
+            <div class="header-icons">
+                <a href="#"><i class="far fa-bell"></i></a>
+                <a href="cart.html">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count">0</span>
+                </a>
+            </div>
+        </div>
+        <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" id="search-input" placeholder="Search for products" oninput="searchProducts()">
+        </div>
+        <nav class="category-nav">
+            <a href="javascript:void(0)" class="category-item" data-category="Electronics">
+                <div class="category-icon">
+                    <i class="fas fa-microchip"></i>
+                </div>
+                <span class="category-name">Electronics</span>
+            </a>
+            <a href="javascript:void(0)" class="category-item" data-category="Fashion">
+                <div class="category-icon">
+                    <i class="fas fa-tshirt"></i>
+                </div>
+                <span class="category-name">Fashion</span>
+            </a>
+            <a href="javascript:void(0)" class="category-item" data-category="Home & Kitchen">
+                <div class="category-icon">
+                    <i class="fas fa-home"></i>
+                </div>
+                <span class="category-name">Home & Kitchen</span>
+            </a>
+            <a href="javascript:void(0)" class="category-item" data-category="Beauty & Personal Care">
+                <div class="category-icon">
+                    <i class="fas fa-spa"></i>
+                </div>
+                <span class="category-name">Beauty</span>
+            </a>
+            <a href="javascript:void(0)" class="category-item" data-category="Health & Wellness">
+                <div class="category-icon">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+                <span class="category-name">Health</span>
+            </a>
+            <a href="javascript:void(0)" class="category-item" data-category="Toys & Games">
+                <div class="category-icon">
+                    <i class="fas fa-gamepad"></i>
+                </div>
+                <span class="category-name">Toys & Games</span>
+            </a>
+            <a href="javascript:void(0)" class="category-item" data-category="Sports & Outdoors">
+                <div class="category-icon">
+                    <i class="fas fa-basketball-ball"></i>
+                </div>
+                <span class="category-name">Sports</span>
+            </a>
+            <a href="javascript:void(0)" class="category-item" data-category="More" onclick="showMoreCategories()">
+                <div class="category-icon">
+                    <i class="fas fa-ellipsis-h"></i>
+                </div>
+                <span class="category-name">More</span>
+            </a>
+        </nav>
+        
+        <!-- Hidden categories that appear when "More" is clicked -->
+        <div id="more-categories" class="more-categories" style="display: none;">
+            <a href="javascript:void(0)" class="category-item" data-category="Automotive">
+                <div class="category-icon">
+                    <i class="fas fa-car"></i>
+                </div>
+                <span class="category-name">Automotive</span>
+            </a>
+            
+            <a href="javascript:void(0)" class="category-item" data-category="Books & Stationery">
+                <div class="category-icon">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <span class="category-name">Books</span>
+            </a>
+            <a href="javascript:void(0)" class="category-item" data-category="Groceries & Gourmet Food">
+                <div class="category-icon">
+                    <i class="fas fa-shopping-basket"></i>
+                </div>
+                <span class="category-name">Groceries</span>
+            </a>
+            <a href="javascript:void(0)" class="category-item" data-category="Baby & Kids">
+                <div class="category-icon">
+                    <i class="fas fa-baby-carriage"></i>
+                </div>
+                <span class="category-name">Baby & Kids</span>
+            </a>
+            <a href="javascript:void(0)" class="category-item" data-category="Pet Supplies">
+                <div class="category-icon">
+                    <i class="fas fa-paw"></i>
+                </div>
+                <span class="category-name">Pets</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- Cart Content -->
+    <div class="cart-container">
+        <div class="cart-header">
+            <h1 class="cart-title">Shopping Cart</h1>
+            <button class="cart-edit-btn" id="edit-cart">Edit</button>
+        </div>
+        
+        <div id="cart-items-container">
+            <!-- Cart items will be loaded here -->
+        </div>
+        
+        <div id="empty-cart" class="empty-cart" style="display: none;">
+            <div class="empty-cart-icon">
+                <i class="fas fa-shopping-cart"></i>
+            </div>
+            <h2 class="empty-cart-title">Your cart is empty</h2>
+            <p class="empty-cart-text">Add some amazing deals to your cart!</p>
+            <a href="index.html" class="shop-now-btn">Shop Now</a>
+        </div>
+        
+        <div class="cart-summary">
+            <div class="summary-row">
+                <span class="summary-label">Subtotal</span>
+                <span class="summary-value" id="subtotal">LKR 0.00</span>
+            </div>
+            <div class="summary-row">
+                <span class="summary-label">Shipping</span>
+                <span class="summary-value" id="shipping">LKR 0.00</span>
+            </div>
+            <div class="summary-row">
+                <span class="summary-label">Tax</span>
+                <span class="summary-value" id="tax">FREE</span>
+            </div>
+            <div class="summary-row total-row">
+                <span class="summary-label">Total</span>
+                <span class="summary-value total-value" id="total">LKR 0.00</span>
+            </div>
+            <a href="checkout.html">
+            <button class="checkout-btn" id="checkout-btn" disabled>Proceed to Checkout</button>
+        </div></a>
+        
+        <div class="recommended-title">Recommended For You</div>
+        <div class="products-grid" id="recommended-products">
+            <!-- Recommended products will be loaded here -->
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home nav-icon"></i>
+            <span>Home</span>
+        </a>
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-search nav-icon"></i>
+            <span>Search</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="fas fa-gift nav-icon"></i>
+            <span>Deals</span>
+        </a>
+        <a href="cart.html" class="nav-item active">
+            <i class="fas fa-shopping-cart nav-icon"></i>
+            <span>Cart</span>
+        </a>
+    </nav>
+
+    <!-- JavaScript -->
+    <script type="module">
+        import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+        
+        const supabaseUrl = 'https://qopdjgfciakmvhlriixt.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFvcGRqZ2ZjaWFrbXZobHJpaXh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk0NDA2NDAsImV4cCI6MjA1NTAxNjY0MH0.5UAelwww7WpDUExqhc5dH2JhUWlGNgUNjh8fzxPNZvs';
+        const supabase = createClient(supabaseUrl, supabaseKey);
+        
+        // Initialize cart
+        updateCartCount();
+        loadCartItems();
+        loadRecommendedProducts();
+        
+        // Generate star rating
+        function generateStarRating() {
+            const rating = (Math.random() * (5 - 3.7) + 3.7).toFixed(1);
+            const fullStars = Math.floor(rating);
+            const halfStar = (rating - fullStars) >= 0.5 ? 1 : 0;
+            const emptyStars = 5 - fullStars - halfStar;
+        
+            let starHtml = '';
+            for (let i = 0; i < fullStars; i++) {
+                starHtml += '<i class="fas fa-star"></i>';
+            }
+            if (halfStar) {
+                starHtml += '<i class="fas fa-star-half-alt"></i>';
+            }
+            for (let i = 0; i < emptyStars; i++) {
+                starHtml += '<i class="far fa-star"></i>';
+            }
+        
+            return { starHtml, rating };
+        }
+        
+        // Update cart count in header
+        function updateCartCount() {
+            const cart = getCart();
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.querySelectorAll('.cart-count').forEach(el => {
+                el.textContent = totalItems;
+            });
+        }
+        
+        // Get cart from localStorage
+        function getCart() {
+            return JSON.parse(localStorage.getItem('cart')) || [];
+        }
+        
+        // Save cart to localStorage
+        function saveCart(cart) {
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+        
+        // Load cart items from localStorage
+        function loadCartItems() {
+            const cart = getCart();
+            const cartContainer = document.getElementById('cart-items-container');
+            const emptyCart = document.getElementById('empty-cart');
+            const checkoutBtn = document.getElementById('checkout-btn');
+            
+            if (cart.length === 0) {
+                cartContainer.style.display = 'none';
+                emptyCart.style.display = 'block';
+                checkoutBtn.disabled = true;
+                updateCartSummary(0, 0);
+                return;
+            }
+            
+            cartContainer.style.display = 'block';
+            emptyCart.style.display = 'none';
+            checkoutBtn.disabled = false;
+            
+            cartContainer.innerHTML = '';
+            
+            let subtotal = 0;
+            let shipping = 0;
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                subtotal += itemTotal;
+                shipping += 250 * item.quantity; // LKR 250 per product
+                
+                const cartItem = document.createElement('div');
+                cartItem.className = 'cart-item';
+                cartItem.dataset.id = item.id;
+                cartItem.innerHTML = `
+                    <input type="checkbox" class="cart-item-checkbox" checked onclick="return false;">
+                    <img src="${item.image || 'https://via.placeholder.com/80'}" alt="${item.name}" class="cart-item-img">
+                    <div class="cart-item-details">
+                        <div class="cart-item-title">${item.name}</div>
+                        <div class="cart-item-price">
+                            LKR ${item.price.toFixed(2)}
+                            ${item.discount > 0 ? `<span class="cart-item-original-price">LKR ${item.originalPrice.toFixed(2)}</span>` : ''}
+                            ${item.discount > 0 ? `<span class="cart-item-discount">${item.discount}% OFF</span>` : ''}
+                        </div>
+                        <div class="cart-item-actions">
+                            <div class="quantity-control">
+                                <button class="quantity-btn minus">-</button>
+                                <input type="number" class="quantity-input" value="${item.quantity}" min="1">
+                                <button class="quantity-btn plus">+</button>
+                            </div>
+                            <button class="remove-item">
+                                <i class="fas fa-trash-alt"></i> Remove
+                            </button>
+                        </div>
+                    </div>`;
+                
+                // Add event listeners to the buttons
+                const minusBtn = cartItem.querySelector('.minus');
+                const plusBtn = cartItem.querySelector('.plus');
+                const quantityInput = cartItem.querySelector('.quantity-input');
+                const removeBtn = cartItem.querySelector('.remove-item');
+                
+                minusBtn.addEventListener('click', () => updateQuantity(item.id, -1));
+                plusBtn.addEventListener('click', () => updateQuantity(item.id, 1));
+                quantityInput.addEventListener('change', (e) => updateQuantityInput(item.id, e.target.value));
+                removeBtn.addEventListener('click', () => removeItem(item.id));
+                
+                cartContainer.appendChild(cartItem);
+            });
+            
+            updateCartSummary(subtotal, shipping);
+        }
+        
+        // Update cart summary
+        function updateCartSummary(subtotal, shipping) {
+            document.getElementById('subtotal').textContent = `LKR ${subtotal.toFixed(2)}`;
+            document.getElementById('shipping').textContent = `LKR ${shipping.toFixed(2)}`;
+            document.getElementById('tax').textContent = 'FREE';
+            document.getElementById('total').textContent = `LKR ${(subtotal + shipping).toFixed(2)}`;
+        }
+        
+        // Update quantity with buttons
+        function updateQuantity(id, change) {
+            let cart = getCart();
+            const itemIndex = cart.findIndex(item => item.id === id);
+            
+            if (itemIndex !== -1) {
+                cart[itemIndex].quantity += change;
+                
+                // Ensure quantity is at least 1
+                if (cart[itemIndex].quantity < 1) {
+                    cart[itemIndex].quantity = 1;
+                }
+                
+                saveCart(cart);
+                loadCartItems();
+                updateCartCount();
+            }
+        }
+        
+        // Update quantity with input
+        function updateQuantityInput(id, value) {
+            let cart = getCart();
+            const itemIndex = cart.findIndex(item => item.id === id);
+            const quantity = parseInt(value) || 1;
+            
+            if (itemIndex !== -1) {
+                cart[itemIndex].quantity = quantity < 1 ? 1 : quantity;
+                saveCart(cart);
+                loadCartItems();
+                updateCartCount();
+            }
+        }
+        
+        // Remove item from cart
+        function removeItem(id) {
+            let cart = getCart();
+            cart = cart.filter(item => item.id !== id);
+            saveCart(cart);
+            loadCartItems();
+            updateCartCount();
+        }
+        
+        // Edit cart mode
+        document.getElementById('edit-cart').addEventListener('click', function() {
+            this.textContent = this.textContent === 'Edit' ? 'Done' : 'Edit';
+            const checkboxes = document.querySelectorAll('.cart-item-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.style.display = checkbox.style.display === 'none' ? 'block' : 'none';
+            });
+        });
+        
+        // Load recommended products from Supabase
+        async function loadRecommendedProducts() {
+            try {
+                const { data: products, error } = await supabase
+                    .from('products')
+                    .select('*')
+                    .limit(6);
+                
+                if (error) throw error;
+                
+                const container = document.getElementById('recommended-products');
+                container.innerHTML = '';
+                
+                if (products.length === 0) {
+                    container.innerHTML = '<p style="grid-column:1/-1;text-align:center;">No recommended products found</p>';
+                    return;
+                }
+                
+                products.forEach(product => {
+                    const { starHtml, rating } = generateStarRating();
+                    const productCard = document.createElement('div');
+                    productCard.className = 'product-card';
+                    productCard.innerHTML = `
+                        <a href="open.html?id=${product.id}">
+                            ${product.discount > 0 ? `<span class="product-badge">${product.discount}% OFF</span>` : ''}
+                            <div class="image-container">
+                                <img src="${product.image || 'https://via.placeholder.com/250'}" alt="${product.name}" class="product-image">
+                            </div>
+                            <div class="product-info"></a>
+                                <div class="product-price">
+                                    LKR ${product.discount > 0 ? 
+                                        (product.price * (1 - product.discount/100)).toFixed(2) : 
+                                        product.price.toFixed(2)}
+                                    ${product.discount > 0 ? 
+                                        `<span class="product-original-price">LKR ${product.price.toFixed(2)}</span>` : ''}
+                                </div>
+                                <div class="product-title">${product.name}</div>
+                                <div class="product-rating">
+                                    <div class="stars">${starHtml}</div>
+                                    <span class="rating-count">${rating}</span>
+                                </div>
+                                <button class="add-to-cart" data-product='${JSON.stringify(product).replace(/'/g, "&apos;")}'>
+                                    <i class="fas fa-cart-plus"></i>
+                                </button>
+                                <button class="buy-now" data-product='${JSON.stringify(product).replace(/'/g, "&apos;")}'>
+                                    BUY NOW
+                                </button>
+                            </div>
+                    `;
+                    
+                    container.appendChild(productCard);
+                });
+                
+                bindAddToCartEvents();
+                bindBuyNowEvents();
+                
+            } catch (error) {
+                console.error("Error loading recommended products:", error);
+                const container = document.getElementById('recommended-products');
+                container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--yunoxa-red);">Error loading recommended products</p>';
+            }
+        }
+        
+        // Cart functions
+        function addToCart(product) {
+            let cart = getCart();
+            const discountedPrice = product.discount > 0 
+                ? product.price * (1 - product.discount/100)
+                : product.price;
+            
+            const existingItem = cart.find(item => item.id === product.id);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: discountedPrice,
+                    originalPrice: product.price,
+                    quantity: 1,
+                    image: product.image,
+                    discount: product.discount || 0
+                });
+            }
+            
+            saveCart(cart);
+            updateCartCount();
+            showToast();
+            loadCartItems();
+        }
+        
+        function showToast(message = 'Item added to cart!') {
+            const toast = document.createElement('div');
+            toast.className = 'toast show';
+            toast.innerHTML = `
+                <i class="fas fa-check-circle"></i>
+                <span>${message}</span>
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+        
+        // Event binding functions
+        function bindAddToCartEvents() {
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    try {
+                        const product = JSON.parse(this.dataset.product.replace(/&apos;/g, "'"));
+                        addToCart(product);
+                    } catch (error) {
+                        console.error("Error parsing product data:", error);
+                    }
+                });
+            });
+        }
+        
+        function bindBuyNowEvents() {
+            document.querySelectorAll('.buy-now').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    try {
+                        const product = JSON.parse(this.dataset.product.replace(/&apos;/g, "'"));
+                        addToCart(product);
+                        window.location.href = `open.html?id=${product.id}`;
+                    } catch (error) {
+                        console.error("Error processing buy now:", error);
+                    }
+                });
+            });
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            bindAddToCartEvents();
+            bindBuyNowEvents();
+        });
+    </script>
+</body>
+</html>
