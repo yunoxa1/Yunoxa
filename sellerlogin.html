@@ -6,6 +6,7 @@
   <title>Login | Temu: Shop Like a Billionaire</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/compressorjs@1.1.1/dist/compressor.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     * {
       margin: 0;
@@ -109,6 +110,11 @@
     
     .login-btn:hover {
       background-color: #e05d00;
+    }
+    
+    .login-btn:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
     }
     
     .divider {
@@ -260,17 +266,52 @@
       display: none;
     }
     
-    .address-group {
+    .nic-upload-container {
       margin-bottom: 15px;
     }
     
-    .address-input {
+    .nic-upload-label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: #333;
+    }
+    
+    .nic-upload-preview {
       width: 100%;
-      padding: 12px 15px;
+      max-height: 200px;
+      object-fit: contain;
       border: 1px solid #ddd;
       border-radius: 4px;
-      font-size: 14px;
-      margin-bottom: 10px;
+      margin-top: 10px;
+      display: none;
+    }
+    
+    .terms-checkbox {
+      margin: 15px 0;
+      display: flex;
+      align-items: center;
+    }
+    
+    .terms-checkbox input {
+      margin-right: 10px;
+    }
+    
+    .loading-indicator {
+      display: none;
+      text-align: center;
+      padding: 10px;
+      margin: 10px 0;
+    }
+    
+    .loading-indicator i {
+      margin-right: 8px;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
   </style>
 </head>
@@ -363,15 +404,41 @@
             </div>
             
             <div class="form-group">
-              <label class="form-label">Home Address</label>
-              <input type="text" id="address-street" class="address-input" placeholder="Street address">
-              <input type="text" id="address-city" class="address-input" placeholder="City">
-              <input type="text" id="address-state" class="address-input" placeholder="State/Province">
-              <input type="text" id="address-zip" class="address-input" placeholder="ZIP/Postal code">
-              <input type="text" id="address-country" class="address-input" placeholder="Country">
+              <label for="nic-no" class="form-label">NIC Number</label>
+              <input type="text" id="nic-no" class="form-input" placeholder="Enter NIC number" required>
             </div>
             
-            <button type="submit" class="login-btn">Sign Up</button>
+            <div class="nic-upload-container">
+              <label for="nic-front-input" class="nic-upload-label">NIC Front Photo</label>
+              <input type="file" id="nic-front-input" class="profile-pic-input" accept="image/*" required>
+              <img id="nic-front-preview" class="nic-upload-preview" alt="NIC Front Preview">
+            </div>
+            
+            <div class="nic-upload-container">
+              <label for="nic-back-input" class="nic-upload-label">NIC Back Photo</label>
+              <input type="file" id="nic-back-input" class="profile-pic-input" accept="image/*" required>
+              <img id="nic-back-preview" class="nic-upload-preview" alt="NIC Back Preview">
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Home Address</label>
+              <input type="text" id="address-street" class="form-input" placeholder="Street address" required>
+              <input type="text" id="address-city" class="form-input" placeholder="City" required>
+              <input type="text" id="address-state" class="form-input" placeholder="State/Province" required>
+              <input type="text" id="address-zip" class="form-input" placeholder="ZIP/Postal code" required>
+              <input type="text" id="address-country" class="form-input" placeholder="Country" required>
+            </div>
+            
+            <div class="terms-checkbox">
+              <input type="checkbox" id="agree-terms" required>
+              <label for="agree-terms">I agree to the Privacy Policy and Terms & Conditions</label>
+            </div>
+            
+            <div class="loading-indicator" id="signup-loading">
+              <i class="fas fa-spinner"></i> Creating your account...
+            </div>
+            
+            <button type="submit" class="login-btn" id="signup-submit">Sign Up</button>
             <div id="signup-error" class="error"></div>
             <div id="signup-success" class="success"></div>
           </form>
@@ -417,10 +484,17 @@
     const showResetLink = document.getElementById('show-reset')
     const profilePicInput = document.getElementById('profile-pic-input')
     const profilePicPreview = document.getElementById('profile-pic-preview')
+    const nicFrontInput = document.getElementById('nic-front-input')
+    const nicFrontPreview = document.getElementById('nic-front-preview')
+    const nicBackInput = document.getElementById('nic-back-input')
+    const nicBackPreview = document.getElementById('nic-back-preview')
+    const signupSubmit = document.getElementById('signup-submit')
+    const signupLoading = document.getElementById('signup-loading')
 
     // Variables
     let profilePicFile = null
-    let cartSyncInterval = null
+    let nicFrontFile = null
+    let nicBackFile = null
 
     // Tab switching
     tabs.forEach(tab => {
@@ -452,16 +526,11 @@
     profilePicInput.addEventListener('change', (e) => {
       const file = e.target.files[0]
       if (file) {
-        console.log('Original file:', file)
-        
-        // Compress the image
         new Compressor(file, {
           quality: 0.6,
           maxWidth: 200,
           maxHeight: 200,
-          convertSize: 50000, // 50KB
           success(result) {
-            console.log('Compressed file:', result)
             profilePicFile = result
             const reader = new FileReader()
             reader.onload = (event) => {
@@ -471,7 +540,6 @@
           },
           error(err) {
             console.error('Image compression error:', err)
-            // Fallback to original file if compression fails
             profilePicFile = file
             const reader = new FileReader()
             reader.onload = (event) => {
@@ -483,121 +551,108 @@
       }
     })
 
-    // Ensure bucket exists and has proper permissions
-    async function ensureBucketExists() {
-      try {
-        console.log('Checking if bucket exists...')
-        const { data, error } = await supabase.storage.getBucket('user.profile')
-        
-        if (error && error.message.includes('not found')) {
-          console.log('Bucket not found, creating...')
-          // Create the bucket if it doesn't exist
-          const { data: createData, error: createError } = await supabase.storage.createBucket('user.profile', {
-            public: true,
-            allowedMimeTypes: ['image/*'],
-            fileSizeLimit: 1024 * 1024 * 5 // 5MB
-          })
-          
-          if (createError) throw createError
-          console.log('Bucket created successfully')
-          
-          // Update bucket policy
-          const { data: policyData, error: policyError } = await supabase
-            .storage
-            .updateBucket('user.profile', {
-              public: true,
-              allowedMimeTypes: ['image/*'],
-              fileSizeLimit: '5MB'
-            })
-          
-          if (policyError) throw policyError
-          console.log('Bucket policy updated')
-        }
-      } catch (error) {
-        console.error('Error ensuring bucket exists:', error)
+    // NIC Front upload handler
+    nicFrontInput.addEventListener('change', (e) => {
+      const file = e.target.files[0]
+      if (file) {
+        new Compressor(file, {
+          quality: 0.7,
+          maxWidth: 800,
+          maxHeight: 800,
+          success(result) {
+            nicFrontFile = result
+            const reader = new FileReader()
+            reader.onload = (event) => {
+              nicFrontPreview.src = event.target.result
+              nicFrontPreview.style.display = 'block'
+            }
+            reader.readAsDataURL(result)
+          },
+          error(err) {
+            console.error('Image compression error:', err)
+            nicFrontFile = file
+            const reader = new FileReader()
+            reader.onload = (event) => {
+              nicFrontPreview.src = event.target.result
+              nicFrontPreview.style.display = 'block'
+            }
+            reader.readAsDataURL(file)
+          }
+        })
       }
-    }
+    })
+
+    // NIC Back upload handler
+    nicBackInput.addEventListener('change', (e) => {
+      const file = e.target.files[0]
+      if (file) {
+        new Compressor(file, {
+          quality: 0.7,
+          maxWidth: 800,
+          maxHeight: 800,
+          success(result) {
+            nicBackFile = result
+            const reader = new FileReader()
+            reader.onload = (event) => {
+              nicBackPreview.src = event.target.result
+              nicBackPreview.style.display = 'block'
+            }
+            reader.readAsDataURL(result)
+          },
+          error(err) {
+            console.error('Image compression error:', err)
+            nicBackFile = file
+            const reader = new FileReader()
+            reader.onload = (event) => {
+              nicBackPreview.src = event.target.result
+              nicBackPreview.style.display = 'block'
+            }
+            reader.readAsDataURL(file)
+          }
+        })
+      }
+    })
 
     // Upload profile picture to Supabase Storage
-    async function uploadProfilePicture(userId) {
-      if (!profilePicFile) {
-        console.log('No profile picture selected')
-        return null
-      }
+    async function uploadProfilePicture(userId, file) {
+      const fileExt = file.name.split('.').pop()
+      const fileName = `${userId}-profile.${fileExt}`
       
-      try {
-        console.log('Starting profile picture upload...')
-        await ensureBucketExists()
-        
-        // Generate unique filename
-        const fileExt = profilePicFile.name.split('.').pop()
-        const fileName = `${userId}-${Date.now()}.${fileExt}`
-        console.log('Generated filename:', fileName)
-        
-        // Get current session
-        const { data: { session } } = await supabase.auth.getSession()
-        console.log('Current session:', session)
-        
-        // Upload file to the "user.profile" bucket
-        console.log('Uploading file...')
-        const { data, error } = await supabase.storage
-          .from('user.profile')
-          .upload(`public/${fileName}`, profilePicFile, {
-            cacheControl: '3600',
-            upsert: false,
-            contentType: profilePicFile.type
-          })
-        
-        if (error) throw error
-        console.log('Upload successful:', data)
-        
-        // Get public URL
-        const { data: { publicUrl } } = supabase.storage
-          .from('user.profile')
-          .getPublicUrl(`public/${fileName}`)
-        
-        console.log('Public URL:', publicUrl)
-        return publicUrl
-      } catch (error) {
-        console.error('Error uploading profile picture:', error)
-        return null
-      }
+      const { data, error } = await supabase.storage
+        .from('user.profile')
+        .upload(fileName, file, {
+          cacheControl: '3600',
+          contentType: file.type
+        })
+      
+      if (error) throw error
+      
+      const { data: { publicUrl } } = supabase.storage
+        .from('user.profile')
+        .getPublicUrl(fileName)
+      
+      return publicUrl
     }
 
-    // Start cart synchronization
-    function startCartSync(userId) {
-      // Clear any existing interval
-      if (cartSyncInterval) clearInterval(cartSyncInterval)
+    // Upload NIC document to Supabase Storage
+    async function uploadNicDocument(userId, file, type) {
+      const fileExt = file.name.split('.').pop()
+      const fileName = `${userId}-nic-${type}.${fileExt}`
       
-      // Sync immediately
-      syncCartWithServer(userId)
+      const { data, error } = await supabase.storage
+        .from('creators')
+        .upload(fileName, file, {
+          cacheControl: '3600',
+          contentType: file.type
+        })
       
-      // Then sync every 10 seconds
-      cartSyncInterval = setInterval(() => {
-        syncCartWithServer(userId)
-      }, 10000)
-    }
-
-    // Sync cart data between localStorage and server
-    async function syncCartWithServer(userId) {
-      try {
-        // Get cart from localStorage with key "cart"
-        const localCart = localStorage.getItem('cart')
-        const cartData = localCart ? JSON.parse(localCart) : []
-        
-        // Update cart in database
-        const { data, error } = await supabase
-          .from('userdata')
-          .update({ cart: cartData })
-          .eq('id', userId)
-          .select()
-        
-        if (error) throw error
-        
-        console.log('Cart synchronized successfully:', cartData)
-      } catch (error) {
-        console.error('Error syncing cart:', error)
-      }
+      if (error) throw error
+      
+      const { data: { publicUrl } } = supabase.storage
+        .from('creators')
+        .getPublicUrl(fileName)
+      
+      return publicUrl
     }
 
     // Sign up handler
@@ -608,6 +663,7 @@
       const mobile = document.getElementById('signup-mobile').value
       const password = document.getElementById('signup-password').value
       const confirmPassword = document.getElementById('signup-confirm-password').value
+      const nicNo = document.getElementById('nic-no').value
       const errorElement = document.getElementById('signup-error')
       const successElement = document.getElementById('signup-success')
       
@@ -627,10 +683,22 @@
         return
       }
       
+      if (!nicFrontFile || !nicBackFile) {
+        errorElement.textContent = 'Please upload both NIC front and back photos'
+        return
+      }
+      
+      if (!document.getElementById('agree-terms').checked) {
+        errorElement.textContent = 'You must agree to the terms and conditions'
+        return
+      }
+
+      // Show loading indicator
+      signupSubmit.disabled = true
+      signupLoading.style.display = 'block'
+      
       try {
-        console.log('Starting signup process...')
-        
-        // Create user in Auth
+        // 1. Create auth user
         const { data: authData, error: authError } = await supabase.auth.signUp({
           email,
           password,
@@ -643,13 +711,28 @@
         })
         
         if (authError) throw authError
-        console.log('Auth user created:', authData)
         
-        // Upload profile picture if selected
-        const profilePicUrl = await uploadProfilePicture(authData.user.id)
-        console.log('Profile picture URL:', profilePicUrl)
+        // 2. Upload files
+        const uploadWithRetry = async (file, type) => {
+          try {
+            if (type === 'profile') {
+              return await uploadProfilePicture(authData.user.id, file)
+            } else {
+              return await uploadNicDocument(authData.user.id, file, type)
+            }
+          } catch (error) {
+            console.error(`Upload failed: ${error.message}`)
+            throw new Error(`Failed to upload ${type} image`)
+          }
+        }
+
+        const [profilePicUrl, nicFrontUrl, nicBackUrl] = await Promise.all([
+          profilePicFile ? uploadWithRetry(profilePicFile, 'profile') : null,
+          uploadWithRetry(nicFrontFile, 'front'),
+          uploadWithRetry(nicBackFile, 'back')
+        ])
         
-        // Create user in userdata table
+        // 3. Create creator record
         const homeAddress = {
           street,
           city,
@@ -658,8 +741,8 @@
           country
         }
         
-        const { data: userData, error: userError } = await supabase
-          .from('userdata')
+        const { data: creatorData, error: creatorError } = await supabase
+          .from('creatordata')
           .insert([{
             id: authData.user.id,
             username,
@@ -668,17 +751,16 @@
             profile_pic: profilePicUrl,
             home_address: homeAddress,
             created_at: new Date().toISOString(),
-            cart: [] // Initialize empty cart
+            nic_no: nicNo,
+            nic_front: nicFrontUrl,
+            nic_back: nicBackUrl,
+            
           }])
           .select()
         
-        if (userError) throw userError
-        console.log('User data created:', userData)
+        if (creatorError) throw creatorError
         
-        successElement.textContent = 'Account created successfully! Check your email for confirmation.'
-        
-        // Start cart synchronization
-        startCartSync(authData.user.id)
+        successElement.textContent = 'Account created successfully! Your account is pending verification. You will receive an email once verified.'
         
         // Automatically login after successful signup
         const { error: loginError } = await supabase.auth.signInWithPassword({
@@ -690,49 +772,78 @@
         
         // Redirect to home page
         window.location.href = '/'
+        
       } catch (error) {
         console.error('Signup error:', error)
         errorElement.textContent = error.message
+      } finally {
+        signupSubmit.disabled = false
+        signupLoading.style.display = 'none'
       }
     })
 
     // Login handler
     loginForm.addEventListener('submit', async (e) => {
-      e.preventDefault()
-      const identifier = document.getElementById('login-identifier').value
-      const password = document.getElementById('login-password').value
-      const errorElement = document.getElementById('login-error')
-      
-      errorElement.textContent = ''
-      
-      try {
-        let credentials = {}
-        if (identifier.includes('@')) {
-          credentials.email = identifier
-        } else {
-          credentials.phone = identifier
+        e.preventDefault()
+        const identifier = document.getElementById('login-identifier').value
+        const password = document.getElementById('login-password').value
+        const errorElement = document.getElementById('login-error')
+        
+        errorElement.textContent = ''
+        
+        try {
+            let credentials = {}
+            if (identifier.includes('@')) {
+                credentials.email = identifier
+            } else {
+                credentials.phone = identifier
+            }
+            credentials.password = password
+            
+            // Authenticate with Supabase Auth
+            const { data: { session, user }, error: authError } = await supabase.auth.signInWithPassword(credentials)
+            
+            if (authError) throw authError
+            
+            // Check verification status
+            const { data: creatorData, error: creatorError } = await supabase
+                .from('creatordata')
+                .select('verification')
+                .eq('id', user.id)
+                .single()
+            
+            if (creatorError) throw creatorError
+        
+        // Handle verification status
+        if (creatorData.verification === 0 || creatorData.verification === null) {
+                throw new Error('Your account is not yet verified by Admin. Please check back later.')
+            } else if (creatorData.verification === 3) {
+                throw new Error('You are not eligible to sell any product.')
+            } else if (creatorData.verification !== 1) {
+                throw new Error('There was an issue with your account verification. Please contact support.')
+            }
+            
+            // Get the return_to URL from query parameters
+            const urlParams = new URLSearchParams(window.location.search)
+            const returnTo = urlParams.get('return_to') || '/create.html'
+            
+            // Redirect with session tokens
+            if (session) {
+                const redirectUrl = new URL(returnTo, window.location.origin)
+                redirectUrl.searchParams.set('access_token', session.access_token)
+                redirectUrl.searchParams.set('refresh_token', session.refresh_token)
+                window.location.href = redirectUrl.toString()
+            }
+            
+        } catch (error) {
+            errorElement.textContent = error.message
+            // Sign out the user if there was a verification issue
+            if (error.message.includes('not yet verified') || error.message.includes('not eligible')) {
+                await supabase.auth.signOut()
+            }
         }
-        credentials.password = password
-        
-        const { data, error } = await supabase.auth.signInWithPassword(credentials)
-        
-        if (error) throw error
-        
-        // Save the full session to localStorage
-        localStorage.setItem('supabase_session', JSON.stringify({
-          user: data.user,
-          session: data.session
-        }))
-        
-        // Start cart synchronization
-        startCartSync(data.user.id)
-        
-        // Login successful - redirect
-        window.location.href = '/index.html'
-      } catch (error) {
-        errorElement.textContent = error.message
-      }
     })
+
 
     // Reset password handler
     resetForm.addEventListener('submit', async (e) => {
@@ -760,14 +871,6 @@
     // Initialize the page
     document.addEventListener('DOMContentLoaded', () => {
       showTab('login')
-      
-      // Check if user is already logged in
-      supabase.auth.getSession().then(({ data: { session } }) => {
-        if (session) {
-          // Start cart synchronization
-          startCartSync(session.user.id)
-        }
-      })
     })
   </script>
 </body>

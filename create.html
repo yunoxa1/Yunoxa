@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Product - Yunoxa</title>
+    <!-- Cropper.js -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+    <style>
+        :root {
+            --yunoxa-red: #e02f2f;
+            --yunoxa-dark-red: #c41e1e;
+            --yunoxa-yellow: #ffd700;
+            --yunoxa-orange: #ff9500;
+            --yunoxa-blue: #2e8bff;
+            --yunoxa-bg: #f8f8f8;
+            --yunoxa-text: #333;
+            --yunoxa-light-text: #666;
+            --yunoxa-card-bg: #ffffff;
+            --yunoxa-border: #e0e0e0;
+            --yunoxa-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --yunoxa-shadow-hover: 0 15px 35px rgba(0, 0, 0, 0.12);
+            --transition-fast: 0.2s ease;
+            --transition-medium: 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --transition-slow: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--yunoxa-bg);
+            color: var(--yunoxa-text);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 40px 20px;
+            animation: fadeIn 0.8s var(--transition-medium);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        /* Auth States */
+        .auth-state {
+            background: var(--yunoxa-card-bg);
+            border-radius: 16px;
+            box-shadow: var(--yunoxa-shadow);
+            padding: 40px;
+            text-align: center;
+            animation: slideUp 0.6s var(--transition-medium);
+            transform-origin: top center;
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        
+        .auth-state h2 {
+            color: var(--yunoxa-red);
+            margin-bottom: 20px;
+            font-size: 28px;
+            font-weight: 700;
+        }
+        
+        .auth-state p {
+            color: var(--yunoxa-light-text);
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        
+        .auth-state .btn {
+            display: inline-block;
+            background: var(--yunoxa-blue);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition-fast);
+            box-shadow: 0 4px 15px rgba(46, 139, 255, 0.3);
+        }
+        
+        .auth-state .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(46, 139, 255, 0.4);
+        }
+        
+        /* Product Form */
+        #productForm {
+            background: var(--yunoxa-card-bg);
+            border-radius: 16px;
+            box-shadow: var(--yunoxa-shadow);
+            padding: 40px;
+            animation: fadeInUp 0.8s var(--transition-medium);
+            transition: var(--transition-medium);
+        }
+        
+        #productForm:hover {
+            box-shadow: var(--yunoxa-shadow-hover);
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .form-header h2 {
+            font-size: 28px;
+            color: var(--yunoxa-text);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .form-header p {
+            color: var(--yunoxa-light-text);
+            font-size: 16px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+            animation: fadeIn 0.6s var(--transition-medium) forwards;
+            opacity: 0;
+        }
+        
+        .form-group:nth-child(1) { animation-delay: 0.1s; }
+        .form-group:nth-child(2) { animation-delay: 0.2s; }
+        .form-group:nth-child(3) { animation-delay: 0.3s; }
+        .form-group:nth-child(4) { animation-delay: 0.4s; }
+        .form-group:nth-child(5) { animation-delay: 0.5s; }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--yunoxa-text);
+            font-size: 15px;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--yunoxa-border);
+            border-radius: 10px;
+            font-size: 15px;
+            transition: var(--transition-fast);
+            background: rgba(255, 255, 255, 0.8);
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: var(--yunoxa-blue);
+            box-shadow: 0 0 0 3px rgba(46, 139, 255, 0.2);
+        }
+        
+        textarea.input-field {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .price-container {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .price-field {
+            flex: 1;
+        }
+        
+        .discount-badge {
+            background: linear-gradient(135deg, var(--yunoxa-red), var(--yunoxa-orange));
+            color: white;
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-left: 8px;
+            display: inline-block;
+            transform: translateY(-2px);
+        }
+        
+        /* Image Upload */
+        .image-upload-container {
+            position: relative;
+            margin-bottom: 25px;
+            border: 2px dashed var(--yunoxa-border);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            transition: var(--transition-fast);
+            background: rgba(255, 255, 255, 0.5);
+        }
+        
+        .image-upload-container:hover {
+            border-color: var(--yunoxa-blue);
+            background: rgba(46, 139, 255, 0.05);
+        }
+        
+        .image-upload-container label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .upload-icon {
+            font-size: 40px;
+            color: var(--yunoxa-blue);
+            margin-bottom: 15px;
+            transition: var(--transition-fast);
+        }
+        
+        .image-upload-container:hover .upload-icon {
+            transform: scale(1.1);
+            color: var(--yunoxa-dark-red);
+        }
+        
+        .upload-text {
+            font-size: 16px;
+            color: var(--yunoxa-light-text);
+            margin-bottom: 10px;
+        }
+        
+        .upload-hint {
+            font-size: 13px;
+            color: var(--yunoxa-light-text);
+        }
+        
+        #imageUpload {
+            position: absolute;
+            width: 0;
+            height: 0;
+            opacity: 0;
+        }
+        
+        /* Image Previews */
+        .image-preview-container {
+            margin: 30px 0;
+        }
+        
+        .small-previews {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .small-previews img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 2px solid var(--yunoxa-border);
+            cursor: pointer;
+            transition: var(--transition-medium);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .small-previews img:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            border-color: var(--yunoxa-blue);
+        }
+        
+        .small-previews img.selected {
+            border-color: var(--yunoxa-blue);
+            box-shadow: 0 5px 15px rgba(46, 139, 255, 0.2);
+        }
+        
+        .small-previews img.thumbnail {
+            border-color: var(--yunoxa-yellow);
+            border-width: 3px;
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 215, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+        }
+        
+        .thumbnail-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--yunoxa-yellow);
+            color: var(--yunoxa-text);
+            font-size: 10px;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 50px;
+            z-index: 1;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Cropper Section */
+        .cropper-section {
+            margin: 30px 0;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        #cropperImage {
+            max-width: 100%;
+            max-height: 400px;
+            display: block;
+            margin: 0 auto;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        #cropButton {
+            background: linear-gradient(135deg, var(--yunoxa-blue), #4aa1ff);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 20px auto 0;
+            display: block;
+            transition: var(--transition-fast);
+            box-shadow: 0 4px 15px rgba(46, 139, 255, 0.3);
+        }
+        
+        #cropButton:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(46, 139, 255, 0.4);
+        }
+        
+        /* Thumbnail Selection */
+        .thumbnail-selection-container {
+            margin: 30px 0;
+            padding: 25px;
+            background: rgba(255, 215, 0, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            display: none;
+            animation: fadeIn 0.6s ease;
+        }
+        
+        .thumbnail-selection-container h4 {
+            color: var(--yunoxa-text);
+            margin-bottom: 15px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .thumbnail-instruction {
+            font-size: 14px;
+            color: var(--yunoxa-light-text);
+            margin-bottom: 20px;
+        }
+        
+        .thumbnail-button {
+            background: linear-gradient(135deg, var(--yunoxa-yellow), #ffdf40);
+            color: var(--yunoxa-text);
+            border: none;
+            padding: 12px 24px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: var(--transition-fast);
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+        
+        .thumbnail-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+        }
+        
+        /* Submit Button */
+        #submitButton {
+            background: linear-gradient(135deg, var(--yunoxa-red), var(--yunoxa-orange));
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 40px auto 0;
+            display: block;
+            transition: var(--transition-medium);
+            box-shadow: 0 5px 20px rgba(224, 47, 47, 0.3);
+            width: auto;
+            min-width: 200px;
+        }
+        
+        #submitButton:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(224, 47, 47, 0.4);
+            animation: pulse 1.5s infinite;
+        }
+        
+        #submitButton:disabled {
+            background: #cccccc;
+            transform: none;
+            box-shadow: none;
+            cursor: not-allowed;
+            animation: none;
+        }
+        
+        /* Messages */
+        .message {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 15px;
+            font-weight: 500;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .error {
+            background: rgba(224, 47, 47, 0.1);
+            color: var(--yunoxa-red);
+            border: 1px solid rgba(224, 47, 47, 0.2);
+        }
+        
+        .success {
+            background: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+            border: 1px solid rgba(40, 167, 69, 0.2);
+        }
+        
+        /* Loading Indicator */
+        #loadingIndicator {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            margin: 20px 0;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(46, 139, 255, 0.2);
+            border-radius: 50%;
+            border-top-color: var(--yunoxa-blue);
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 15px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 15px;
+            }
+            
+            .auth-state, #productForm {
+                padding: 30px 20px;
+            }
+            
+            .price-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="loginRequired" class="auth-state animate__animated animate__fadeIn">
+            <h2><i class="fas fa-lock"></i> Login Required</h2>
+            <p>You must login to access the product creation page.</p>
+            <a href="sellerlogin.html" class="btn animate__animated animate__pulse animate__infinite"><i class="fas fa-sign-in-alt"></i> Go to Login Page</a>
+        </div>
+
+        <form id="productForm" style="display: none;">
+            <div class="form-header animate__animated animate__fadeIn">
+                <h2><i class="fas fa-plus-circle"></i> Create New Product</h2>
+                <p>Fill in the details below to list your product</p>
+            </div>
+
+            <div class="form-group">
+                <label for="name"><i class="fas fa-heading"></i> Product Title</label>
+                <input type="text" id="name" class="input-field" required placeholder="Enter product title">
+            </div>
+
+            <div class="form-group">
+                <label for="details"><i class="fas fa-list"></i> Product Details</label>
+                <textarea id="details" class="input-field" rows="5" required placeholder="Enter product details (features, specifications, etc.)"></textarea>
+            </div>
+
+            <div class="form-group">
+                <div class="price-container">
+                    <div class="price-field">
+                        <label for="price"><i class="fas fa-tag"></i> Price (LKR)</label>
+                        <input type="number" id="price" class="input-field" required placeholder="Enter price">
+                    </div>
+                    <div class="price-field">
+                        <label for="discount"><i class="fas fa-percentage"></i> Discount (%) <span class="discount-badge">SAVE</span></label>
+                        <input type="number" id="discount" class="input-field" min="0" max="100" placeholder="Enter discount percentage">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="price-container">
+                    <div class="price-field">
+                        <label for="whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp Number</label>
+                        <input type="text" id="whatsapp" class="input-field" required placeholder="Enter your WhatsApp number">
+                    </div>
+                    <div class="price-field">
+                        <label for="delivery"><i class="fas fa-truck"></i> Delivery Price (LKR)</label>
+                        <input type="number" id="delivery" class="input-field" required placeholder="Enter delivery price">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="description"><i class="fas fa-align-left"></i> Description</label>
+                <textarea id="description" class="input-field" rows="5" required placeholder="Enter detailed product description"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="categorize"><i class="fas fa-tags"></i> Category</label>
+                <select id="categorize" class="input-field" required>
+                    <option value="" disabled selected>Select a category</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Fashion">Fashion</option>
+                    <option value="Home & Kitchen">Home & Kitchen</option>
+                    <option value="Beauty & Personal Care">Beauty & Personal Care</option>
+                    <option value="Health & Wellness">Health & Wellness</option>
+                    <option value="Toys & Games">Toys & Games</option>
+                    <option value="Sports & Outdoors">Sports & Outdoors</option>
+                    <option value="Automotive">Automotive</option>
+                    <option value="Books & Stationery">Books & Stationery</option>
+                    <option value="Groceries & Gourmet Food">Groceries & Gourmet Food</option>
+                    <option value="Baby & Kids">Baby & Kids</option>
+                    <option value="Pet Supplies">Pet Supplies</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <div class="image-upload-container">
+                    <label for="imageUpload">
+                        <div class="upload-icon animate__animated animate__bounceIn">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <div class="upload-text">Upload Product Images</div>
+                        <div class="upload-hint">(3-6 images required, JPG/PNG, max 5MB each)</div>
+                    </label>
+                    <input type="file" id="imageUpload" accept="image/*" multiple>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="image-preview-container">
+                    <div class="cropper-section">
+                        <img id="cropperImage">
+                        <button type="button" id="cropButton"><i class="fas fa-crop"></i> Crop & Continue</button>
+                    </div>
+                    <div class="small-previews" id="imagePreview"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="thumbnail-selection-container" id="thumbnailSelection">
+                    <h4><i class="fas fa-star"></i> Select Thumbnail Image</h4>
+                    <p class="thumbnail-instruction">Click on an image below to set it as the thumbnail (main display image)</p>
+                    <div class="small-previews" id="thumbnailPreview"></div>
+                    <button type="button" class="thumbnail-button" id="confirmThumbnail"><i class="fas fa-check"></i> Confirm Thumbnail</button>
+                </div>
+            </div>
+
+            <div id="loadingIndicator">
+                <div class="loading-spinner"></div>
+                <p>Processing your product...</p>
+            </div>
+
+            <p id="uploadError" class="error message"></p>
+
+            <button type="submit" class="form-button" id="submitButton" disabled>
+                <i class="fas fa-plus-circle"></i> Add Product
+            </button>
+
+            <p id="formError" class="error message"></p>
+            <p id="successMessage" class="success message"></p>
+        </form>
+    </div>
+
+<script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+    const SUPABASE_URL = "https://qopdjgfciakmvhlriixt.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFvcGRqZ2ZjaWFrbXZobHJpaXh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk0NDA2NDAsImV4cCI6MjA1NTAxNjY0MH0.5UAelwww7WpDUExqhc5dH2JhUWlGNgUNjh8fzxPNZvs";
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let cropper;
+    let uploadedImages = [];
+    let imageFiles = [];
+    let currentImageIndex = 0;
+    let selectedThumbnailIndex = 0;
+    let croppedImageBlobs = [];
+    let currentUser = null;
+
+    // DOM Elements
+    const imageUpload = document.getElementById("imageUpload");
+    const imagePreview = document.getElementById("imagePreview");
+    const thumbnailPreview = document.getElementById("thumbnailPreview");
+    const cropperImage = document.getElementById("cropperImage");
+    const cropButton = document.getElementById("cropButton");
+    const loadingIndicator = document.getElementById("loadingIndicator");
+    const uploadError = document.getElementById("uploadError");
+    const submitButton = document.getElementById("submitButton");
+    const successMessage = document.getElementById("successMessage");
+    const thumbnailSelection = document.getElementById("thumbnailSelection");
+    const confirmThumbnail = document.getElementById("confirmThumbnail");
+    const productForm = document.getElementById("productForm");
+    const loginRequired = document.getElementById("loginRequired");
+
+    // Initialize with forced logout
+    document.addEventListener('DOMContentLoaded', async () => {
+        // Always clear any existing session first
+        await supabase.auth.signOut();
+        
+        // Check for OAuth callback parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const accessToken = urlParams.get('access_token');
+        const refreshToken = urlParams.get('refresh_token');
+        
+        if (accessToken && refreshToken) {
+            try {
+                // Set the session from the OAuth callback
+                const { data: { session }, error } = await supabase.auth.setSession({
+                    access_token: accessToken,
+                    refresh_token: refreshToken
+                });
+                
+                if (error) throw error;
+                
+                if (session) {
+                    await verifyUserAndShowForm(session.user);
+                    // Clean the URL after successful auth
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                    return;
+                }
+            } catch (error) {
+                console.error('Authentication error:', error);
+            }
+        }
+        
+        // If no valid session, show login required
+        showLoginRequired();
+    });
+
+    async function verifyUserAndShowForm(user) {
+        try {
+            // Check verification status
+            const { data: creatorData, error: creatorError } = await supabase
+                .from('creatordata')
+                .select('verification')
+                .eq('id', user.id)
+                .single();
+            
+            if (creatorError || !creatorData || creatorData.verification !== 1) {
+                showVerificationError();
+                return;
+            }
+            
+            currentUser = user;
+            productForm.style.display = "block";
+            loginRequired.style.display = "none";
+            
+            // Set timeout to automatically log out after 1 hour
+            setTimeout(() => {
+                supabase.auth.signOut();
+                showSessionExpired();
+            }, 3600000); // 1 hour in milliseconds
+            
+        } catch (error) {
+            console.error('Verification error:', error);
+            showLoginRequired();
+        }
+    }
+
+    function showLoginRequired() {
+        productForm.style.display = "none";
+        loginRequired.style.display = "block";
+        
+        // Update login button to force fresh login
+        const loginBtn = loginRequired.querySelector('.btn');
+        if (loginBtn) {
+            loginBtn.onclick = (e) => {
+                e.preventDefault();
+                // Redirect to login with current path as return URL
+                const returnUrl = encodeURIComponent(window.location.pathname);
+                window.location.href = `sellerlogin.html?return_to=${returnUrl}`;
+            };
+        }
+    }
+
+    function showVerificationError() {
+        loginRequired.innerHTML = `
+            <h2><i class="fas fa-exclamation-triangle"></i> Account Not Verified</h2>
+            <p>Your seller account is not yet verified or not eligible to create products.</p>
+            <a href="sellerlogin.html" class="btn"><i class="fas fa-sign-in-alt"></i> Login with Different Account</a>
+        `;
+        productForm.style.display = "none";
+        loginRequired.style.display = "block";
+    }
+
+    function showSessionExpired() {
+        loginRequired.innerHTML = `
+            <h2><i class="fas fa-clock"></i> Session Expired</h2>
+            <p>Your session has ended. Please login again to continue.</p>
+            <a href="sellerlogin.html" class="btn"><i class="fas fa-sign-in-alt"></i> Login Again</a>
+        `;
+        productForm.style.display = "none";
+        loginRequired.style.display = "block";
+    }
+
+    // Image handling functions remain the same
+    imageUpload.addEventListener("change", function (event) {
+        const files = event.target.files;
+
+        if (files.length < 3 || files.length > 6) {
+            uploadError.textContent = "Please upload between 3 and 6 images!";
+            return;
+        }
+
+        for (const file of files) {
+            if (file.size > 5 * 1024 * 1024) {
+                uploadError.textContent = "Each image must be less than 5MB!";
+                return;
+            }
+        }
+
+        imageFiles = Array.from(files);
+        imagePreview.innerHTML = "";
+        thumbnailPreview.innerHTML = "";
+        uploadedImages = [];
+        croppedImageBlobs = [];
+        submitButton.disabled = true;
+        successMessage.style.display = "none";
+        thumbnailSelection.style.display = "none";
+
+        let loadedImages = 0;
+        imageFiles.forEach((file, index) => {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = document.createElement("img");
+                img.src = e.target.result;
+                img.dataset.index = index;
+                img.addEventListener("click", () => openCropper(img, index));
+                imagePreview.appendChild(img);
+
+                loadedImages++;
+                if (loadedImages === imageFiles.length) {
+                    openCropper(imagePreview.children[0], 0);
+                }
+            };
+
+            reader.onerror = function () {
+                uploadError.textContent = `Failed to load image ${index + 1}. Please try again.`;
+            };
+
+            reader.readAsDataURL(file);
+        });
+    });
+
+    function openCropper(img, index) {
+        if (!img.src) {
+            uploadError.textContent = `Image ${index + 1} could not be loaded. Please try again.`;
+            return;
+        }
+
+        imagePreview.style.display = "none";
+        cropperImage.src = img.src;
+        cropperImage.style.display = "block";
+        currentImageIndex = index;
+
+        if (cropper) cropper.destroy();
+
+        cropper = new Cropper(cropperImage, {
+            aspectRatio: 1,
+            viewMode: 1,
+        });
+
+        document.querySelector('.cropper-section').style.display = 'block';
+        cropButton.style.display = "block";
+    }
+
+    cropButton.addEventListener("click", async function () {
+        if (!cropper) return;
+
+        const canvas = cropper.getCroppedCanvas({
+            width: 640,
+            height: 640,
+            fillColor: "#fff",
+        });
+
+        loadingIndicator.style.display = "block";
+        cropButton.disabled = true;
+
+        canvas.toBlob(async (blob) => {
+            if (blob.size > 120 * 1024) {
+                uploadError.textContent = "Cropped image is too large! Please crop a smaller area.";
+                loadingIndicator.style.display = "none";
+                cropButton.disabled = false;
+                return;
+            }
+
+            croppedImageBlobs[currentImageIndex] = blob;
+            const previewUrl = URL.createObjectURL(blob);
+            uploadedImages[currentImageIndex] = previewUrl;
+
+            const previewImg = imagePreview.querySelector(`img[data-index="${currentImageIndex}"]`);
+            previewImg.src = previewUrl;
+            previewImg.classList.add("selected");
+
+            if (currentImageIndex < imageFiles.length - 1) {
+                currentImageIndex++;
+                openCropper(imagePreview.children[currentImageIndex], currentImageIndex);
+            } else {
+                cropperImage.style.display = "none";
+                cropButton.style.display = "none";
+                document.querySelector('.cropper-section').style.display = 'none';
+                if (cropper) {
+                    cropper.destroy();
+                    cropper = null;
+                }
+
+                imagePreview.style.display = "flex";
+                showThumbnailSelection();
+            }
+
+            loadingIndicator.style.display = "none";
+            cropButton.disabled = false;
+        }, "image/jpeg", 0.8);
+    });
+
+    function showThumbnailSelection() {
+        thumbnailSelection.style.display = "block";
+        thumbnailPreview.innerHTML = "";
+
+        uploadedImages.forEach((imgSrc, index) => {
+            const img = document.createElement("img");
+            img.src = imgSrc;
+            img.dataset.index = index;
+            
+            if (index === 0) {
+                img.classList.add("thumbnail");
+                const badge = document.createElement("span");
+                badge.className = "thumbnail-badge";
+                badge.textContent = "Thumbnail";
+                img.appendChild(badge);
+                selectedThumbnailIndex = 0;
+            }
+            
+            img.addEventListener("click", () => selectThumbnail(index));
+            thumbnailPreview.appendChild(img);
+        });
+    }
+
+    function selectThumbnail(index) {
+        const thumbnails = thumbnailPreview.querySelectorAll("img");
+        thumbnails.forEach((img, i) => {
+            img.classList.remove("thumbnail");
+            
+            const existingBadge = img.querySelector(".thumbnail-badge");
+            if (existingBadge) {
+                img.removeChild(existingBadge);
+            }
+            
+            if (i === index) {
+                img.classList.add("thumbnail");
+                const badge = document.createElement("span");
+                badge.className = "thumbnail-badge";
+                badge.textContent = "Thumbnail";
+                img.appendChild(badge);
+                selectedThumbnailIndex = index;
+            }
+        });
+    }
+
+    confirmThumbnail.addEventListener("click", function() {
+        thumbnailSelection.style.display = "none";
+        submitButton.disabled = false;
+    });
+
+    // Form submission handler
+    document.getElementById("productForm").addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        // Force fresh authentication check
+        const { data: { user }, error: authError } = await supabase.auth.getUser();
+        if (authError || !user) {
+            showSessionExpired();
+            return;
+        }
+
+        // Verify the user is still valid
+        const { data: creatorData, error: creatorError } = await supabase
+            .from('creatordata')
+            .select('verification')
+            .eq('id', user.id)
+            .single();
+        
+        if (creatorError || !creatorData || creatorData.verification !== 1) {
+            showVerificationError();
+            return;
+        }
+
+        currentUser = user;
+        loadingIndicator.style.display = "block";
+        submitButton.disabled = true;
+
+        let imageUrls = [];
+        
+        if (croppedImageBlobs.length > 0) {
+            for (let i = 0; i < croppedImageBlobs.length; i++) {
+                const fileName = `product-${Date.now()}-${i}.jpg`;
+                const { data, error } = await supabase.storage
+                    .from("product-images")
+                    .upload(fileName, croppedImageBlobs[i], {
+                        cacheControl: "3600",
+                        contentType: "image/jpeg",
+                    });
+
+                if (error) {
+                    uploadError.textContent = "Error uploading image: " + error.message;
+                    loadingIndicator.style.display = "none";
+                    submitButton.disabled = false;
+                    return;
+                }
+                
+                const imageUrl = `${SUPABASE_URL}/storage/v1/object/public/product-images/${fileName}`;
+                imageUrls.push(imageUrl);
+            }
+
+            const reorderedImageUrls = [
+                imageUrls[selectedThumbnailIndex],
+                ...imageUrls.slice(0, selectedThumbnailIndex),
+                ...imageUrls.slice(selectedThumbnailIndex + 1)
+            ];
+            
+            // Submit product data
+            const name = document.getElementById("name").value.trim();
+            const details = document.getElementById("details").value.trim();
+            const price = parseFloat(document.getElementById("price").value.trim());
+            const discount = parseFloat(document.getElementById("discount").value.trim()) || 0;
+            const description = document.getElementById("description").value.trim();
+            const categorize = document.getElementById("categorize").value.trim();
+            const whatsapp = document.getElementById("whatsapp").value.trim();
+            const delivery = parseFloat(document.getElementById("delivery").value.trim());
+
+            const { data, error } = await supabase
+                .from("products")
+                .insert([
+                    {
+                        name,
+                        details,
+                        price,
+                        discount,
+                        description,
+                        categorize,
+                        image: reorderedImageUrls[0],
+                        image1: reorderedImageUrls[1] || null,
+                        image2: reorderedImageUrls[2] || null,
+                        image3: reorderedImageUrls[3] || null,
+                        image4: reorderedImageUrls[4] || null,
+                        image5: reorderedImageUrls[5] || null,
+                        user_id: currentUser.email,
+                        whatsapp_no: whatsapp,
+                        delivery: delivery
+                    }
+                ]);
+
+            loadingIndicator.style.display = "none";
+
+            if (error) {
+                document.getElementById("formError").textContent = "Error adding product: " + error.message;
+                submitButton.disabled = false;
+                return;
+            }
+
+            // Show success state
+            successMessage.textContent = "Product added successfully!";
+            successMessage.style.display = "block";
+            submitButton.innerHTML = '<i class="fas fa-check"></i> Success!';
+            submitButton.style.background = 'linear-gradient(135deg, #28a745, #5cb85c)';
+            
+            // Redirect after delay
+            setTimeout(() => {
+                window.location.href = 'sellerlogin.html'; // Force fresh login next time
+            }, 2000);
+        } else {
+            uploadError.textContent = "No images available for the product";
+            loadingIndicator.style.display = "none";
+            submitButton.disabled = false;
+        }
+    });
+</script>
+</body>
+</html>

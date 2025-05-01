@@ -40,7 +40,10 @@
             <span>Cart</span>
         </a>
     </nav>
-
+    <div class="user-info" style="text-align: right; padding: 10px; background: #f5f5f5;">
+        <span id="user-email"></span>
+        <button id="logout-btn" style="margin-left: 10px; padding: 5px 10px;">Logout</button>
+      </div>
     <!-- Checkout Content -->
     <div class="checkout-container">
         <div class="checkout-header">
@@ -322,6 +325,149 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
 
     <!-- Checkout Script -->
+    <script type="module">
+        import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+        
+        // Initialize Supabase
+        const supabase = createClient(
+          'https://qopdjgfciakmvhlriixt.supabase.co',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFvcGRqZ2ZjaWFrbXZobHJpaXh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk0NDA2NDAsImV4cCI6MjA1NTAxNjY0MH0.5UAelwww7WpDUExqhc5dH2JhUWlGNgUNjh8fzxPNZvs'
+        )
+      
+        // Track verification state
+        let verificationInProgress = false
+        let verificationInterval
+      
+        // Enhanced verification with ban detection
+        async function verifySession() {
+          if (verificationInProgress) return
+          
+          verificationInProgress = true
+          console.log('Starting session verification...')
+      
+          try {
+            // 1. Check current session
+            const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+            
+            if (sessionError || !session) {
+              throw new Error('No active session')
+            }
+      
+            // 2. Verify user status - THIS DETECTS BANS
+            const { data: { user }, error: userError } = await supabase.auth.getUser()
+            
+            if (userError) {
+              // Specific check for banned users
+              if (userError.message.includes('disabled') || userError.message.includes('banned')) {
+                console.warn('User account is banned/disabled')
+                await handleBan()
+                return false
+              }
+              throw userError
+            }
+            
+            if (!user) {
+              throw new Error('User verification failed')
+            }
+      
+            // 3. Update local storage
+            localStorage.setItem('supabase_session', JSON.stringify({
+              user: user,
+              session: session
+            }))
+            
+            // Update UI
+            updateUserUI(user)
+            
+            console.log('Session verified successfully')
+            return true
+      
+          } catch (error) {
+            console.warn('Session verification failed:', error.message)
+            await handleLogout()
+            return false
+          } finally {
+            verificationInProgress = false
+          }
+        }
+      
+        // Special handling for banned users
+        async function handleBan() {
+          console.log('Processing ban...')
+          try {
+            // 1. Force logout from Supabase
+            const { error } = await supabase.auth.signOut()
+            if (error) console.error('Ban logout error:', error)
+            
+            // 2. Clear local data
+            localStorage.removeItem('supabase_session')
+            
+            // 3. Show ban message
+            alert('Your account has been restricted. Please contact support.')
+            
+            // 4. Redirect to login
+            window.location.href = 'login.html'
+          } catch (e) {
+            console.error('Ban handling failed:', e)
+            window.location.href = 'login.html'
+          }
+        }
+      
+        // Normal logout handler
+        async function handleLogout() {
+          try {
+            await supabase.auth.signOut()
+          } catch (e) {
+            console.error('Logout error:', e)
+          } finally {
+            localStorage.removeItem('supabase_session')
+            window.location.href = 'login.html'
+          }
+        }
+      
+        // Update UI elements
+        function updateUserUI(user) {
+          const emailElement = document.getElementById('user-email')
+          if (emailElement) {
+            emailElement.textContent = user.email || "User"
+          }
+          
+          // Add any other UI updates here
+        }
+      
+        // Initial verification on page load
+        verifySession()
+      
+        // Setup periodic verification
+        function setupPeriodicVerification() {
+          // First check after 10 seconds
+          setTimeout(async () => {
+            await verifySession()
+            
+            // Subsequent checks every 60 seconds
+            verificationInterval = setInterval(verifySession, 15 * 1000)
+          }, 10 * 1000)
+        }
+      
+        // Start the verification system
+        setupPeriodicVerification()
+      
+        // Cleanup interval when page unloads
+        window.addEventListener('beforeunload', () => {
+          if (verificationInterval) {
+            clearInterval(verificationInterval)
+          }
+        })
+      
+        // Manual logout handler
+        document.getElementById('logout-btn')?.addEventListener('click', async () => {
+          if (verificationInterval) {
+            clearInterval(verificationInterval)
+          }
+          await handleLogout()
+        })
+      </script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
     // DOM Elements
@@ -613,6 +759,8 @@
         }, 1500);
     });
 });
+
+
     </script>
 </body>
 </html>

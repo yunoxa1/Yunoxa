@@ -8,7 +8,7 @@
     <meta name="description" content="Shop like yunoxa - Amazing deals every day!">
 
     <!-- Favicon -->
-    <link rel="icon" href="img/Favicon.ico" type="image/png">
+    <link rel="icon" href="Favicon.png" type="image/png">
     <link rel="icon" href="https://img.kwcdn.com/product/open/2023-09-19/1695100220116-7e3a8b7a3a1e4b1d8f8f5a0a5d1a9a7a-goods.jpeg?imageView2/2/w/800/q/70/format/webp" type="image/jpeg">
 
     <!-- Font Awesome -->
@@ -298,30 +298,48 @@
         }
         
         function bindBuyNowEvents() {
-            document.querySelectorAll('.buy-now').forEach(button => {
-                button.replaceWith(button.cloneNode(true));
-            });
-            
-            document.querySelectorAll('.buy-now').forEach(button => {
-                button.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    try {
-                        const product = JSON.parse(this.dataset.product.replace(/&apos;/g, "'"));
-                        addToCart(product);
-                        window.location.href = `open.html?id=${product.id}`;
-                    } catch (error) {
-                        console.error("Error processing buy now:", error);
-                    }
-                });
-            });
-        }
+    document.querySelectorAll('.buy-now').forEach(button => {
+        button.replaceWith(button.cloneNode(true));
+    });
+    
+    document.querySelectorAll('.buy-now').forEach(button => {
+        button.addEventListener('click', async function(e) {
+            e.preventDefault();
+            try {
+                const product = JSON.parse(this.dataset.product.replace(/&apos;/g, "'"));
+                
+                // Create a new cart with just this product
+                const cart = [{
+                    id: product.id,
+                    name: product.name,
+                    price: product.discount > 0 
+                        ? product.price * (1 - product.discount/100)
+                        : product.price,
+                    originalPrice: product.price,
+                    quantity: 1, // Default to 1 for buy now
+                    image: product.image,
+                    discount: product.discount || 0
+                }];
+                
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCartCount();
+                
+                // Redirect to checkout with product ID
+                window.location.href = `checkout1.html?id=${product.id}`;
+            } catch (error) {
+                console.error("Error processing buy now:", error);
+                showToast("Error processing your order");
+            }
+        });
+    });
+}
         
         // Product loading functions
         async function fetchProducts(category = null) {
             try {
                 document.getElementById('loading').style.display = 'flex';
                 
-                let query = supabase.from('products').select('*');
+                let query = supabase.from('products').select('*').eq('verification', 1); // Only verified products
                 
                 if (category) {
                     query = query.eq('categorize', category);
@@ -407,7 +425,8 @@
                 const { data, error } = await supabase
                     .from('products')
                     .select('*')
-                    .eq('categorize', category);
+                    .eq('categorize', category)
+                    .eq('verification', 1);
                 
                 if (error) throw error;
                 
@@ -486,7 +505,8 @@
                 const { data, error } = await supabase
                     .from('products')
                     .select('*')
-                    .ilike('name', `%${query}%`);
+                    .ilike('name', `%${query}%`)
+                    .eq('verification', 1);
                 
                 if (error) throw error;
                 
@@ -504,6 +524,7 @@
                         <div class="product-card">
                             ${product.discount > 0 ? `<span class="product-badge">${product.discount}% OFF</span>` : ''}
                             <div class="image-container">
+                                <a href="open.html?id=${product.id}">
                                 <img src="${product.image || 'https://via.placeholder.com/250'}" alt="${product.name}" class="product-image">
                             </div>
                             <div class="product-info">

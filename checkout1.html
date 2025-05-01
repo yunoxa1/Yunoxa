@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Yunoxa - Express Checkout</title>
+    <title>Yunoxa - Checkout</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="Online Shopping in Sri Lanka" name="keywords">
     <meta content="Yunoxa - Best Online Shopping Platform in Sri Lanka" name="description">
@@ -40,13 +40,20 @@
             <span>Cart</span>
         </a>
     </nav>
-
+    <div class="user-info">
+        <span id="user-email"></span>
+        <button id="logout-btn">
+          <i class="fas fa-sign-out-alt"></i>
+          Logout
+        </button>
+      </div>
+    
     <!-- Checkout Content -->
     <div class="checkout-container">
         <div class="checkout-header">
-            <h1><i class="fas fa-lock"></i> Express Checkout</h1>
+            <h1><i class="fas fa-lock"></i> Secure Checkout</h1>
             <div class="checkout-progress">
-                <div class="progress-step active" id="step-shipping">1. Shipping</div>
+                <div class="progress-step" id="step-shipping">1. Shipping</div>
                 <div class="progress-step" id="step-payment">2. Payment</div>
                 <div class="progress-step" id="step-review">3. Review</div>
             </div>
@@ -129,21 +136,9 @@
                             <div class="method-info">
                                 <h3>Standard Shipping</h3>
                                 <p>Estimated delivery: 5-7 business days</p>
-                                <p class="shipping-rate">LKR 250</p>
+                                <p class="shipping-rate">Delivery fee calculated based on quantity</p>
                             </div>
-                            <div class="method-price">LKR 250</div>
-                        </div>
-                        <div class="shipping-method">
-                            <div class="method-radio">
-                                <input type="radio" name="shipping" id="express">
-                                <label for="express"></label>
-                            </div>
-                            <div class="method-info">
-                                <h3>Express Shipping</h3>
-                                <p>Estimated delivery: 2-3 business days</p>
-                                <p class="shipping-rate">LKR 400</p>
-                            </div>
-                            <div class="method-price">LKR 400</div>
+                            <div class="method-price" id="delivery-price">Calculating...</div>
                         </div>
                     </div>
                 </section>
@@ -154,61 +149,15 @@
                     <div class="payment-methods">
                         <div class="payment-method selected">
                             <div class="method-radio">
-                                <input type="radio" name="payment" id="creditCard" checked>
-                                <label for="creditCard"></label>
+                                <input type="radio" name="payment" id="whatsapp" checked disabled>
+                                <label for="whatsapp"></label>
                             </div>
                             <div class="method-info">
-                                <h3>Credit/Debit Card</h3>
-                                <div class="card-icons">
-                                    <img src="https://cdn-icons-png.flaticon.com/512/196/196578.png" alt="Visa">
-                                    <img src="https://cdn-icons-png.flaticon.com/512/196/196561.png" alt="Mastercard">
+                                <h3>Order via WhatsApp</h3>
+                                <p>Complete your order by contacting us on WhatsApp</p>
+                                <div class="whatsapp-icon">
+                                    <i class="fab fa-whatsapp"></i>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="payment-method">
-                            <div class="method-radio">
-                                <input type="radio" name="payment" id="paypal">
-                                <label for="paypal"></label>
-                            </div>
-                            <div class="method-info">
-                                <h3>PayPal</h3>
-                                <img src="https://cdn-icons-png.flaticon.com/512/174/174861.png" alt="PayPal" class="paypal-icon">
-                            </div>
-                        </div>
-                        <div class="payment-method">
-                            <div class="method-radio">
-                                <input type="radio" name="payment" id="cod">
-                                <label for="cod"></label>
-                            </div>
-                            <div class="method-info">
-                                <h3>Cash on Delivery</h3>
-                                <p>Pay when you receive your order</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Credit Card Form (shown when credit card is selected) -->
-                    <div class="credit-card-form">
-                        <div class="form-group">
-                            <label for="cardNumber">Card Number *</label>
-                            <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" required>
-                            <div class="error-message"></div>
-                        </div>
-                        <div class="form-group">
-                            <label for="cardName">Name on Card *</label>
-                            <input type="text" id="cardName" placeholder="Enter name as it appears on card" required>
-                            <div class="error-message"></div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="expiry">Expiry Date *</label>
-                                <input type="text" id="expiry" placeholder="MM/YY" required>
-                                <div class="error-message"></div>
-                            </div>
-                            <div class="form-group">
-                                <label for="cvv">CVV *</label>
-                                <input type="text" id="cvv" placeholder="123" required>
-                                <div class="error-message"></div>
                             </div>
                         </div>
                     </div>
@@ -239,11 +188,12 @@
                     
                     <div class="checkout-actions">
                         <button class="btn-back" id="back-to-payment"><i class="fas fa-arrow-left"></i> Back to Payment</button>
-                        <button class="btn-confirm" id="confirm-order">Confirm Order</button>
+                        <button class="btn-confirm" id="confirm-order">Confirm & Send WhatsApp Message</button>
                     </div>
                 </section>
 
                 <div class="checkout-actions" id="initial-actions">
+                    <a href="open.html?id=${new URLSearchParams(window.location.search).get('id')}" class="back-to-cart"><i class="fas fa-arrow-left"></i> Back to Product</a>
                     <button class="btn-continue" id="continue-to-payment">Continue to Payment</button>
                 </div>
             </div>
@@ -252,25 +202,34 @@
                 <div class="order-summary">
                     <h2><i class="fas fa-shopping-bag"></i> Order Summary</h2>
                     <div class="order-items" id="order-items-container">
-                        <!-- Single product will be inserted here -->
+                        <!-- Single product will be shown here -->
                     </div>
                     <div class="order-totals">
                         <div class="total-row">
                             <span>Subtotal</span>
-                            <span id="subtotal-amount">LKR 0.00</span>
+                            <span id="subtotal-price">LKR 0.00</span>
                         </div>
                         <div class="total-row">
                             <span>Shipping</span>
-                            <span id="shipping-amount">LKR 250.00</span>
+                            <span id="shipping-price">Calculating...</span>
                         </div>
                         <div class="total-row discount">
                             <span>Discount</span>
-                            <span id="discount-amount">-LKR 0.00</span>
+                            <span id="discount-price">LKR 0.00</span>
                         </div>
                         <div class="total-row grand-total">
                             <span>Total</span>
-                            <span id="total-amount">LKR 0.00</span>
+                            <span id="total-price">LKR 0.00</span>
                         </div>
+                    </div>
+                </div>
+
+                <div class="quantity-selector">
+                    <label for="quantity">Quantity:</label>
+                    <div class="quantity-controls">
+                        <button class="quantity-btn minus"><i class="fas fa-minus"></i></button>
+                        <input type="number" id="quantity" min="1" value="1">
+                        <button class="quantity-btn plus"><i class="fas fa-plus"></i></button>
                     </div>
                 </div>
 
@@ -282,310 +241,238 @@
         </div>
     </div>
 
-    <!-- JavaScript -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Get product from URL parameters
-            const urlParams = new URLSearchParams(window.location.search);
-            let product = {
-                name: "Product Name",
-                price: 0,
-                originalPrice: 0,
-                discount: "0",
-                image: "https://via.placeholder.com/60",
-                color: "",
-                size: "",
-                quantity: 1
-            };
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
 
+    <!-- Checkout Script -->
+    <script type="module">
+        import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+        
+        // Initialize Supabase
+        const supabase = createClient(
+            'https://qopdjgfciakmvhlriixt.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFvcGRqZ2ZjaWFrbXZobHJpaXh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk0NDA2NDAsImV4cCI6MjA1NTAxNjY0MH0.5UAelwww7WpDUExqhc5dH2JhUWlGNgUNjh8fzxPNZvs'
+        )
+
+        // Track verification state
+        let verificationInProgress = false
+        let verificationInterval
+        let currentUser = null;
+        let productData = null;
+        let deliveryPrice = 0;
+        let whatsappNumber = '767087651'; // Default number
+        
+        // Get product ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id');
+
+        // Enhanced verification with ban detection
+        async function verifySession() {
+            if (verificationInProgress) return;
+            
+            verificationInProgress = true;
+            console.log('Starting session verification...');
+        
             try {
-                if (urlParams.has('product')) {
-                    const productParam = JSON.parse(decodeURIComponent(urlParams.get('product')));
-                    product = {
-                        ...product,
-                        ...productParam,
-                        quantity: 1 // Force quantity to 1 for Buy Now
-                    };
+                // 1. Check current session
+                const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+                
+                if (sessionError || !session) {
+                    throw new Error('No active session');
                 }
+        
+                // 2. Verify user status - THIS DETECTS BANS
+                const { data: { user }, error: userError } = await supabase.auth.getUser();
+                
+                if (userError) {
+                    // Specific check for banned users
+                    if (userError.message.includes('disabled') || userError.message.includes('banned')) {
+                        console.warn('User account is banned/disabled');
+                        await handleBan();
+                        return false;
+                    }
+                    throw userError;
+                }
+                
+                if (!user) {
+                    throw new Error('User verification failed');
+                }
+        
+                // 3. Update local storage
+                localStorage.setItem('supabase_session', JSON.stringify({
+                    user: user,
+                    session: session
+                }));
+                
+                // Update current user
+                currentUser = user;
+                
+                // Update UI
+                updateUserUI(user);
+                
+                console.log('Session verified successfully');
+                return true;
+        
+            } catch (error) {
+                console.warn('Session verification failed:', error.message);
+                await handleLogout();
+                return false;
+            } finally {
+                verificationInProgress = false;
+            }
+        }
+        
+        // Special handling for banned users
+        async function handleBan() {
+            console.log('Processing ban...');
+            try {
+                // 1. Force logout from Supabase
+                const { error } = await supabase.auth.signOut();
+                if (error) console.error('Ban logout error:', error);
+                
+                // 2. Clear local data
+                localStorage.removeItem('supabase_session');
+                
+                // 3. Show ban message
+                alert('Your account has been restricted. Please contact support.');
+                
+                // 4. Redirect to login
+                window.location.href = 'login.html';
             } catch (e) {
-                console.error("Error parsing product:", e);
+                console.error('Ban handling failed:', e);
+                window.location.href = 'login.html';
+            }
+        }
+        
+        // Normal logout handler
+        async function handleLogout() {
+            try {
+                await supabase.auth.signOut();
+            } catch (e) {
+                console.error('Logout error:', e);
+            } finally {
+                localStorage.removeItem('supabase_session');
+                window.location.href = 'login.html';
+            }
+        }
+        
+        // Update UI elements
+        function updateUserUI(user) {
+            const emailElement = document.getElementById('user-email');
+            if (emailElement) {
+                emailElement.textContent = user.email || "User";
+            }
+        }
+        
+        // Load product details
+        async function loadProductDetails() {
+            if (!productId) {
+                alert('No product selected');
+                window.location.href = 'index.html';
+                return;
             }
 
-            // Calculate prices
-            const discountValue = parseFloat(product.discount) || 0;
-            const discountedPrice = product.price * (1 - discountValue/100);
-            const subtotal = discountedPrice;
-            let shippingCost = 250; // Default to standard shipping
+            try {
+                // Fetch product details
+                const { data: product, error } = await supabase
+                    .from('products')
+                    .select('*')
+                    .eq('id', productId)
+                    .single();
 
-            // Display the product
-            const orderItemsContainer = document.getElementById('order-items-container');
-            orderItemsContainer.innerHTML = `
+                if (error) throw error;
+                if (!product) {
+                    alert('Product not found');
+                    window.location.href = 'index.html';
+                    return;
+                }
+
+                // Store product data
+                productData = product;
+                
+                // Set WhatsApp number if available
+                if (product.whatsapp_no) {
+                    whatsappNumber = product.whatsapp_no;
+                }
+
+                // Set delivery price
+                deliveryPrice = product.delivery || 500; // Default to 500 if not set
+
+                // Update product display
+                updateProductDisplay();
+                updateOrderSummary();
+
+            } catch (error) {
+                console.error("Error loading product:", error);
+                alert('Error loading product details');
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Update product display in order summary
+        function updateProductDisplay() {
+            if (!productData) return;
+
+            const container = document.getElementById('order-items-container');
+            const currentPrice = productData.discount > 0 
+                ? (productData.price * (1 - productData.discount/100)).toFixed(2)
+                : productData.price.toFixed(2);
+            
+            container.innerHTML = `
                 <div class="order-item">
                     <div class="item-image">
-                        <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/60'">
+                        <img src="${productData.image}" alt="${productData.name}">
                     </div>
                     <div class="item-details">
-                        <h3>${product.name}</h3>
-                        ${product.color ? `<p>Color: ${product.color}</p>` : ''}
-                        ${product.size ? `<p>Size: ${product.size}</p>` : ''}
-                        ${discountValue > 0 ? `<p>Discount: ${product.discount}%</p>` : ''}
-                        <div class="item-price">LKR ${discountedPrice.toFixed(2)}</div>
-                        <div class="item-quantity">Qty: 1</div>
+                        <h3>${productData.name}</h3>
+                        ${productData.discount > 0 ? `<p>Discount: ${productData.discount}%</p>` : ''}
+                        <div class="item-price">LKR ${currentPrice}</div>
+                        <div class="item-quantity">Qty: <span id="display-quantity">1</span></div>
                     </div>
                 </div>
             `;
+        }
 
-            // Update order totals
-            document.getElementById('subtotal-amount').textContent = `LKR ${subtotal.toFixed(2)}`;
-            document.getElementById('shipping-amount').textContent = `LKR ${shippingCost.toFixed(2)}`;
+        // Calculate shipping cost based on quantity
+        function calculateShippingCost(quantity) {
+            if (quantity === 1) return deliveryPrice;
+            return deliveryPrice + ((quantity - 1) * (deliveryPrice / 2));
+        }
+
+        // Update order summary with current values
+        function updateOrderSummary() {
+            if (!productData) return;
+
+            const quantity = parseInt(document.getElementById('quantity').value) || 1;
+            const shippingCost = calculateShippingCost(quantity);
+            const subtotal = (productData.price * (1 - (productData.discount || 0)/100)) * quantity;
+            const discountAmount = (productData.price * (productData.discount || 0)/100) * quantity;
+            const total = subtotal + shippingCost;
+
+            // Update displayed quantities
+            document.getElementById('display-quantity').textContent = quantity;
+            document.getElementById('subtotal-price').textContent = `LKR ${subtotal.toFixed(2)}`;
+            document.getElementById('shipping-price').textContent = `LKR ${shippingCost.toFixed(2)}`;
+            document.getElementById('delivery-price').textContent = `LKR ${shippingCost.toFixed(2)}`;
             
-            if (discountValue > 0) {
-                const discountAmount = product.price - discountedPrice;
-                document.getElementById('discount-amount').textContent = `-LKR ${discountAmount.toFixed(2)}`;
+            if (discountAmount > 0) {
+                document.getElementById('discount-price').textContent = `-LKR ${discountAmount.toFixed(2)}`;
+                document.querySelector('.total-row.discount').style.display = 'flex';
             } else {
                 document.querySelector('.total-row.discount').style.display = 'none';
             }
             
-            updateTotal();
-
-            // Shipping method change handler
-            document.querySelectorAll('input[name="shipping"]').forEach(radio => {
-                radio.addEventListener('change', function() {
-                    shippingCost = this.id === 'express' ? 400 : 250;
-                    document.getElementById('shipping-amount').textContent = `LKR ${shippingCost.toFixed(2)}`;
-                    updateTotal();
-                });
-            });
-
-            function updateTotal() {
-                const subtotal = parseFloat(document.getElementById('subtotal-amount').textContent.replace('LKR ', ''));
-                const total = subtotal + shippingCost;
-                document.getElementById('total-amount').textContent = `LKR ${total.toFixed(2)}`;
-            }
-
-            // [Rest of your existing JavaScript for form navigation and validation]
-            // ... (include all the form navigation and validation code from your original)
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
-    // DOM Elements
-    const continueToPaymentBtn = document.getElementById('continue-to-payment');
-    const continueToReviewBtn = document.getElementById('continue-to-review');
-    const confirmOrderBtn = document.getElementById('confirm-order');
-    const backToShippingBtn = document.getElementById('back-to-shipping');
-    const backToPaymentBtn = document.getElementById('back-to-payment');
-    
-    const shippingSection = document.getElementById('shipping-section');
-    const shippingMethodSection = document.getElementById('shipping-method-section');
-    const paymentSection = document.getElementById('payment-section');
-    const reviewSection = document.getElementById('review-section');
-    const initialActions = document.getElementById('initial-actions');
-    
-    const stepShipping = document.getElementById('step-shipping');
-    const stepPayment = document.getElementById('step-payment');
-    const stepReview = document.getElementById('step-review');
-    
-    // Calculate shipping cost based on method and number of items
-    function calculateShippingCost(shippingMethod, itemCount) {
-        if (shippingMethod === 'express') {
-            return 400 * itemCount; // LKR 400 per product for express
-        } else {
-            return 250 * itemCount; // LKR 250 per product for standard
+            document.getElementById('total-price').textContent = `LKR ${total.toFixed(2)}`;
         }
-    }
 
-    // Update order summary with cart items and totals
-    function updateOrderSummary() {
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        const orderItemsContainer = document.querySelector('.order-items');
-        const subtotalElement = document.querySelector('.total-row span:last-child');
-        const shippingElement = document.querySelector('.total-row:nth-child(2) span:last-child');
-        const discountElement = document.querySelector('.total-row.discount span:last-child');
-        const totalElement = document.querySelector('.total-row.grand-total span:last-child');
-        
-        // Get selected shipping method
-        const shippingMethod = document.querySelector('input[name="shipping"]:checked')?.id || 'standard';
-        const shippingCost = calculateShippingCost(shippingMethod, cart.reduce((total, item) => total + item.quantity, 0));
-        
-        // Calculate totals
-        let subtotal = 0;
-        let totalDiscount = 0;
-        
-        orderItemsContainer.innerHTML = cart.map(item => {
-            const itemTotal = item.price * item.quantity;
-            subtotal += itemTotal;
-            const itemDiscount = (item.originalPrice - item.price) * item.quantity;
-            totalDiscount += itemDiscount;
-            
-            return `
-                <div class="order-item">
-                    <div class="item-image">
-                        <img src="${item.image}" alt="${item.name}">
-                    </div>
-                    <div class="item-details">
-                        <h3>${item.name}</h3>
-                        ${item.discount && item.discount !== "0" ? `<p>Discount: ${item.discount}%</p>` : ''}
-                        <div class="item-price">LKR ${itemTotal.toFixed(2)}</div>
-                        <div class="item-quantity">Qty: ${item.quantity}</div>
-                    </div>
-                </div>
-            `;
-        }).join('');
-        
-        // Update totals
-        subtotalElement.textContent = `LKR ${subtotal.toFixed(2)}`;
-        shippingElement.textContent = shippingCost === 0 ? 'FREE' : `LKR ${shippingCost.toFixed(2)}`;
-        
-        if (totalDiscount > 0) {
-            discountElement.textContent = `-LKR ${totalDiscount.toFixed(2)}`;
-            discountElement.parentElement.style.display = 'flex';
-        } else {
-            discountElement.parentElement.style.display = 'none';
-        }
-        
-        const total = subtotal + shippingCost;
-        totalElement.textContent = `LKR ${total.toFixed(2)}`;
-        
-        // Update shipping method prices
-        document.querySelectorAll('.method-price').forEach(el => {
-            const methodId = el.closest('.shipping-method').querySelector('input').id;
-            const itemCount = cart.reduce((total, item) => total + item.quantity, 0);
-            const cost = calculateShippingCost(methodId, itemCount);
-            el.textContent = cost === 0 ? 'FREE' : `LKR ${cost.toFixed(2)}`;
-        });
-    }
-
-    // Form validation function
-    function validateShippingForm() {
-        let isValid = true;
-        const requiredFields = [
-            'firstName', 'lastName', 'address', 
-            'city', 'province', 'postalCode', 'phone'
-        ];
-        
-        requiredFields.forEach(fieldId => {
-            const field = document.getElementById(fieldId);
-            const errorMsg = field.parentElement.querySelector('.error-message');
-            
-            if (!field.value.trim()) {
-                errorMsg.textContent = 'This field is required';
-                isValid = false;
-            } else {
-                errorMsg.textContent = '';
-            }
-        });
-        
-        return isValid;
-    }
-    
-    // Function to update review sections with entered information
-    function updateReviewSections() {
-        // Shipping info
-        const shippingInfo = `
-            <p>${document.getElementById('firstName').value} ${document.getElementById('lastName').value}</p>
-            <p>${document.getElementById('address').value}</p>
-            ${document.getElementById('address2').value ? `<p>${document.getElementById('address2').value}</p>` : ''}
-            <p>${document.getElementById('city').value}, ${document.getElementById('province').value}</p>
-            <p>${document.getElementById('postalCode').value}</p>
-            <p>Phone: ${document.getElementById('phone').value}</p>
-            <p>Shipping Method: ${document.querySelector('input[name="shipping"]:checked + label').parentElement.parentElement.querySelector('h3').textContent}</p>
-        `;
-        document.getElementById('review-shipping').innerHTML = shippingInfo;
-        
-        // Payment info
-        const paymentMethod = document.querySelector('input[name="payment"]:checked').id;
-        let paymentInfo = '';
-        
-        if (paymentMethod === 'creditCard') {
-            paymentInfo = `
-                <p>Credit Card ending in ${document.getElementById('cardNumber').value.slice(-4)}</p>
-                <p>Expires: ${document.getElementById('expiry').value}</p>
-            `;
-        } else if (paymentMethod === 'paypal') {
-            paymentInfo = `<p>PayPal</p>`;
-        } else {
-            paymentInfo = `<p>Cash on Delivery</p>`;
-        }
-        
-        document.getElementById('review-payment').innerHTML = paymentInfo;
-    }
-    
-    // Initialize the order summary
-    updateOrderSummary();
-    
-    // Handle shipping method selection
-    const shippingMethods = document.querySelectorAll('.shipping-method');
-    shippingMethods.forEach(method => {
-        method.addEventListener('click', function() {
-            shippingMethods.forEach(m => m.classList.remove('selected'));
-            this.classList.add('selected');
-            this.querySelector('input').checked = true;
-            updateOrderSummary();
-        });
-    });
-
-    // Handle payment method selection
-    const paymentMethods = document.querySelectorAll('.payment-method');
-    paymentMethods.forEach(method => {
-        method.addEventListener('click', function() {
-            paymentMethods.forEach(m => m.classList.remove('selected'));
-            this.classList.add('selected');
-            this.querySelector('input').checked = true;
-        });
-    });
-
-    // Continue to Payment Button
-    continueToPaymentBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        
-        if (validateShippingForm()) {
-            // Hide shipping sections
-            shippingSection.style.display = 'none';
-            shippingMethodSection.style.display = 'none';
-            initialActions.style.display = 'none';
-            
-            // Show payment section
-            paymentSection.style.display = 'block';
-            
-            // Update progress steps
-            stepShipping.classList.remove('active');
-            stepPayment.classList.add('active');
-            
-            // Scroll to top
-            window.scrollTo(0, 0);
-        }
-    });
-    
-    // Back to Shipping Button
-    backToShippingBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        
-        // Show shipping sections
-        shippingSection.style.display = 'block';
-        shippingMethodSection.style.display = 'block';
-        initialActions.style.display = 'flex';
-        
-        // Hide payment section
-        paymentSection.style.display = 'none';
-        
-        // Update progress steps
-        stepPayment.classList.remove('active');
-        stepShipping.classList.add('active');
-        
-        // Scroll to top
-        window.scrollTo(0, 0);
-    });
-    
-    // Continue to Review Button
-    continueToReviewBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        
-        // Validate payment form if credit card is selected
-        const paymentMethod = document.querySelector('input[name="payment"]:checked').id;
-        
-        if (paymentMethod === 'creditCard') {
+        // Form validation function
+        function validateShippingForm() {
             let isValid = true;
-            const requiredFields = ['cardNumber', 'cardName', 'expiry', 'cvv'];
+            const requiredFields = [
+                'firstName', 'lastName', 'address', 
+                'city', 'province', 'postalCode', 'phone'
+            ];
             
             requiredFields.forEach(fieldId => {
                 const field = document.getElementById(fieldId);
@@ -599,64 +486,229 @@
                 }
             });
             
-            if (!isValid) return;
+            return isValid;
         }
         
-        // Update review sections with entered information
-        updateReviewSections();
-        
-        // Hide payment section
-        paymentSection.style.display = 'none';
-        
-        // Show review section
-        reviewSection.style.display = 'block';
-        
-        // Update progress steps
-        stepPayment.classList.remove('active');
-        stepReview.classList.add('active');
-        
-        // Scroll to top
-        window.scrollTo(0, 0);
-    });
-    
-    // Back to Payment Button
-    backToPaymentBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        
-        // Show payment section
-        paymentSection.style.display = 'block';
-        
-        // Hide review section
-        reviewSection.style.display = 'none';
-        
-        // Update progress steps
-        stepReview.classList.remove('active');
-        stepPayment.classList.add('active');
-        
-        // Scroll to top
-        window.scrollTo(0, 0);
-    });
-    
-    // Confirm Order Button
-    confirmOrderBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        
-        // Show loading state
-        confirmOrderBtn.disabled = true;
-        confirmOrderBtn.innerHTML = 'Processing... <i class="fas fa-spinner fa-spin"></i>';
-        
-        // Simulate order processing
-        setTimeout(function() {
-            alert('Order confirmed! Thank you for your purchase.');
+        // Function to update review sections with entered information
+        function updateReviewSections() {
+            // Shipping info
+            const shippingInfo = `
+                <p>${document.getElementById('firstName').value} ${document.getElementById('lastName').value}</p>
+                <p>${document.getElementById('address').value}</p>
+                ${document.getElementById('address2').value ? `<p>${document.getElementById('address2').value}</p>` : ''}
+                <p>${document.getElementById('city').value}, ${document.getElementById('province').value}</p>
+                <p>${document.getElementById('postalCode').value}</p>
+                <p>Phone: ${document.getElementById('phone').value}</p>
+                <p>Shipping Method: Standard Shipping</p>
+            `;
+            document.getElementById('review-shipping').innerHTML = shippingInfo;
             
-            // Clear cart after successful order
-            localStorage.removeItem('cart');
+            // Payment info
+            document.getElementById('review-payment').innerHTML = `
+                <p>Order via WhatsApp</p>
+                <p>You will be redirected to WhatsApp to complete your order</p>
+            `;
+        }
+
+        // Generate WhatsApp message
+        // Generate WhatsApp message
+function generateWhatsAppMessage() {
+    try {
+        if (!currentUser) {
+            throw new Error("User not logged in");
+        }
+
+        const quantity = parseInt(document.getElementById('quantity').value) || 1;
+        const shippingCost = calculateShippingCost(quantity);
+        const subtotal = (productData.price * (1 - (productData.discount || 0)/100)) * quantity;
+        const total = subtotal + shippingCost;
+        
+        const productLink = `${window.location.origin}/open.html?id=${productId}`;
+        
+        let message = `Hello Yunoxa!%0A%0A` +
+               `I would like to order:%0A%0A` +
+               `*Product:* ${productData.name}%0A` +
+               `*Quantity:* ${quantity}%0A` +
+               `*Price:* LKR ${(productData.price * (1 - (productData.discount || 0)/100)).toFixed(2)} each%0A` +
+               `*Subtotal:* LKR ${subtotal.toFixed(2)}%0A` +
+               `*Delivery:* LKR ${shippingCost.toFixed(2)}%0A` +
+               `*Total:* LKR ${total.toFixed(2)}%0A%0A` +
+               `*Shipping Details:*%0A` +
+               `Name: ${document.getElementById('firstName').value} ${document.getElementById('lastName').value}%0A` +
+               `Address: ${document.getElementById('address').value}%0A` +
+               `${document.getElementById('address2').value ? `Address 2: ${document.getElementById('address2').value}%0A` : ''}` +
+               `City: ${document.getElementById('city').value}%0A` +
+               `Province: ${document.getElementById('province').value}%0A` +
+               `Postal Code: ${document.getElementById('postalCode').value}%0A` +
+               `Phone: ${document.getElementById('phone').value}%0A%0A` +
+               `*Product Link:* ${productLink}%0A%0A`;
+        
+        // Safely add user info if available
+        if (currentUser.email) {
+            message += `*Customer Email:* ${currentUser.email}%0A`;
+        }
+        if (currentUser.id) {
+            message += `*User UUID:* ${currentUser.id}`;
+        }
+        
+        return message;
+        
+    } catch (error) {
+        console.error("Error generating WhatsApp message:", error);
+        // Return a basic message without user info if there's an error
+        return `Hello Yunoxa!%0A%0AI would like to place an order. Please contact me.`;
+    }
+}
+
+        // Setup quantity controls
+        function setupQuantityControls() {
+            document.querySelector('.quantity-btn.minus').addEventListener('click', function() {
+                const input = document.getElementById('quantity');
+                if (parseInt(input.value) > 1) {
+                    input.value = parseInt(input.value) - 1;
+                    updateOrderSummary();
+                }
+            });
+
+            document.querySelector('.quantity-btn.plus').addEventListener('click', function() {
+                const input = document.getElementById('quantity');
+                input.value = parseInt(input.value) + 1;
+                updateOrderSummary();
+            });
+
+            document.getElementById('quantity').addEventListener('change', function() {
+                if (this.value < 1) this.value = 1;
+                updateOrderSummary();
+            });
+        }
+
+        // Initial verification on page load
+        document.addEventListener('DOMContentLoaded', async function() {
+            await verifySession();
+            await loadProductDetails();
+            setupQuantityControls();
             
-            // Redirect to order confirmation page
-            window.location.href = 'order-confirmation.html';
-        }, 1500);
-    });
-});
+            // Setup periodic verification
+            setTimeout(async () => {
+                await verifySession();
+                verificationInterval = setInterval(verifySession, 15 * 1000);
+            }, 10 * 1000);
+
+            // Cleanup interval when page unloads
+            window.addEventListener('beforeunload', () => {
+                if (verificationInterval) {
+                    clearInterval(verificationInterval);
+                }
+            });
+
+            // Manual logout handler
+            document.getElementById('logout-btn')?.addEventListener('click', async () => {
+                if (verificationInterval) {
+                    clearInterval(verificationInterval);
+                }
+                await handleLogout();
+            });
+
+            // Continue to Payment Button
+            document.getElementById('continue-to-payment').addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                if (validateShippingForm()) {
+                    // Hide shipping sections
+                    document.getElementById('shipping-section').style.display = 'none';
+                    document.getElementById('shipping-method-section').style.display = 'none';
+                    document.getElementById('initial-actions').style.display = 'none';
+                    
+                    // Show payment section
+                    document.getElementById('payment-section').style.display = 'block';
+                    
+                    // Update progress steps
+                    document.getElementById('step-shipping').classList.remove('active');
+                    document.getElementById('step-payment').classList.add('active');
+                    
+                    // Scroll to top
+                    window.scrollTo(0, 0);
+                }
+            });
+            
+            // Back to Shipping Button
+            document.getElementById('back-to-shipping').addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Show shipping sections
+                document.getElementById('shipping-section').style.display = 'block';
+                document.getElementById('shipping-method-section').style.display = 'block';
+                document.getElementById('initial-actions').style.display = 'flex';
+                
+                // Hide payment section
+                document.getElementById('payment-section').style.display = 'none';
+                
+                // Update progress steps
+                document.getElementById('step-payment').classList.remove('active');
+                document.getElementById('step-shipping').classList.add('active');
+                
+                // Scroll to top
+                window.scrollTo(0, 0);
+            });
+            
+            // Continue to Review Button
+            document.getElementById('continue-to-review').addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Update review sections with entered information
+                updateReviewSections();
+                
+                // Hide payment section
+                document.getElementById('payment-section').style.display = 'none';
+                
+                // Show review section
+                document.getElementById('review-section').style.display = 'block';
+                
+                // Update progress steps
+                document.getElementById('step-payment').classList.remove('active');
+                document.getElementById('step-review').classList.add('active');
+                
+                // Scroll to top
+                window.scrollTo(0, 0);
+            });
+            
+            // Back to Payment Button
+            document.getElementById('back-to-payment').addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Show payment section
+                document.getElementById('payment-section').style.display = 'block';
+                
+                // Hide review section
+                document.getElementById('review-section').style.display = 'none';
+                
+                // Update progress steps
+                document.getElementById('step-review').classList.remove('active');
+                document.getElementById('step-payment').classList.add('active');
+                
+                // Scroll to top
+                window.scrollTo(0, 0);
+            });
+            
+            // Confirm Order Button
+            document.getElementById('confirm-order').addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Show loading state
+                const btn = document.getElementById('confirm-order');
+                btn.disabled = true;
+                btn.innerHTML = 'Preparing... <i class="fas fa-spinner fa-spin"></i>';
+                
+                // Generate WhatsApp message
+                const message = generateWhatsAppMessage();
+                
+                // Open WhatsApp after short delay
+                setTimeout(() => {
+                    window.open(`https://api.whatsapp.com/send/?phone=${whatsappNumber}&text=${message}`, '_blank');
+                    btn.innerHTML = 'WhatsApp Opened!';
+                }, 1000);
+            });
+        });
     </script>
 </body>
 </html>

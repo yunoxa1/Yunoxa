@@ -452,8 +452,6 @@
     profilePicInput.addEventListener('change', (e) => {
       const file = e.target.files[0]
       if (file) {
-        console.log('Original file:', file)
-        
         // Compress the image
         new Compressor(file, {
           quality: 0.6,
@@ -461,7 +459,6 @@
           maxHeight: 200,
           convertSize: 50000, // 50KB
           success(result) {
-            console.log('Compressed file:', result)
             profilePicFile = result
             const reader = new FileReader()
             reader.onload = (event) => {
@@ -471,92 +468,35 @@
           },
           error(err) {
             console.error('Image compression error:', err)
-            // Fallback to original file if compression fails
-            profilePicFile = file
-            const reader = new FileReader()
-            reader.onload = (event) => {
-              profilePicPreview.src = event.target.result
-            }
-            reader.readAsDataURL(file)
           }
         })
       }
     })
 
-    // Ensure bucket exists and has proper permissions
-    async function ensureBucketExists() {
-      try {
-        console.log('Checking if bucket exists...')
-        const { data, error } = await supabase.storage.getBucket('user.profile')
-        
-        if (error && error.message.includes('not found')) {
-          console.log('Bucket not found, creating...')
-          // Create the bucket if it doesn't exist
-          const { data: createData, error: createError } = await supabase.storage.createBucket('user.profile', {
-            public: true,
-            allowedMimeTypes: ['image/*'],
-            fileSizeLimit: 1024 * 1024 * 5 // 5MB
-          })
-          
-          if (createError) throw createError
-          console.log('Bucket created successfully')
-          
-          // Update bucket policy
-          const { data: policyData, error: policyError } = await supabase
-            .storage
-            .updateBucket('user.profile', {
-              public: true,
-              allowedMimeTypes: ['image/*'],
-              fileSizeLimit: '5MB'
-            })
-          
-          if (policyError) throw policyError
-          console.log('Bucket policy updated')
-        }
-      } catch (error) {
-        console.error('Error ensuring bucket exists:', error)
-      }
-    }
-
     // Upload profile picture to Supabase Storage
     async function uploadProfilePicture(userId) {
-      if (!profilePicFile) {
-        console.log('No profile picture selected')
-        return null
-      }
+      if (!profilePicFile) return null
       
       try {
-        console.log('Starting profile picture upload...')
-        await ensureBucketExists()
-        
         // Generate unique filename
         const fileExt = profilePicFile.name.split('.').pop()
         const fileName = `${userId}-${Date.now()}.${fileExt}`
-        console.log('Generated filename:', fileName)
-        
-        // Get current session
-        const { data: { session } } = await supabase.auth.getSession()
-        console.log('Current session:', session)
         
         // Upload file to the "user.profile" bucket
-        console.log('Uploading file...')
         const { data, error } = await supabase.storage
           .from('user.profile')
           .upload(`public/${fileName}`, profilePicFile, {
             cacheControl: '3600',
-            upsert: false,
-            contentType: profilePicFile.type
+            upsert: false
           })
         
         if (error) throw error
-        console.log('Upload successful:', data)
         
         // Get public URL
         const { data: { publicUrl } } = supabase.storage
           .from('user.profile')
           .getPublicUrl(`public/${fileName}`)
         
-        console.log('Public URL:', publicUrl)
         return publicUrl
       } catch (error) {
         console.error('Error uploading profile picture:', error)
@@ -628,8 +568,6 @@
       }
       
       try {
-        console.log('Starting signup process...')
-        
         // Create user in Auth
         const { data: authData, error: authError } = await supabase.auth.signUp({
           email,
@@ -643,11 +581,9 @@
         })
         
         if (authError) throw authError
-        console.log('Auth user created:', authData)
         
         // Upload profile picture if selected
         const profilePicUrl = await uploadProfilePicture(authData.user.id)
-        console.log('Profile picture URL:', profilePicUrl)
         
         // Create user in userdata table
         const homeAddress = {
@@ -673,7 +609,6 @@
           .select()
         
         if (userError) throw userError
-        console.log('User data created:', userData)
         
         successElement.textContent = 'Account created successfully! Check your email for confirmation.'
         
@@ -691,7 +626,6 @@
         // Redirect to home page
         window.location.href = '/'
       } catch (error) {
-        console.error('Signup error:', error)
         errorElement.textContent = error.message
       }
     })
@@ -728,7 +662,7 @@
         startCartSync(data.user.id)
         
         // Login successful - redirect
-        window.location.href = '/index.html'
+        window.location.href = '/checkout.html'
       } catch (error) {
         errorElement.textContent = error.message
       }
