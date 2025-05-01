@@ -65,7 +65,7 @@
             position: relative;
         }
 
-        .cart-count {
+        .favorites-count {
             position: absolute;
             top: -8px;
             right: -8px;
@@ -544,7 +544,7 @@
     padding-bottom: 40px; /* Make space for buttons */
 }
 
-.product-card .add-to-cart {
+.product-card .add-to-favorites {
     position: absolute;
     bottom: 10px;
     right: 10px;
@@ -554,7 +554,7 @@
     position: absolute;
     bottom: 10px;
     left: 10px;
-    right: 60px; /* Leave space for cart button */
+    right: 60px; /* Leave space for favorites button */
 }
 
 /* Flash deal cards */
@@ -566,9 +566,9 @@
     left: auto;
     width: auto;
 }
-    /* Add to Cart Button Styles */
-/* Cart Icon Button Styles */
-.add-to-cart {
+    /* Add to favorites Button Styles */
+/* favorites Icon Button Styles */
+.add-to-favorites {
     background-color: var(--yunoxa-red);
     color: white;
     border: none;
@@ -584,12 +584,12 @@
     margin-top: 5px;
 }
 
-.add-to-cart:hover {
+.add-to-favorites:hover {
     background-color: var(--yunoxa-dark-red);
     transform: scale(1.05);
 }
 
-.add-to-cart i {
+.add-to-favorites i {
     font-size: 14px;
 }
 
@@ -598,14 +598,14 @@
     position: relative;
 }
 
-.product-card .add-to-cart {
+.product-card .add-to-favorites {
     position: absolute;
     bottom: 10px;
     right: 10px;
 }
 
 /* Flash deal cards */
-.deal-card .add-to-cart {
+.deal-card .add-to-favorites {
     width: 28px;
     height: 28px;
     position: absolute;
@@ -613,7 +613,7 @@
     right: 5px;
 }
 
-.deal-card .add-to-cart i {
+.deal-card .add-to-favorites i {
     font-size: 12px;
     /* yunoxa-inspired Color Scheme */
     background-color: #e02f2f; /* yunoxa's red color */
@@ -656,7 +656,7 @@
 
 
 /* For product cards specifically */
-.product-card .add-to-cart {
+.product-card .add-to-favorites {
     /* More compact version for grid items */
     padding: 4px 8px;
     font-size: 13px;
@@ -664,7 +664,7 @@
 }
 
 /* Flash deal cards */
-.deal-card .add-to-cart {
+.deal-card .add-to-favorites {
     /* Even more compact for deal items */
     padding: 4px 8px;
     font-size: 12px;
@@ -672,8 +672,8 @@
     margin-top: 8px;
 }
 
-/* Animation when added to cart */
-@keyframes cartBounce {
+/* Animation when added to favorites */
+@keyframes favoritesBounce {
     0% { transform: scale(1); }
     25% { transform: scale(0.95); }
     50% { transform: scale(1.05); }
@@ -681,8 +681,8 @@
     100% { transform: scale(1); }
 }
 
-.added-to-cart {
-    animation: cartBounce 0.4s ease;
+.added-to-favorites {
+    animation: favoritesBounce 0.4s ease;
     background-color: #4CAF50; /* Green to indicate success */
 }
 
@@ -772,7 +772,7 @@ body {
     cursor: pointer;
 }
 
-/* Cart and Wishlist Icons */
+/* favorites and Wishlist Icons */
 .btn.px-0 .fas {
     font-size: 1.2rem;
 }
@@ -803,7 +803,7 @@ body {
     padding: 0;
 }
 
-/* Cart Table */
+/* favorites Table */
 .table {
     background-color: white;
     border-radius: 10px;
@@ -879,8 +879,8 @@ body {
     color: var(--yunoxa-dark-text) !important;
 }
 
-/* Floating Cart Button */
-.floating-cart-btn {
+/* Floating favorites Button */
+.floating-favorites-btn {
     position: fixed;
     bottom: 30px;
     right: 30px;
@@ -898,7 +898,7 @@ body {
     cursor: pointer;
 }
 
-.floating-cart-btn .badge {
+.floating-favorites-btn .badge {
     background-color: white;
     color: var(--yunoxa-red);
     font-weight: bold;
@@ -922,7 +922,7 @@ body {
         padding: 0 10px;
     }
     
-    .floating-cart-btn {
+    .floating-favorites-btn {
         width: 50px;
         height: 50px;
         font-size: 1.2rem;
@@ -986,7 +986,7 @@ body {
     font-weight: 600;
 }
 
-/* Fix for cart table responsiveness */
+/* Fix for favorites table responsiveness */
 .table-responsive {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
@@ -1073,4 +1073,35 @@ html, body {
 
 .more-categories .category-item {
     margin: 5px;
+}
+
+.sell-now-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center; /* Ensures text stays centered */
+    gap: 3px;               /* Minimal gap between icon and text */
+    padding: 0 10px;        /* Very tight horizontal padding, no vertical padding */
+    background: linear-gradient(135deg, #FFD700 0%, #ff0a0a 100%);
+    color: #111;
+    text-decoration: none;
+    border-radius: 40px;     /* Slightly rounded corners */
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.65rem;     /* Extremely small text */
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(212, 175, 55, 0.3);
+    border: none;
+    cursor: pointer;
+    height: 25px;           /* Fixed tiny height */
+    line-height: 1;         /* Prevents text from expanding height */
+    white-space: nowrap;    /* Prevents text wrapping */
+}
+
+.sell-now-btn:hover {
+    transform: translateY(-0.5px); /* Subtle hover effect */
+    box-shadow: 0 2px 5px rgba(212, 175, 55, 0.4);
+}
+
+.sell-now-btn i {
+    font-size: 14px;        /* Tiny icon to match text */
 }

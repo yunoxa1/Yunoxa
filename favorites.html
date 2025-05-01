@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Yunoxa - My Favorites</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta name="description" content="Your favorite products - Save items you love!">
+
+    <!-- Favicon -->
+    <link rel="icon" href="https://img.kwcdn.com/product/open/2023-09-19/1695100220116-7e3a8b7a3a1e4b1d8f8f5a0a5d1a9a7a-goods.jpeg?imageView2/2/w/800/q/70/format/webp" type="image/jpeg">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link href="css/style.css" rel="stylesheet">
+    <style>
+        /* Favorites specific styles */
+        .favorites-container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .favorites-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .favorites-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .favorites-count {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .favorites-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        
+        .favorite-item {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .favorite-item-img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        
+        .favorite-item-details {
+            padding: 12px;
+        }
+        
+        .favorite-item-title {
+            font-size: 14px;
+            margin-bottom: 5px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .favorite-item-price {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .favorite-item-original-price {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+        
+        .favorite-item-discount {
+            color: #e53935;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+        
+        .favorite-item-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        
+        .remove-favorite {
+            color: #666;
+            font-size: 12px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .buy-now-btn {
+            background: #ff5722;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        
+        .empty-favorites {
+            text-align: center;
+            padding: 50px 20px;
+        }
+        
+        .empty-favorites-icon {
+            font-size: 50px;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .empty-favorites-title {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .empty-favorites-text {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .shop-now-btn {
+            background: #ff5722;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .toast.show {
+            opacity: 1;
+        }
+        
+        @media (min-width: 768px) {
+            .favorites-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        @media (min-width: 992px) {
+            .favorites-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .favorites-count-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: var(--yunoxa-red);
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="yunoxa-header">
+        <div class="header-top">
+            <div class="logo">Yunoxa<span>!</span></div>
+            <div class="header-icons">
+                <a href="favorites.html">
+                    <i class="fas fa-heart"></i>
+                    <span class="favorites-count-badge">0</span>
+                </a>
+            </div>
+        </div>
+        <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" id="search-input" placeholder="Search for products">
+        </div>
+        
+    </header>
+
+    <!-- Favorites Content -->
+    <div class="favorites-container">
+        <div class="favorites-header">
+            <h1 class="favorites-title">My Favorites</h1>
+            <div class="favorites-count" id="favorites-count">0 items</div>
+        </div>
+        
+        <div class="favorites-grid" id="favorites-grid">
+            <!-- Favorite items will be loaded here -->
+        </div>
+        
+        <div id="empty-favorites" class="empty-favorites" style="display: none;">
+            <div class="empty-favorites-icon">
+                <i class="fas fa-heart"></i>
+            </div>
+            <h2 class="empty-favorites-title">Your favorites list is empty</h2>
+            <p class="empty-favorites-text">Save products you love by clicking the heart icon!</p>
+            <a href="index.html" class="shop-now-btn">Shop Now</a>
+        </div>
+        
+        
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home nav-icon"></i>
+            <span>Home</span>
+        </a>
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-search nav-icon"></i>
+            <span>Search</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="fas fa-gift nav-icon"></i>
+            <span>Deals</span>
+        </a>
+        <a href="favorites.html" class="nav-item active">
+            <i class="fas fa-heart nav-icon"></i>
+            <span>Favorites</span>
+        </a>
+    </nav>
+
+    <!-- JavaScript -->
+    <script>
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // First, migrate cart data to favorites if needed
+            migrateCartToFavorites();
+            
+            // Then load the favorites
+            updateFavoritesCount();
+            loadFavorites();
+            loadRecommendedProducts();
+        });
+
+        // Migrate cart data to favorites format
+        function migrateCartToFavorites() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            
+            if (cart.length > 0 && favorites.length === 0) {
+                // Convert cart items to favorites format
+                const newFavorites = cart.map(item => ({
+                    id: item.id,
+                    name: item.name,
+                    price: item.price,
+                    discount: item.discount || 0,
+                    originalPrice: item.originalPrice || item.price,
+                    image: item.image
+                }));
+                
+                // Save to favorites
+                localStorage.setItem('favorites', JSON.stringify(newFavorites));
+                
+                // Clear the cart
+                localStorage.removeItem('cart');
+            }
+        }
+
+        // Generate star rating
+        function generateStarRating() {
+            const rating = (Math.random() * (5 - 3.7) + 3.7).toFixed(1);
+            const fullStars = Math.floor(rating);
+            const halfStar = (rating - fullStars) >= 0.5 ? 1 : 0;
+            const emptyStars = 5 - fullStars - halfStar;
+        
+            let starHtml = '';
+            for (let i = 0; i < fullStars; i++) {
+                starHtml += '<i class="fas fa-star"></i>';
+            }
+            if (halfStar) {
+                starHtml += '<i class="fas fa-star-half-alt"></i>';
+            }
+            for (let i = 0; i < emptyStars; i++) {
+                starHtml += '<i class="far fa-star"></i>';
+            }
+        
+            return { starHtml, rating };
+        }
+        
+        // Get favorites from localStorage
+        function getFavorites() {
+            return JSON.parse(localStorage.getItem('favorites')) || [];
+        }
+        
+        // Save favorites to localStorage
+        function saveFavorites(favorites) {
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            updateFavoritesCount();
+        }
+        
+        // Update favorites count in header and page
+        function updateFavoritesCount() {
+            const favorites = getFavorites();
+            const count = favorites.length;
+            
+            // Update header badge
+            document.querySelectorAll('.favorites-count-badge').forEach(el => {
+                el.textContent = count;
+            });
+            
+            // Update favorites count text
+            document.getElementById('favorites-count').textContent = `${count} ${count === 1 ? 'item' : 'items'}`;
+        }
+        
+        // Load favorite items
+        function loadFavorites() {
+            const favorites = getFavorites();
+            const favoritesGrid = document.getElementById('favorites-grid');
+            const emptyFavorites = document.getElementById('empty-favorites');
+            
+            updateFavoritesCount();
+            
+            if (favorites.length === 0) {
+                favoritesGrid.style.display = 'none';
+                emptyFavorites.style.display = 'block';
+                return;
+            }
+            
+            favoritesGrid.style.display = 'grid';
+            emptyFavorites.style.display = 'none';
+            
+            favoritesGrid.innerHTML = '';
+            
+            favorites.forEach(item => {
+                const { starHtml, rating } = generateStarRating();
+                const discount = item.discount || 0;
+                const originalPrice = item.originalPrice || item.price;
+                const displayPrice = discount > 0 ? 
+                    (originalPrice * (1 - discount/100)).toFixed(2) : 
+                    item.price.toFixed(2);
+                
+                const favoriteItem = document.createElement('div');
+                favoriteItem.className = 'favorite-item';
+                favoriteItem.dataset.id = item.id;
+                favoriteItem.innerHTML = `
+                    <img src="${item.image || 'https://via.placeholder.com/250'}" alt="${item.name}" class="favorite-item-img">
+                    <div class="favorite-item-details">
+                        <div class="favorite-item-title">${item.name}</div>
+                        <div class="favorite-item-price">
+                            LKR ${displayPrice}
+                            ${discount > 0 ? 
+                                `<span class="favorite-item-original-price">LKR ${originalPrice.toFixed(2)}</span>` : ''}
+                            ${discount > 0 ? 
+                                `<span class="favorite-item-discount">${discount}% OFF</span>` : ''}
+                        </div>
+                        <div class="product-rating">
+                            <div class="stars">${starHtml}</div>
+                            <span class="rating-count">${rating}</span>
+                        </div>
+                        <div class="favorite-item-actions">
+                            <button class="remove-favorite" data-id="${item.id}">
+                                <i class="far fa-trash-alt"></i> Remove
+                            </button>
+                            <button class="buy-now-btn" data-id="${item.id}">
+                                BUY NOW
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                // Add event listeners
+                const removeBtn = favoriteItem.querySelector('.remove-favorite');
+                const productBtn = favoriteItem.querySelector('.favorite-item-img');
+                const buyNowBtn = favoriteItem.querySelector('.buy-now-btn');
+
+                removeBtn.addEventListener('click', () => removeFromFavorites(item.id));
+                productBtn.addEventListener('click', () => {
+                    window.location.href = `open.html?id=${item.id}`;
+                });
+                buyNowBtn.addEventListener('click', () => {
+                    window.location.href = `checkout1.html?id=${item.id}`;
+                });
+                
+                favoritesGrid.appendChild(favoriteItem);
+            });
+        }
+        
+        // Remove item from favorites
+        function removeFromFavorites(id) {
+            let favorites = getFavorites();
+            favorites = favorites.filter(item => item.id !== id);
+            saveFavorites(favorites);
+            loadFavorites();
+            showToast('Removed from favorites');
+        }
+        
+        function showToast(message = '') {
+            const toast = document.createElement('div');
+            toast.className = 'toast show';
+            toast.innerHTML = `
+                <i class="fas fa-check-circle"></i>
+                <span>${message}</span>
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+        
+        // Load recommended products
+        async function loadRecommendedProducts() {
+            try {
+                // In a real app, you would fetch from your API
+                // For demo, we'll use some sample products
+                const sampleProducts = [
+                    {
+                        id: "1001",
+                        name: "Wireless Earbuds",
+                        price: 2990,
+                        discount: 10,
+                        image: "https://via.placeholder.com/250"
+                    },
+                    {
+                        id: "1002",
+                        name: "Smart Watch",
+                        price: 5990,
+                        discount: 15,
+                        image: "https://via.placeholder.com/250"
+                    },
+                    {
+                        id: "1003",
+                        name: "Bluetooth Speaker",
+                        price: 2490,
+                        discount: 0,
+                        image: "https://via.placeholder.com/250"
+                    },
+                    {
+                        id: "1004",
+                        name: "Power Bank 10000mAh",
+                        price: 1990,
+                        discount: 5,
+                        image: "https://via.placeholder.com/250"
+                    }
+                ];
+                
+                const container = document.getElementById('recommended-products');
+                container.innerHTML = '';
+                
+                sampleProducts.forEach(product => {
+                    const { starHtml, rating } = generateStarRating();
+                    const discount = product.discount || 0;
+                    const displayPrice = discount > 0 ? 
+                        (product.price * (1 - discount/100)).toFixed(2) : 
+                        product.price.toFixed(2);
+                    
+                    const productCard = document.createElement('div');
+                    productCard.className = 'product-card';
+                    productCard.innerHTML = `
+                        <a href="open.html?id=${product.id}">
+                            ${discount > 0 ? `<span class="product-badge">${discount}% OFF</span>` : ''}
+                            <div class="image-container">
+                                <img src="${product.image}" alt="${product.name}" class="product-image">
+                            </div>
+                            <div class="product-info"></a>
+                                <div class="product-price">
+                                    LKR ${displayPrice}
+                                    ${discount > 0 ? 
+                                        `<span class="product-original-price">LKR ${product.price.toFixed(2)}</span>` : ''}
+                                </div>
+                                <div class="product-title">${product.name}</div>
+                                <div class="product-rating">
+                                    <div class="stars">${starHtml}</div>
+                                    <span class="rating-count">${rating}</span>
+                                </div>
+                                <button class="add-to-favorites" data-product='${JSON.stringify(product).replace(/'/g, "&apos;")}'>
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                                <button class="buy-now" data-id="${product.id}">
+                                    BUY NOW
+                                </button>
+                            </div>
+                    `;
+                    
+                    container.appendChild(productCard);
+                });
+                
+                bindAddToFavoritesEvents();
+                bindBuyNowEvents();
+                
+            } catch (error) {
+                console.error("Error loading recommended products:", error);
+                const container = document.getElementById('recommended-products');
+                container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#e53935;">Error loading recommended products</p>';
+            }
+        }
+        
+        // Add to favorites function
+        function addToFavorites(product) {
+            let favorites = getFavorites();
+            
+            // Check if product already exists in favorites
+            const existingItem = favorites.find(item => item.id === product.id);
+            
+            if (!existingItem) {
+                favorites.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    discount: product.discount || 0,
+                    originalPrice: product.price,
+                    image: product.image
+                });
+                
+                saveFavorites(favorites);
+                showToast('Added to favorites!');
+            } else {
+                showToast('Already in favorites');
+            }
+        }
+        
+        // Event binding functions
+        function bindAddToFavoritesEvents() {
+            document.querySelectorAll('.add-to-favorites').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    try {
+                        const product = JSON.parse(this.dataset.product.replace(/&apos;/g, "'"));
+                        addToFavorites(product);
+                    } catch (error) {
+                        console.error("Error parsing product data:", error);
+                    }
+                });
+            });
+        }
+        
+        function bindBuyNowEvents() {
+            document.querySelectorAll('.buy-now').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const productId = this.dataset.id;
+                    window.location.href = `open.html?id=${productId}`;
+                });
+            });
+        }
+    </script>
+</body>
+</html>

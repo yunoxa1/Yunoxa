@@ -73,7 +73,7 @@ body, html {
     text-decoration: none;
 }
 
-.cart-count {
+.favorites-count {
     position: absolute;
     top: -8px;
     right: -8px;
@@ -316,7 +316,7 @@ body, html {
     margin-top: 20px;
 }
 
-.add-to-cart-btn, .buy-now-btn {
+.add-to-favorites-btn, .buy-now-btn {
     flex: 1;
     padding: 14px;
     border: none;
@@ -330,13 +330,13 @@ body, html {
     transition: all 0.2s;
 }
 
-.add-to-cart-btn {
+.add-to-favorites-btn {
     background-color: white;
     color: var(--yunoxa-red);
     border: 1px solid var(--yunoxa-red);
 }
 
-.add-to-cart-btn:hover {
+.add-to-favorites-btn:hover {
     background-color: #fff5f6;
 }
 
@@ -428,14 +428,14 @@ body, html {
     }
 }
 
-/* Animation for added to cart */
+/* Animation for added to favorites */
 @keyframes pulse {
     0% { transform: scale(1); }
     50% { transform: scale(1.05); }
     100% { transform: scale(1); }
 }
 
-.added-to-cart {
+.added-to-favorites {
     animation: pulse 0.5s ease;
 }
 

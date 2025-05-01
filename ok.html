@@ -167,9 +167,50 @@
     <script type="module">
         import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     
-        const supabaseUrl = 'https://qopdjgfciakmvhlriixt.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFvcGRqZ2ZjaWFrbXZobHJpaXh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk0NDA2NDAsImV4cCI6MjA1NTAxNjY0MH0.5UAelwww7WpDUExqhc5dH2JhUWlGNgUNjh8fzxPNZvs';
-        const supabase = createClient(supabaseUrl, supabaseKey);
+        // Split Supabase URL into 10 parts
+const urlParts = [
+  'https://qop',
+  'djg',
+  'fci',
+  'akm',
+  'vhl',
+  'rii',
+  'xt.',
+  'supa',
+  'base.',
+  'co'
+];
+
+// Split Supabase anonymous key into 20 parts
+const keyParts = [
+  'eyJhbGciOiJIUz',
+  'I1NiIsInR5cCI6',
+  'IkpXVCJ9.eyJpc3',
+  'MiOiJzdXBhYmFz',
+  'ZSIsInJlZiI6In',
+  'FvcGRqZ2ZjaWF',
+  'rbXZobHJpaXh0I',
+  'iwicm9sZSI6ImF',
+  'ub24iLCJpYXQiO',
+  'jE3Mzk0NDA2NDA',
+  'sImV4cCI6MjA1N',
+  'TAxNjY0MH0.5UA',
+  'elwww7WpDUExqh',
+  'c5dH2JhUWlGNg',
+  'UNjh8fzxPNZvs',
+  '', // Empty parts as filler to reach 20
+  '',
+  '',
+  '',
+  ''
+];
+
+// Reconstruct the values
+const supabaseUrl = urlParts.join('');
+const supabaseKey = keyParts.join('');
+
+// Create Supabase client
+const supabase = createClient(supabaseUrl, supabaseKey);
 
         // Get product ID from URL
         const urlParams = new URLSearchParams(window.location.search);

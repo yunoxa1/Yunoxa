@@ -13,7 +13,7 @@
 
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
@@ -27,10 +27,13 @@
         <div class="header-top">
             <div class="logo">Yunoxa<span>!</span></div>
             <div class="header-icons">
-                <a href="#"><i class="far fa-bell"></i></a>
-                <a href="cart.html">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span class="cart-count">0</span>
+                <a href="create.html" class="sell-now-btn">
+                    <i class="fas fa-coins"></i>
+                    <span>Sell Now</span>
+                  </a>
+                  <a href="favorites.html">
+                    <i class="fas fa-heart"></i>
+                    
                 </a>
             </div>
         </div>
@@ -157,7 +160,7 @@
     <!-- Toast Notification -->
     <div class="toast" id="toast">
         <i class="fas fa-check-circle"></i>
-        <span>Item added to cart!</span>
+        <span>Item added to favorites!</span>
     </div>
 
     <!-- Bottom Navigation -->
@@ -174,9 +177,9 @@
             <i class="fas fa-gift nav-icon"></i>
             <span>Deals</span>
         </a>
-        <a href="cart.html" class="nav-item">
-            <i class="fas fa-shopping-cart nav-icon"></i>
-            <span>Cart</span>
+        <a href="favorites.html" class="nav-item">
+            <i class="fas fa-heart nav-icon"></i>
+            <span>favorites</span>
         </a>
     
     </nav>
@@ -189,8 +192,8 @@
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFvcGRqZ2ZjaWFrbXZobHJpaXh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk0NDA2NDAsImV4cCI6MjA1NTAxNjY0MH0.5UAelwww7WpDUExqhc5dH2JhUWlGNgUNjh8fzxPNZvs';
         const supabase = createClient(supabaseUrl, supabaseKey);
         
-        // Initialize cart count
-        updateCartCount();
+        // Initialize favorites count
+        updatefavoritesCount();
         
         // Countdown timer
         function updateCountdown() {
@@ -233,19 +236,19 @@
             return { starHtml, rating };
         }
         
-        // Cart functions
-        function addToCart(product) {
-            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        // favorites functions
+        function addTofavorites(product) {
+            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
              const discountedPrice = product.discount > 0 
         ? product.price * (1 - product.discount/100)
         : product.price;
     
-    const existingItem = cart.find(item => item.id === product.id);
+    const existingItem = favorites.find(item => item.id === product.id);
 
     if (existingItem) {
         existingItem.quantity += 1;
     } else {
-        cart.push({
+        favorites.push({
             id: product.id,
             name: product.name,
             price: discountedPrice, // Store the discounted price
@@ -256,20 +259,20 @@
         });
     }
         
-            localStorage.setItem('cart', JSON.stringify(cart));
-            updateCartCount();
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            updatefavoritesCount();
             showToast();
         }
         
-        function updateCartCount() {
-            const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-            document.querySelectorAll('.cart-count').forEach(el => {
+        function updatefavoritesCount() {
+            const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            const totalItems = favorites.reduce((sum, item) => sum + item.quantity, 0);
+            document.querySelectorAll('.favorites').forEach(el => {
                 el.textContent = totalItems;
             });
         }
         
-        function showToast(message = 'Item added to cart!') {
+        function showToast(message = 'Item added to favorites!') {
             const toast = document.getElementById('toast');
             toast.querySelector('span').textContent = message;
             toast.classList.add('show');
@@ -279,17 +282,17 @@
         }
         
         // Event binding functions
-        function bindAddToCartEvents() {
-            document.querySelectorAll('.add-to-cart').forEach(button => {
+        function bindAddTofavoritesEvents() {
+            document.querySelectorAll('.add-to-favorites').forEach(button => {
                 button.replaceWith(button.cloneNode(true));
             });
             
-            document.querySelectorAll('.add-to-cart').forEach(button => {
+            document.querySelectorAll('.add-to-favorites').forEach(button => {
                 button.addEventListener('click', function(e) {
                     e.preventDefault();
                     try {
                         const product = JSON.parse(this.dataset.product.replace(/&apos;/g, "'"));
-                        addToCart(product);
+                        addTofavorites(product);
                     } catch (error) {
                         console.error("Error parsing product data:", error);
                     }
@@ -308,8 +311,8 @@
             try {
                 const product = JSON.parse(this.dataset.product.replace(/&apos;/g, "'"));
                 
-                // Create a new cart with just this product
-                const cart = [{
+                // Create a new favorites with just this product
+                const favorites = [{
                     id: product.id,
                     name: product.name,
                     price: product.discount > 0 
@@ -321,8 +324,8 @@
                     discount: product.discount || 0
                 }];
                 
-                localStorage.setItem('cart', JSON.stringify(cart));
-                updateCartCount();
+                localStorage.setItem('favorites', JSON.stringify(favorites));
+                updatefavoritesCount();
                 
                 // Redirect to checkout with product ID
                 window.location.href = `checkout1.html?id=${product.id}`;
@@ -394,8 +397,8 @@
                                         <div class="stars">${starHtml}</div>
                                         <span class="rating-count">${rating}</span>
                                     </div>
-                                    <button class="add-to-cart" data-product='${JSON.stringify(product).replace(/'/g, "&apos;")}'>
-                                        <i class="fas fa-cart-plus"></i>
+                                    <button class="add-to-favorites" data-product='${JSON.stringify(product).replace(/'/g, "&apos;")}'>
+                                        <i class="fas fa-heart"></i>
                                     </button>
                                     <button class="buy-now" data-product='${JSON.stringify(product).replace(/'/g, "&apos;")}'>
                                         BUY NOW
@@ -412,7 +415,7 @@
                     </div>`;
             } finally {
                 document.getElementById('loading').style.display = 'none';
-                bindAddToCartEvents();
+                bindAddTofavoritesEvents();
                 bindBuyNowEvents();
             }
         }
@@ -466,8 +469,8 @@
                                         <div class="stars">${starHtml}</div>
                                         <span class="rating-count">${rating}</span>
                                     </div>
-                                    <button class="add-to-cart" data-product='${JSON.stringify(product).replace(/'/g, "&apos;")}'>
-                                        <i class="fas fa-cart-plus"></i>
+                                    <button class="add-to-favorites" data-product='${JSON.stringify(product).replace(/'/g, "&apos;")}'>
+                                        <i class="fas fa-heart"></i>
                                     </button>
                                     <button class="buy-now" data-product='${JSON.stringify(product).replace(/'/g, "&apos;")}'>
                                         BUY NOW
@@ -486,7 +489,7 @@
                     </div>`;
             } finally {
                 document.getElementById('loading').style.display = 'none';
-                bindAddToCartEvents();
+                bindAddTofavoritesEvents();
                 bindBuyNowEvents();
             }
         }
@@ -537,8 +540,8 @@
                                     <div class="stars">${starHtml}</div>
                                     <span class="rating-count">${rating}</span>
                                 </div>
-                                <button class="add-to-cart" data-product='${JSON.stringify(product).replace(/'/g, "&apos;")}'>
-                                    <i class="fas fa-cart-plus"></i>
+                                <button class="add-to-favorites" data-product='${JSON.stringify(product).replace(/'/g, "&apos;")}'>
+                                    <i class="fas fa-favorites-plus"></i>
                                 </button>
                                 <button class="buy-now" data-product='${JSON.stringify(product).replace(/'/g, "&apos;")}'>
                                     BUY NOW
@@ -551,7 +554,7 @@
                 console.error("Error searching products:", error);
             } finally {
                 document.getElementById('loading').style.display = 'none';
-                bindAddToCartEvents();
+                bindAddTofavoritesEvents();
                 bindBuyNowEvents();
             }
         }

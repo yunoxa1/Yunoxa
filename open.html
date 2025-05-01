@@ -25,10 +25,10 @@
         <div class="header-top">
             <div class="logo">Yunoxa<span>!</span></div>
             <div class="header-icons">
-                <a href="#"><i class="far fa-bell"></i></a>
-                <a href="cart.html">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span class="cart-count">0</span>
+                
+                <a href="favorites.html">
+                    <i class="fas fa-heart"></i>
+                    <span class="favorites-count">0</span>
                 </a>
             </div>
         </div>
@@ -93,8 +93,8 @@
             </div>
             
             <div class="button-group">
-                <button class="add-to-cart-btn">
-                    <i class="fas fa-cart-plus"></i> Add to Cart
+                <button class="add-to-favorites-btn">
+                    <i class="fas fa-favorites-plus"></i> Add to favorites
                 </button>
                 <a href="#" class="buy-now-btn" onclick="buyNow()">Buy Now</a>
             </div>
@@ -150,9 +150,9 @@
             <i class="fas fa-gift nav-icon"></i>
             <span>Deals</span>
         </a>
-        <a href="cart.html" class="nav-item">
-            <i class="fas fa-shopping-cart nav-icon"></i>
-            <span>Cart</span>
+        <a href="favorites.html" class="nav-item">
+            <i class="fas fa-heart nav-icon"></i>
+            <span>favorites</span>
         </a>
         
     </nav>
@@ -160,7 +160,7 @@
     <!-- Toast Notification -->
     <div class="toast" id="toast">
         <i class="fas fa-check-circle"></i>
-        <span>Item added to cart!</span>
+        <span>Item added to favorites!</span>
     </div>
 
     <!-- JavaScript -->
@@ -175,8 +175,8 @@
         const urlParams = new URLSearchParams(window.location.search);
         const productId = urlParams.get('id');
 
-        // Initialize cart count
-        updateCartCount();
+        // Initialize favorites count
+        updatefavoritesCount();
 
         async function loadProductDetails() {
     if (!productId) {
@@ -259,8 +259,8 @@ window.buyNow = async function() {
     const productId = urlParams.get('id');
     const quantity = parseInt(document.querySelector('.quantity-input').value);
 
-    // First add the item to cart
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    // First add the item to favorites
+    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
     const { data: product, error } = await supabase
         .from('products')
         .select('*')
@@ -276,8 +276,8 @@ window.buyNow = async function() {
         ? product.price * (1 - product.discount/100)
         : product.price;
 
-    // Clear the cart first for "Buy Now" functionality
-    cart = [{
+    // Clear the favorites first for "Buy Now" functionality
+    favorites = [{
         id: product.id,
         name: product.name,
         price: discountedPrice,
@@ -287,8 +287,8 @@ window.buyNow = async function() {
         discount: product.discount || 0
     }];
 
-    localStorage.setItem('cart', JSON.stringify(cart));
-    updateCartCount();
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+    updatefavoritesCount();
     
     // Then redirect to checkout page with the product ID
     window.location.href = `checkout1.html?id=${productId}`;
@@ -365,14 +365,14 @@ document.querySelector('.buy-now-btn').addEventListener('click', function(e) {
             input.value = parseInt(input.value) + 1;
         });
 
-        // Add to cart functionality
-        document.querySelector('.add-to-cart-btn').addEventListener('click', addToCart);
+        // Add to favorites functionality
+        document.querySelector('.add-to-favorites-btn').addEventListener('click', addTofavorites);
 
-        async function addToCart() {
+        async function addTofavorites() {
             const productId = urlParams.get('id');
             const quantity = parseInt(document.querySelector('.quantity-input').value);
 
-            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
             const { data: product, error } = await supabase
                 .from('products')
                 .select('*')
@@ -388,12 +388,12 @@ document.querySelector('.buy-now-btn').addEventListener('click', function(e) {
         ? product.price * (1 - product.discount/100)
         : product.price;
     
-    const existingItem = cart.find(item => item.id === product.id);
+    const existingItem = favorites.find(item => item.id === product.id);
 
     if (existingItem) {
         existingItem.quantity += 1;
     } else {
-        cart.push({
+        favorites.push({
             id: product.id,
             name: product.name,
             price: discountedPrice, // Store the discounted price
@@ -404,9 +404,9 @@ document.querySelector('.buy-now-btn').addEventListener('click', function(e) {
         });
     }
 
-            localStorage.setItem('cart', JSON.stringify(cart));
+            localStorage.setItem('favorites', JSON.stringify(favorites));
             showToast();
-            updateCartCount();
+            updatefavoritesCount();
         }
 
         function showToast() {
@@ -417,10 +417,10 @@ document.querySelector('.buy-now-btn').addEventListener('click', function(e) {
             }, 3000);
         }
 
-        function updateCartCount() {
-            const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-            document.querySelector('.cart-count').textContent = totalItems;
+        function updatefavoritesCount() {
+            const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            const totalItems = favorites.reduce((sum, item) => sum + item.quantity, 0);
+            document.querySelector('.favorites-count').textContent = totalItems;
         }
 
         // Social sharing functions
@@ -494,7 +494,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
             loadProductDetails();
-            updateCartCount();
+            updatefavoritesCount();
         });
     </script>
 </body>
