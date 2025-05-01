@@ -8,6 +8,18 @@
   <script src="https://cdn.jsdelivr.net/npm/compressorjs@1.1.1/dist/compressor.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
+
+:root {
+            --yunoxa-red: #e02f2f;
+            --yunoxa-dark-red: #c41e1e;
+            --yunoxa-yellow: #ffd700;
+            --yunoxa-orange: #ff9500;
+            --yunoxa-blue: #2e8bff;
+            --yunoxa-bg: #f8f8f8;
+            --yunoxa-text: #333;
+            --yunoxa-light-text: #666;
+        }
+
     * {
       margin: 0;
       padding: 0;
@@ -91,13 +103,13 @@
     }
     
     .form-input:focus {
-      border-color: #ff6b00;
+      border-color: #e02f2f;
       outline: none;
     }
     
     .login-btn {
       width: 100%;
-      background-color: #ff6b00;
+      background-color: #e02f2f;
       color: white;
       border: none;
       border-radius: 4px;
@@ -109,7 +121,7 @@
     }
     
     .login-btn:hover {
-      background-color: #e05d00;
+      background-color: #e02f2f;
     }
     
     .login-btn:disabled {
@@ -176,7 +188,7 @@
     }
     
     .footer-link:hover {
-      color: #ff6b00;
+      color: #e02f2f;
     }
     
     .tabs {
@@ -195,8 +207,8 @@
     }
     
     .tab.active {
-      color: #ff6b00;
-      border-bottom: 2px solid #ff6b00;
+      color: #e02f2f;
+      border-bottom: 2px solid #e02f2f;
     }
     
     .form-container {
@@ -221,8 +233,8 @@
     
     .forgot-password {
       text-align: right;
-      margin-top: -15px;
-      margin-bottom: 15px;
+      margin-top: -1px;
+      margin-bottom: 1px;
     }
     
     .forgot-password a {
@@ -232,7 +244,7 @@
     }
     
     .forgot-password a:hover {
-      color: #ff6b00;
+      color: #e02f2f;
     }
     
     .profile-pic-upload {
@@ -313,14 +325,66 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--yunoxa-light-text);
+            font-size: 12px;
+        }
+
+        .nav-item.active {
+            color: var(--yunoxa-red);
+        }
+
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 3px;
+        }
   </style>
 </head>
 <body>
   <header class="header">
     <div class="container header-container">
-      <img src="https://img.kwcdn.com/product/open/2023-09-15/1694773030349-8a1a1a8f3d9647c9a3b3d4f3a3b3d4f3-800-800?imageView2/2/w/800/q/70/format/webp" alt= Yunoxa  Logo" class="logo">
+      <img src="img/Favicon.png" alt= Yunoxa  Logo" class="logo">
     </div>
   </header>
+
+  <nav class="bottom-nav">
+    <a href="index.html" class="nav-item">
+        <i class="fas fa-home nav-icon"></i>
+        <span>Home</span>
+    </a>
+    <a href="#" class="nav-item">
+        <i class="fas fa-search nav-icon"></i>
+        <span>Search</span>
+    </a>
+    <a href="#" class="nav-item">
+        <i class="fas fa-gift nav-icon"></i>
+        <span>Deals</span>
+    </a>
+    <a href="favorites.html" class="nav-item">
+        <i class="fas fa-heart nav-icon"></i>
+        <span>favorites</span>
+    </a>
+
+</nav>
   
   <main class="main">
     <div class="container">
@@ -351,29 +415,14 @@
             <div id="login-error" class="error"></div>
           </form>
           
-          <div class="divider">or</div>
           
-          <div class="social-login">
-            <button type="button" class="social-btn">
-              <img src="https://img.kwcdn.com/product/open/2023-09-15/1694773030349-8a1a1a8f3d9647c9a3b3d4f3a3b3d4f3-800-800?imageView2/2/w/800/q/70/format/webp" alt="Google">
-              Continue with Google
-            </button>
-            <button type="button" class="social-btn">
-              <img src="https://img.kwcdn.com/product/open/2023-09-15/1694773030349-8a1a1a8f3d9647c9a3b3d4f3a3b3d4f3-800-800?imageView2/2/w/800/q/70/format/webp" alt="Facebook">
-              Continue with Facebook
-            </button>
-            <button type="button" class="social-btn">
-              <img src="https://img.kwcdn.com/product/open/2023-09-15/1694773030349-8a1a1a8f3d9647c9a3b3d4f3a3b3d4f3-800-800?imageView2/2/w/800/q/70/format/webp" alt="Apple">
-              Continue with Apple
-            </button>
-          </div>
         </div>
         
         <!-- Sign Up Form -->
         <div id="signup-form" class="form-container">
           <form id="signupForm">
             <div class="profile-pic-upload">
-              <img id="profile-pic-preview" src="https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png" class="profile-pic-preview" alt="Profile Preview">
+              <img id="profile-pic-preview" src="img/profile.avif" class="profile-pic-preview" alt="Profile Preview">
               <label for="profile-pic-input" class="profile-pic-label">Choose Profile Picture</label>
               <input type="file" id="profile-pic-input" class="profile-pic-input" accept="image/*">
             </div>
