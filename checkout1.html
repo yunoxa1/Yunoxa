@@ -254,7 +254,7 @@
             'https://qopdjgfciakmvhlriixt.supabase.co',
             'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFvcGRqZ2ZjaWFrbXZobHJpaXh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk0NDA2NDAsImV4cCI6MjA1NTAxNjY0MH0.5UAelwww7WpDUExqhc5dH2JhUWlGNgUNjh8fzxPNZvs'
         )
-
+        
         // Track verification state
         let verificationInProgress = false
         let verificationInterval
@@ -266,10 +266,10 @@
         // Get product ID from URL
         const urlParams = new URLSearchParams(window.location.search);
         const productId = urlParams.get('id');
-
+        
         // Enhanced verification with ban detection
         async function verifySession() {
-            if (verificationInProgress) return;
+            if (verificationInProgress) return false;
             
             verificationInProgress = true;
             console.log('Starting session verification...');
@@ -367,12 +367,18 @@
         
         // Load product details
         async function loadProductDetails() {
+            // Early check for user session
+            if (!currentUser) {
+                console.warn('Attempted to load product without user session');
+                return;
+            }
+        
             if (!productId) {
                 alert('No product selected');
                 window.location.href = 'index.html';
                 return;
             }
-
+        
             try {
                 // Fetch product details
                 const { data: product, error } = await supabase
@@ -380,14 +386,14 @@
                     .select('*')
                     .eq('id', productId)
                     .single();
-
+        
                 if (error) throw error;
                 if (!product) {
                     alert('Product not found');
                     window.location.href = 'index.html';
                     return;
                 }
-
+        
                 // Store product data
                 productData = product;
                 
@@ -395,25 +401,25 @@
                 if (product.whatsapp_no) {
                     whatsappNumber = product.whatsapp_no;
                 }
-
+        
                 // Set delivery price
                 deliveryPrice = product.delivery || 500; // Default to 500 if not set
-
+        
                 // Update product display
                 updateProductDisplay();
                 updateOrderSummary();
-
+        
             } catch (error) {
                 console.error("Error loading product:", error);
                 alert('Error loading product details');
                 window.location.href = 'index.html';
             }
         }
-
+        
         // Update product display in order summary
         function updateProductDisplay() {
             if (!productData) return;
-
+        
             const container = document.getElementById('order-items-container');
             const currentPrice = productData.discount > 0 
                 ? (productData.price * (1 - productData.discount/100)).toFixed(2)
@@ -433,23 +439,23 @@
                 </div>
             `;
         }
-
+        
         // Calculate shipping cost based on quantity
         function calculateShippingCost(quantity) {
             if (quantity === 1) return deliveryPrice;
             return deliveryPrice + ((quantity - 1) * (deliveryPrice / 2));
         }
-
+        
         // Update order summary with current values
         function updateOrderSummary() {
             if (!productData) return;
-
+        
             const quantity = parseInt(document.getElementById('quantity').value) || 1;
             const shippingCost = calculateShippingCost(quantity);
             const subtotal = (productData.price * (1 - (productData.discount || 0)/100)) * quantity;
             const discountAmount = (productData.price * (productData.discount || 0)/100) * quantity;
             const total = subtotal + shippingCost;
-
+        
             // Update displayed quantities
             document.getElementById('display-quantity').textContent = quantity;
             document.getElementById('subtotal-price').textContent = `LKR ${subtotal.toFixed(2)}`;
@@ -465,7 +471,7 @@
             
             document.getElementById('total-price').textContent = `LKR ${total.toFixed(2)}`;
         }
-
+        
         // Form validation function
         function validateShippingForm() {
             let isValid = true;
@@ -509,57 +515,56 @@
                 <p>You will be redirected to WhatsApp to complete your order</p>
             `;
         }
-
+        
         // Generate WhatsApp message
-        // Generate WhatsApp message
-function generateWhatsAppMessage() {
-    try {
-        if (!currentUser) {
-            throw new Error("User not logged in");
+        function generateWhatsAppMessage() {
+            try {
+                if (!currentUser) {
+                    throw new Error("User not logged in");
+                }
+        
+                const quantity = parseInt(document.getElementById('quantity').value) || 1;
+                const shippingCost = calculateShippingCost(quantity);
+                const subtotal = (productData.price * (1 - (productData.discount || 0)/100)) * quantity;
+                const total = subtotal + shippingCost;
+                
+                const productLink = `${window.location.origin}/open.html?id=${productId}`;
+                
+                let message = `Hello Yunoxa!%0A%0A` +
+                       `I would like to order:%0A%0A` +
+                       `*Product:* ${productData.name}%0A` +
+                       `*Quantity:* ${quantity}%0A` +
+                       `*Price:* LKR ${(productData.price * (1 - (productData.discount || 0)/100)).toFixed(2)} each%0A` +
+                       `*Subtotal:* LKR ${subtotal.toFixed(2)}%0A` +
+                       `*Delivery:* LKR ${shippingCost.toFixed(2)}%0A` +
+                       `*Total:* LKR ${total.toFixed(2)}%0A%0A` +
+                       `*Shipping Details:*%0A` +
+                       `Name: ${document.getElementById('firstName').value} ${document.getElementById('lastName').value}%0A` +
+                       `Address: ${document.getElementById('address').value}%0A` +
+                       `${document.getElementById('address2').value ? `Address 2: ${document.getElementById('address2').value}%0A` : ''}` +
+                       `City: ${document.getElementById('city').value}%0A` +
+                       `Province: ${document.getElementById('province').value}%0A` +
+                       `Postal Code: ${document.getElementById('postalCode').value}%0A` +
+                       `Phone: ${document.getElementById('phone').value}%0A%0A` +
+                       `*Product Link:* ${productLink}%0A%0A`;
+                
+                // Safely add user info if available
+                if (currentUser.email) {
+                    message += `*Customer Email:* ${currentUser.email}%0A`;
+                }
+                if (currentUser.id) {
+                    message += `*User UUID:* ${currentUser.id}`;
+                }
+                
+                return message;
+                
+            } catch (error) {
+                console.error("Error generating WhatsApp message:", error);
+                // Return a basic message without user info if there's an error
+                return `Hello Yunoxa!%0A%0AI would like to place an order. Please contact me.`;
+            }
         }
-
-        const quantity = parseInt(document.getElementById('quantity').value) || 1;
-        const shippingCost = calculateShippingCost(quantity);
-        const subtotal = (productData.price * (1 - (productData.discount || 0)/100)) * quantity;
-        const total = subtotal + shippingCost;
         
-        const productLink = `${window.location.origin}/open.html?id=${productId}`;
-        
-        let message = `Hello Yunoxa!%0A%0A` +
-               `I would like to order:%0A%0A` +
-               `*Product:* ${productData.name}%0A` +
-               `*Quantity:* ${quantity}%0A` +
-               `*Price:* LKR ${(productData.price * (1 - (productData.discount || 0)/100)).toFixed(2)} each%0A` +
-               `*Subtotal:* LKR ${subtotal.toFixed(2)}%0A` +
-               `*Delivery:* LKR ${shippingCost.toFixed(2)}%0A` +
-               `*Total:* LKR ${total.toFixed(2)}%0A%0A` +
-               `*Shipping Details:*%0A` +
-               `Name: ${document.getElementById('firstName').value} ${document.getElementById('lastName').value}%0A` +
-               `Address: ${document.getElementById('address').value}%0A` +
-               `${document.getElementById('address2').value ? `Address 2: ${document.getElementById('address2').value}%0A` : ''}` +
-               `City: ${document.getElementById('city').value}%0A` +
-               `Province: ${document.getElementById('province').value}%0A` +
-               `Postal Code: ${document.getElementById('postalCode').value}%0A` +
-               `Phone: ${document.getElementById('phone').value}%0A%0A` +
-               `*Product Link:* ${productLink}%0A%0A`;
-        
-        // Safely add user info if available
-        if (currentUser.email) {
-            message += `*Customer Email:* ${currentUser.email}%0A`;
-        }
-        if (currentUser.id) {
-            message += `*User UUID:* ${currentUser.id}`;
-        }
-        
-        return message;
-        
-    } catch (error) {
-        console.error("Error generating WhatsApp message:", error);
-        // Return a basic message without user info if there's an error
-        return `Hello Yunoxa!%0A%0AI would like to place an order. Please contact me.`;
-    }
-}
-
         // Setup quantity controls
         function setupQuantityControls() {
             document.querySelector('.quantity-btn.minus').addEventListener('click', function() {
@@ -569,145 +574,158 @@ function generateWhatsAppMessage() {
                     updateOrderSummary();
                 }
             });
-
+        
             document.querySelector('.quantity-btn.plus').addEventListener('click', function() {
                 const input = document.getElementById('quantity');
                 input.value = parseInt(input.value) + 1;
                 updateOrderSummary();
             });
-
+        
             document.getElementById('quantity').addEventListener('change', function() {
                 if (this.value < 1) this.value = 1;
                 updateOrderSummary();
             });
         }
-
+        
         // Initial verification on page load
         document.addEventListener('DOMContentLoaded', async function() {
-            await verifySession();
-            await loadProductDetails();
-            setupQuantityControls();
-            
-            // Setup periodic verification
-            setTimeout(async () => {
-                await verifySession();
-                verificationInterval = setInterval(verifySession, 15 * 1000);
-            }, 10 * 1000);
-
-            // Cleanup interval when page unloads
-            window.addEventListener('beforeunload', () => {
-                if (verificationInterval) {
-                    clearInterval(verificationInterval);
+            try {
+                // First verify session
+                const isVerified = await verifySession();
+                if (!isVerified) {
+                    // If not verified, verifySession will handle the redirect
+                    return;
                 }
-            });
-
-            // Manual logout handler
-            document.getElementById('logout-btn')?.addEventListener('click', async () => {
-                if (verificationInterval) {
-                    clearInterval(verificationInterval);
-                }
-                await handleLogout();
-            });
-
-            // Continue to Payment Button
-            document.getElementById('continue-to-payment').addEventListener('click', function(e) {
-                e.preventDefault();
                 
-                if (validateShippingForm()) {
-                    // Hide shipping sections
-                    document.getElementById('shipping-section').style.display = 'none';
-                    document.getElementById('shipping-method-section').style.display = 'none';
-                    document.getElementById('initial-actions').style.display = 'none';
+                // Only load product details if verified
+                await loadProductDetails();
+                setupQuantityControls();
+                
+                // Setup periodic verification
+                setTimeout(async () => {
+                    await verifySession();
+                    verificationInterval = setInterval(verifySession, 15 * 1000);
+                }, 10 * 1000);
+        
+                // Cleanup interval when page unloads
+                window.addEventListener('beforeunload', () => {
+                    if (verificationInterval) {
+                        clearInterval(verificationInterval);
+                    }
+                });
+        
+                // Manual logout handler
+                document.getElementById('logout-btn')?.addEventListener('click', async () => {
+                    if (verificationInterval) {
+                        clearInterval(verificationInterval);
+                    }
+                    await handleLogout();
+                });
+        
+                // Continue to Payment Button
+                document.getElementById('continue-to-payment').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    if (validateShippingForm()) {
+                        // Hide shipping sections
+                        document.getElementById('shipping-section').style.display = 'none';
+                        document.getElementById('shipping-method-section').style.display = 'none';
+                        document.getElementById('initial-actions').style.display = 'none';
+                        
+                        // Show payment section
+                        document.getElementById('payment-section').style.display = 'block';
+                        
+                        // Update progress steps
+                        document.getElementById('step-shipping').classList.remove('active');
+                        document.getElementById('step-payment').classList.add('active');
+                        
+                        // Scroll to top
+                        window.scrollTo(0, 0);
+                    }
+                });
+                
+                // Back to Shipping Button
+                document.getElementById('back-to-shipping').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Show shipping sections
+                    document.getElementById('shipping-section').style.display = 'block';
+                    document.getElementById('shipping-method-section').style.display = 'block';
+                    document.getElementById('initial-actions').style.display = 'flex';
+                    
+                    // Hide payment section
+                    document.getElementById('payment-section').style.display = 'none';
+                    
+                    // Update progress steps
+                    document.getElementById('step-payment').classList.remove('active');
+                    document.getElementById('step-shipping').classList.add('active');
+                    
+                    // Scroll to top
+                    window.scrollTo(0, 0);
+                });
+                
+                // Continue to Review Button
+                document.getElementById('continue-to-review').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Update review sections with entered information
+                    updateReviewSections();
+                    
+                    // Hide payment section
+                    document.getElementById('payment-section').style.display = 'none';
+                    
+                    // Show review section
+                    document.getElementById('review-section').style.display = 'block';
+                    
+                    // Update progress steps
+                    document.getElementById('step-payment').classList.remove('active');
+                    document.getElementById('step-review').classList.add('active');
+                    
+                    // Scroll to top
+                    window.scrollTo(0, 0);
+                });
+                
+                // Back to Payment Button
+                document.getElementById('back-to-payment').addEventListener('click', function(e) {
+                    e.preventDefault();
                     
                     // Show payment section
                     document.getElementById('payment-section').style.display = 'block';
                     
+                    // Hide review section
+                    document.getElementById('review-section').style.display = 'none';
+                    
                     // Update progress steps
-                    document.getElementById('step-shipping').classList.remove('active');
+                    document.getElementById('step-review').classList.remove('active');
                     document.getElementById('step-payment').classList.add('active');
                     
                     // Scroll to top
                     window.scrollTo(0, 0);
-                }
-            });
-            
-            // Back to Shipping Button
-            document.getElementById('back-to-shipping').addEventListener('click', function(e) {
-                e.preventDefault();
+                });
                 
-                // Show shipping sections
-                document.getElementById('shipping-section').style.display = 'block';
-                document.getElementById('shipping-method-section').style.display = 'block';
-                document.getElementById('initial-actions').style.display = 'flex';
-                
-                // Hide payment section
-                document.getElementById('payment-section').style.display = 'none';
-                
-                // Update progress steps
-                document.getElementById('step-payment').classList.remove('active');
-                document.getElementById('step-shipping').classList.add('active');
-                
-                // Scroll to top
-                window.scrollTo(0, 0);
-            });
-            
-            // Continue to Review Button
-            document.getElementById('continue-to-review').addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                // Update review sections with entered information
-                updateReviewSections();
-                
-                // Hide payment section
-                document.getElementById('payment-section').style.display = 'none';
-                
-                // Show review section
-                document.getElementById('review-section').style.display = 'block';
-                
-                // Update progress steps
-                document.getElementById('step-payment').classList.remove('active');
-                document.getElementById('step-review').classList.add('active');
-                
-                // Scroll to top
-                window.scrollTo(0, 0);
-            });
-            
-            // Back to Payment Button
-            document.getElementById('back-to-payment').addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                // Show payment section
-                document.getElementById('payment-section').style.display = 'block';
-                
-                // Hide review section
-                document.getElementById('review-section').style.display = 'none';
-                
-                // Update progress steps
-                document.getElementById('step-review').classList.remove('active');
-                document.getElementById('step-payment').classList.add('active');
-                
-                // Scroll to top
-                window.scrollTo(0, 0);
-            });
-            
-            // Confirm Order Button
-            document.getElementById('confirm-order').addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                // Show loading state
-                const btn = document.getElementById('confirm-order');
-                btn.disabled = true;
-                btn.innerHTML = 'Preparing... <i class="fas fa-spinner fa-spin"></i>';
-                
-                // Generate WhatsApp message
-                const message = generateWhatsAppMessage();
-                
-                // Open WhatsApp after short delay
-                setTimeout(() => {
-                    window.open(`https://api.whatsapp.com/send/?phone=${whatsappNumber}&text=${message}`, '_blank');
-                    btn.innerHTML = 'WhatsApp Opened!';
-                }, 1000);
-            });
+                // Confirm Order Button
+                document.getElementById('confirm-order').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Show loading state
+                    const btn = document.getElementById('confirm-order');
+                    btn.disabled = true;
+                    btn.innerHTML = 'Preparing... <i class="fas fa-spinner fa-spin"></i>';
+                    
+                    // Generate WhatsApp message
+                    const message = generateWhatsAppMessage();
+                    
+                    // Open WhatsApp after short delay
+                    setTimeout(() => {
+                        window.open(`https://api.whatsapp.com/send/?phone=${whatsappNumber}&text=${message}`, '_blank');
+                        btn.innerHTML = 'WhatsApp Opened!';
+                    }, 1000);
+                });
+            } catch (error) {
+                console.error("Initialization error:", error);
+                // Fallback redirect if something goes wrong
+                window.location.href = 'login.html';
+            }
         });
     </script>
 </body>
