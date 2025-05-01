@@ -1105,3 +1105,15 @@ html, body {
 .sell-now-btn i {
     font-size: 14px;        /* Tiny icon to match text */
 }
+
+.category-nav.hidden {
+    transform: translateY(-100%);
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+    transition: transform 0.9s ease, opacity 0.3s ease, height 0.3s ease;
+}
+
+.category-nav {
+    transition: transform 0.9s ease, opacity 0.9s ease;
+}
