@@ -190,6 +190,7 @@
             .from('products')
             .select('*')
             .eq('id', productId)
+            .eq('verification', 1)  // Only verified products
             .single();
 
         if (error) throw error;
@@ -265,6 +266,7 @@ window.buyNow = async function() {
         .from('products')
         .select('*')
         .eq('id', productId)
+        .eq('verification', 1)  // Only verified products
         .single();
 
     if (error) {
@@ -307,6 +309,7 @@ document.querySelector('.buy-now-btn').addEventListener('click', function(e) {
                     .from('products')
                     .select('*')
                     .eq('categorize', categorize)
+                    .eq('verification', 1)  // Only verified products
                     .limit(8);
 
                 if (error) throw error;
@@ -377,6 +380,7 @@ document.querySelector('.buy-now-btn').addEventListener('click', function(e) {
                 .from('products')
                 .select('*')
                 .eq('id', productId)
+                .eq('verification', 1)  // Only verified products
                 .single();
 
             if (error) {
