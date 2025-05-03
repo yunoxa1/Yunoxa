@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Yunoxa - yunoxa Style</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta name="description" content="Shop like yunoxa - Amazing deals every day!">
+
+    <!-- Favicon -->
+    <link rel="icon" href="Favicon.png" type="image/png">
+    <link rel="icon" href="https://img.kwcdn.com/product/open/2023-09-19/1695100220116-7e3a8b7a3a1e4b1d8f8f5a0a5d1a9a7a-goods.jpeg?imageView2/2/w/800/q/70/format/webp" type="image/jpeg">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link href="css/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="yunoxa-header">
+        <div class="header-top">
+            <div class="logo">Yunoxa<span>!</span></div>
+            <div class="header-icons">
+                <a href="create.html" class="sell-now-btn">
+                    <i class="fas fa-coins"></i>
+                    <span>Sell Now</span>
+                  </a>
+                  <a href="favorites.html">
+                    <i class="fas fa-heart"></i>
+                    
+                </a>
+            </div>
+        </div>
+        <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" id="search-input" placeholder="Search for products" oninput="searchProducts()">
+        </div>
+        <nav class="category-nav" id="categoryNav">
+            <a href="javascript:void(0)" class="category-item" data-category="Electronics">
+                <div class="category-icon">
+                    <i class="fas fa-microchip"></i>
+                </div>
+                <span class="category-name">Electronics</span>
+            </a>
+            <a href="javascript:void(0)" class="category-item" data-category="Fashion">
+                <div class="category-icon">
+                    <i class="fas fa-tshirt"></i>
+                </div>
+                <span class="category-name">Fashion</span>
+            </a>
+            <a href="javascript:void(0)" class="category-item" data-category="Home & Kitchen">
+                <div class="category-icon">
+                    <i class="fas fa-home"></i>
+                </div>
+                <span class="category-name">Home & Kitchen</span>
+            </a>
+            <a href="javascript:void(0)" class="category-item" data-category="Beauty & Personal Care">
+                <div class="category-icon">
+                    <i class="fas fa-spa"></i>
+                </div>
+                <span class="category-name">Beauty</span>
+            </a>
+            <a href="javascript:void(0)" class="category-item" data-category="Health & Wellness">
+                <div class="category-icon">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+                <span class="category-name">Health</span>
+            </a>
+            <a href="javascript:void(0)" class="category-item" data-category="Toys & Games">
+                <div class="category-icon">
+                    <i class="fas fa-gamepad"></i>
+                </div>
+                <span class="category-name">Toys & Games</span>
+            </a>
+            <a href="javascript:void(0)" class="category-item" data-category="Sports & Outdoors">
+                <div class="category-icon">
+                    <i class="fas fa-basketball-ball"></i>
+                </div>
+                <span class="category-name">Sports</span>
+            </a>
+            <a href="javascript:void(0)" class="category-item" data-category="More" onclick="showMoreCategories()">
+                <div class="category-icon">
+                    <i class="fas fa-ellipsis-h"></i>
+                </div>
+                <span class="category-name">More</span>
+            </a>
+        </nav>
+        
+        <!-- Hidden categories that appear when "More" is clicked -->
+        <div id="more-categories" class="more-categories" style="display: none;">
+            <a href="javascript:void(0)" class="category-item" data-category="Automotive">
+                <div class="category-icon">
+                    <i class="fas fa-car"></i>
+                </div>
+                <span class="category-name">Automotive</span>
+            </a>
+            
+            <a href="javascript:void(0)" class="category-item" data-category="Books & Stationery">
+                <div class="category-icon">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <span class="category-name">Books</span>
+            </a>
+            <a href="javascript:void(0)" class="category-item" data-category="Groceries & Gourmet Food">
+                <div class="category-icon">
+                    <i class="fas fa-shopping-basket"></i>
+                </div>
+                <span class="category-name">Groceries</span>
+            </a>
+            <a href="javascript:void(0)" class="category-item" data-category="Baby & Kids">
+                <div class="category-icon">
+                    <i class="fas fa-baby-carriage"></i>
+                </div>
+                <span class="category-name">Baby & Kids</span>
+            </a>
+            <a href="javascript:void(0)" class="category-item" data-category="Pet Supplies">
+                <div class="category-icon">
+                    <i class="fas fa-paw"></i>
+                </div>
+                <span class="category-name">Pets</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- Flash Deals Section -->
+    <div class="section-title">
+        <h2>Flash Deals</h2>
+        <a href="#" class="see-all">See All</a>
+    </div>
+    <div class="countdown-timer">
+        <span class="timer-label">Ends in:</span>
+        <span class="timer-segment" id="hours">1</span>:
+        <span class="timer-segment" id="minutes">10</span>:
+        <span class="timer-segment" id="seconds">56</span>
+    </div>
+    <div class="flash-deals" id="flash-deals">
+        <!-- Flash deals will be loaded here -->
+    </div>
+
+    <!-- Products Grid -->
+    <div class="section-title">
+        <h2>Recommended For You</h2>
+        
+    </div>
+    <div class="products-grid" id="products">
+        <!-- Products will be loaded here -->
+    </div>
+
+    <!-- Loading Indicator -->
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span>Item added to favorites!</span>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item active">
+            <i class="fas fa-home nav-icon"></i>
+            <span>Home</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="fas fa-search nav-icon"></i>
+            <span>Search</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="fas fa-gift nav-icon"></i>
+            <span>Deals</span>
+        </a>
+        <a href="favorites.html" class="nav-item">
+            <i class="fas fa-heart nav-icon"></i>
+            <span>favorites</span>
+        </a>
+    
+    </nav>
+
+    <!-- JavaScript -->
+    <script type="module">
+        import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+async function initializeSupabase() {
+  try {
+    const response = await fetch('https://api-proxy.yunoxa1.workers.dev', {
+      headers: {
+        'x-verified-source': 'yunoxa-web-app',
+        'Content-Type': 'application/json'
+      },
+      credentials: 'omit' // Important for CORS
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const { key, url } = await response.json();
+    return createClient(url, key, {
+      auth: {
+        persistSession: false
+      }
+    });
+  } catch (error) {
+    console.error('Failed to initialize Supabase:', error);
+    throw error;
+  }
+}
+
+// Then use it like this:
+let supabase;
+try {
+  supabase = await initializeSupabase();
+  // Rest of your code...
+} catch (error) {
+  console.error('Initialization error:', error);
+  // Show user-friendly error message
+}
+        
+        // Initialize favorites count
+        updatefavoritesCount();
+        
+        // Countdown timer
+        function updateCountdown() {
+            const now = new Date();
+            const endOfDay = new Date();
+            endOfDay.setHours(23, 59, 59, 999);
+            
+            const diff = endOfDay - now;
+            
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+        }
+        
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+        
+        // Generate star rating
+        function generateStarRating() {
+            const rating = (Math.random() * (5 - 3.7) + 3.7).toFixed(1);
+            const fullStars = Math.floor(rating);
+            const halfStar = (rating - fullStars) >= 0.5 ? 1 : 0;
+            const emptyStars = 5 - fullStars - halfStar;
+        
+            let starHtml = '';
+            for (let i = 0; i < fullStars; i++) {
+                starHtml += '<i class="fas fa-star"></i>';
+            }
+            if (halfStar) {
+                starHtml += '<i class="fas fa-star-half-alt"></i>';
+            }
+            for (let i = 0; i < emptyStars; i++) {
+                starHtml += '<i class="far fa-star"></i>';
+            }
+        
+            return { starHtml, rating };
+        }
+        
+        // favorites functions
+        function addTofavorites(product) {
+            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+             const discountedPrice = product.discount > 0 
+        ? product.price * (1 - product.discount/100)
+        : product.price;
+    
+    const existingItem = favorites.find(item => item.id === product.id);
+
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        favorites.push({
+            id: product.id,
+            name: product.name,
+            price: discountedPrice, // Store the discounted price
+            originalPrice: product.price, // Store original for reference
+            quantity: 1,
+            image: product.image,
+            discount: product.discount || 0
+        });
+    }
+        
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            updatefavoritesCount();
+            showToast();
+        }
+        
+        function updatefavoritesCount() {
+            const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            const totalItems = favorites.reduce((sum, item) => sum + item.quantity, 0);
+            document.querySelectorAll('.favorites').forEach(el => {
+                el.textContent = totalItems;
+            });
+        }
+        
+        function showToast(message = 'Item added to favorites!') {
+            const toast = document.getElementById('toast');
+            toast.querySelector('span').textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Event binding functions
+        function bindAddTofavoritesEvents() {
+            document.querySelectorAll('.add-to-favorites').forEach(button => {
+                button.replaceWith(button.cloneNode(true));
+            });
+            
+            document.querySelectorAll('.add-to-favorites').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    try {
+                        const product = JSON.parse(this.dataset.product.replace(/&apos;/g, "'"));
+                        addTofavorites(product);
+                    } catch (error) {
+                        console.error("Error parsing product data:", error);
+                    }
+                });
+            });
+        }
+        
+        function bindBuyNowEvents() {
+    document.querySelectorAll('.buy-now').forEach(button => {
+        button.replaceWith(button.cloneNode(true));
+    });
+    
+    document.querySelectorAll('.buy-now').forEach(button => {
+        button.addEventListener('click', async function(e) {
+            e.preventDefault();
+            try {
+                const product = JSON.parse(this.dataset.product.replace(/&apos;/g, "'"));
+                
+                // Create a new favorites with just this product
+                const favorites = [{
+                    id: product.id,
+                    name: product.name,
+                    price: product.discount > 0 
+                        ? product.price * (1 - product.discount/100)
+                        : product.price,
+                    originalPrice: product.price,
+                    quantity: 1, // Default to 1 for buy now
+                    image: product.image,
+                    discount: product.discount || 0
+                }];
+                
+                localStorage.setItem('favorites', JSON.stringify(favorites));
+                updatefavoritesCount();
+                
+                // Redirect to checkout with product ID
+                window.location.href = `checkout1.html?id=${product.id}`;
+            } catch (error) {
+                console.error("Error processing buy now:", error);
+                showToast("Error processing your order");
+            }
+        });
+    });
+}
+        
+        // Product loading functions
+        async function fetchProducts(category = null) {
+            try {
+                document.getElementById('loading').style.display = 'flex';
+                
+                let query = supabase.from('products').select('*').eq('verification', 1); // Only verified products
+                
+                if (category) {
+                    query = query.eq('categorize', category);
+                }
+                
+                const { data, error } = await query;
+                
+                if (error) throw error;
+                
+                // Display flash deals
+                const flashDealsContainer = document.getElementById('flash-deals');
+                flashDealsContainer.innerHTML = '';
+                
+                const discountedProducts = data.filter(product => product.discount > 0);
+                discountedProducts.slice(0, 12).forEach(product => {
+                    const sold = Math.floor(Math.random() * 500) + 50;
+                    flashDealsContainer.innerHTML += `
+                        <div class="deal-card">
+                            <a href="open.html?id=${product.id}">
+                                <span class="deal-badge">${product.discount}% OFF</span>
+                                <img src="${product.image || 'https://via.placeholder.com/150'}" alt="${product.name}" class="deal-image">
+                                <div class="deal-price">LKR ${(product.price * (1 - product.discount/100)).toFixed(2)}</div>
+                                <div class="deal-original-price">LKR ${product.price.toFixed(2)}</div>
+                                <div class="deal-sold">${sold} sold</div>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: ${Math.min(100, (sold / 600) * 100)}%"></div>
+                                </div>
+                            </a>
+                        </div>`;
+                });
+                
+                // Display products grid
+                const productsContainer = document.getElementById('products');
+                productsContainer.innerHTML = '';
+                
+                data.forEach(product => {
+                    const { starHtml, rating } = generateStarRating();
+                    productsContainer.innerHTML += `
+                        <div class="product-card">
+                            <a href="open.html?id=${product.id}">
+                                ${product.discount > 0 ? `<span class="product-badge">${product.discount}% OFF</span>` : ''}
+                                <div class="image-container">
+                                    <img src="${product.image || 'https://via.placeholder.com/250'}" alt="${product.name}" class="product-image">
+                                </div>
+                                <div class="product-info"></a>
+                                    <div class="product-price">
+                                        LKR ${product.discount > 0 ? (product.price * (1 - product.discount/100)).toFixed(2) : product.price.toFixed(2)}
+                                        ${product.discount > 0 ? `<span class="product-original-price">LKR ${product.price.toFixed(2)}</span>` : ''}
+                                    </div>
+                                    <div class="product-title">${product.name}</div>
+                                    <div class="product-rating">
+                                        <div class="stars">${starHtml}</div>
+                                        <span class="rating-count">${rating}</span>
+                                    </div>
+                                    <button class="add-to-favorites" data-product='${JSON.stringify(product).replace(/'/g, "&apos;")}'>
+                                        <i class="fas fa-heart"></i>
+                                    </button>
+                                    <button class="buy-now" data-product='${JSON.stringify(product).replace(/'/g, "&apos;")}'>
+                                        BUY NOW
+                                    </button>
+                                </div>
+                        </div>`;
+                });
+                
+            } catch (error) {
+                console.error("Error fetching products:", error);
+                document.getElementById('products').innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 20px;">
+                        Error loading products. Please try again.
+                    </div>`;
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+                bindAddTofavoritesEvents();
+                bindBuyNowEvents();
+            }
+        }
+        
+        async function loadProductsByCategory(category) {
+            try {
+                document.getElementById('loading').style.display = 'flex';
+                document.getElementById('products').innerHTML = '';
+                
+                const { data, error } = await supabase
+                    .from('products')
+                    .select('*')
+                    .eq('categorize', category)
+                    .eq('verification', 1);
+                
+                if (error) throw error;
+                
+                const productsContainer = document.getElementById('products');
+                
+                if (data.length === 0) {
+                    productsContainer.innerHTML = `
+                        <div class="no-products" style="grid-column: 1/-1; text-align: center; padding: 20px;">
+                            No products found in ${category} category
+                        </div>`;
+                    return;
+                }
+                
+                document.querySelector('#products').previousElementSibling.querySelector('h2').textContent = category;
+                
+                data.forEach(product => {
+                    const { starHtml, rating } = generateStarRating();
+                    productsContainer.innerHTML += `
+                        <div class="product-card">
+                            <a href="open.html?id=${product.id}">
+                                ${product.discount > 0 ? `<span class="product-badge">${product.discount}% OFF</span>` : ''}
+                                <div class="image-container">
+                                    <img src="${product.image || 'https://via.placeholder.com/250'}" 
+                                         alt="${product.name}" 
+                                         class="product-image">
+                                </div>
+                                <div class="product-info"></a>
+                                    <div class="product-price">
+                                        LKR ${product.discount > 0 ? 
+                                            (product.price * (1 - product.discount/100)).toFixed(2) : 
+                                            product.price.toFixed(2)}
+                                        ${product.discount > 0 ? 
+                                            `<span class="product-original-price">LKR ${product.price.toFixed(2)}</span>` : ''}
+                                    </div>
+                                    <div class="product-title">${product.name}</div>
+                                    <div class="product-rating">
+                                        <div class="stars">${starHtml}</div>
+                                        <span class="rating-count">${rating}</span>
+                                    </div>
+                                    <button class="add-to-favorites" data-product='${JSON.stringify(product).replace(/'/g, "&apos;")}'>
+                                        <i class="fas fa-heart"></i>
+                                    </button>
+                                    <button class="buy-now" data-product='${JSON.stringify(product).replace(/'/g, "&apos;")}'>
+                                        BUY NOW
+                                    </button>
+                                </div>
+                        </div>`;
+                });
+                
+                document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
+                
+            } catch (error) {
+                console.error("Error loading products by category:", error);
+                document.getElementById('products').innerHTML = `
+                    <div class="error-message" style="grid-column: 1/-1; text-align: center; padding: 20px;">
+                        Error loading products. Please try again.
+                    </div>`;
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+                bindAddTofavoritesEvents();
+                bindBuyNowEvents();
+            }
+        }
+        
+        // Search function
+        async function searchProducts() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            if (query.length < 2) {
+                fetchProducts();
+                return;
+            }
+        
+            try {
+                document.getElementById('loading').style.display = 'flex';
+                
+                const { data, error } = await supabase
+                    .from('products')
+                    .select('*')
+                    .ilike('name', `%${query}%`)
+                    .eq('verification', 1);
+                
+                if (error) throw error;
+                
+                const productsContainer = document.getElementById('products');
+                productsContainer.innerHTML = '';
+                
+                if (data.length === 0) {
+                    productsContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 20px;">No products found</p>';
+                    return;
+                }
+                
+                data.forEach(product => {
+                    const { starHtml, rating } = generateStarRating();
+                    productsContainer.innerHTML += `
+                        <div class="product-card">
+                            ${product.discount > 0 ? `<span class="product-badge">${product.discount}% OFF</span>` : ''}
+                            <div class="image-container">
+                                <a href="open.html?id=${product.id}">
+                                <img src="${product.image || 'https://via.placeholder.com/250'}" alt="${product.name}" class="product-image">
+                            </div>
+                            <div class="product-info">
+                                <div class="product-price">
+                                    LKR ${product.discount > 0 ? (product.price * (1 - product.discount/100)).toFixed(2) : product.price.toFixed(2)}
+                                    ${product.discount > 0 ? `<span class="product-original-price">LKR ${product.price.toFixed(2)}</span>` : ''}
+                                </div>
+                                <div class="product-title">${product.name}</div>
+                                <div class="product-rating">
+                                    <div class="stars">${starHtml}</div>
+                                    <span class="rating-count">${rating}</span>
+                                </div>
+                                <button class="add-to-favorites" data-product='${JSON.stringify(product).replace(/'/g, "&apos;")}'>
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                                <button class="buy-now" data-product='${JSON.stringify(product).replace(/'/g, "&apos;")}'>
+                                    BUY NOW
+                                </button>
+                            </div>
+                        </div>`;
+                });
+                
+            } catch (error) {
+                console.error("Error searching products:", error);
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+                bindAddTofavoritesEvents();
+                bindBuyNowEvents();
+            }
+        }
+        
+        // Category functions
+        window.showMoreCategories = function() {
+            const moreCategories = document.getElementById('more-categories');
+            moreCategories.style.display = moreCategories.style.display === 'none' ? 'flex' : 'none';
+        }
+        
+        function setupCategoryListeners() {
+            const categoryItems = document.querySelectorAll('.category-item[data-category]');
+            categoryItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const category = this.getAttribute('data-category');
+                    loadProductsByCategory(category);
+                    
+                    document.getElementById('more-categories').style.display = 'none';
+                    
+                    categoryItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            setupCategoryListeners();
+            fetchProducts();
+            document.getElementById('search-input').addEventListener('input', searchProducts);
+        });
+
+        // Scroll-based hide/show for category nav
+let lastScrollPosition = 0;
+const categoryNav = document.getElementById('categoryNav');
+
+window.addEventListener('scroll', function() {
+    const currentScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+    
+    if (currentScrollPosition > lastScrollPosition) {
+        // Scrolling down - hide nav
+        categoryNav.classList.add('hidden');
+    } else {
+        // Scrolling up - show nav
+        categoryNav.classList.remove('hidden');
+    }
+    
+    lastScrollPosition = currentScrollPosition;
+});
+
+// Still hide after 5 seconds if no scrolling
+setTimeout(() => {
+    categoryNav.classList.add('hidden');
+}, 5000);
+
+// Show when hovering over header area
+document.querySelector('.yunoxa-header').addEventListener('mouseenter', () => {
+    categoryNav.classList.remove('hidden');
+});
+        </script>
+</body>
+</html>
