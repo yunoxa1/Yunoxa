@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login | Yunoxa: Shop Like a Billionaire</title>
+  <title>Login | Yunoxa: Endless Choices, One Marketplace</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/compressorjs@1.1.1/dist/compressor.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -317,6 +317,28 @@
             font-size: 20px;
             margin-bottom: 3px;
         }
+
+        .terms-checkbox {
+  display: flex;
+  align-items: flex-start;
+  margin: 15px 0;
+  font-size: 12px;
+}
+
+.terms-checkbox input {
+  margin-right: 8px;
+  margin-top: 2px;
+}
+
+.terms-links {
+  color: var(--yunoxa-red);
+  text-decoration: none;
+}
+
+.terms-links:hover {
+  text-decoration: underline;
+}
+
   </style>
 </head>
 <body>
@@ -351,7 +373,7 @@
     <div class="container">
       <div class="login-container">
         <h1 class="login-title">Welcome to Yunoxa</h1>
-        <p class="login-subtitle">Shop like a billionaire</p>
+        <p class="login-subtitle">Endless Choices, One Marketplace</p>
         
         <div class="tabs">
           <div class="tab active" data-tab="login">Login</div>
@@ -371,6 +393,12 @@
               <div class="forgot-password">
                 <a href="#" id="show-reset">Forgot password?</a>
               </div>
+            </div>
+            <div class="terms-checkbox">
+              <input type="checkbox" id="login-terms" required>
+              <label for="login-terms">
+                I agree to the <a href="termsandconditions.html" class="terms-links">Terms and Conditions</a> and have read the <a href="privacypolicy.html" class="terms-links">Privacy Policy</a>
+              </label>
             </div>
             <button type="submit" class="login-btn">Login</button>
             <div id="login-error" class="error"></div>
@@ -424,6 +452,13 @@
               <input type="text" id="address-country" class="address-input" placeholder="Country">
             </div>
             
+            <div class="terms-checkbox">
+              <input type="checkbox" id="signup-terms" required>
+              <label for="signup-terms">
+                I agree to the <a href="#" class="terms-links">Terms and Conditions</a> and have read the <a href="#" class="terms-links">Privacy Policy</a>
+              </label>
+            </div>
+
             <button type="submit" class="login-btn">Sign Up</button>
             <div id="signup-error" class="error"></div>
             <div id="signup-success" class="success"></div>
@@ -447,8 +482,8 @@
       
       <div class="footer-links">
         <a href="#" class="footer-link">Help Center</a>
-        <a href="#" class="footer-link">Privacy Policy</a>
-        <a href="#" class="footer-link">Terms of Service</a>
+        <a href="privacypolicy.html" class="footer-link">Privacy Policy</a>
+        <a href="termsandconditions.html" class="footer-link">Terms of Service</a>
       </div>
     </div>
   </main>
@@ -670,6 +705,11 @@
       const state = document.getElementById('address-state').value
       const zip = document.getElementById('address-zip').value
       const country = document.getElementById('address-country').value
+      const termsAgreed = document.getElementById('signup-terms').checked
+if (!termsAgreed) {
+  errorElement.textContent = 'You must agree to the Terms of Service and Privacy Policy'
+  return
+}
       
       errorElement.textContent = ''
       successElement.textContent = ''
@@ -755,7 +795,11 @@
       const identifier = document.getElementById('login-identifier').value
       const password = document.getElementById('login-password').value
       const errorElement = document.getElementById('login-error')
-      
+      const termsAgreed = document.getElementById('login-terms').checked
+if (!termsAgreed) {
+  errorElement.textContent = 'You must agree to the Terms of Service'
+  return
+}
       errorElement.textContent = ''
       
       try {

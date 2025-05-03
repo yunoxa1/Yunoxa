@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Terms and Conditions | Yunoxa</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="termsandconditions terms for Yunoxa - Sri Lanka's Best Online Shopping Platform" name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --yunoxa-red: #e02f2f;
+            --yunoxa-dark-red: #c41e1e;
+            --yunoxa-yellow: #ffd700;
+            --yunoxa-orange: #ff9500;
+            --yunoxa-blue: #2e8bff;
+            --yunoxa-bg: #f8f8f8;
+            --yunoxa-text: #333;
+            --yunoxa-light-text: #666;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--yunoxa-bg);
+            color: var(--yunoxa-text);
+            line-height: 1.6;
+            padding-bottom: 70px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .termsandconditions-header {
+            text-align: center;
+            padding: 30px 0;
+        }
+        
+        .termsandconditions-header h1 {
+            font-size: 36px;
+            color: var(--yunoxa-red);
+            margin-bottom: 15px;
+        }
+        
+        .termsandconditions-header p {
+            color: var(--yunoxa-light-text);
+            font-size: 16px;
+        }
+        
+        .termsandconditions-content {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .termsandconditions-section {
+            margin-bottom: 30px;
+        }
+        
+        .termsandconditions-section h2 {
+            color: var(--yunoxa-red);
+            font-size: 24px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .termsandconditions-section h3 {
+            font-size: 18px;
+            margin: 20px 0 10px;
+            color: var(--yunoxa-text);
+        }
+        
+        .termsandconditions-section p {
+            margin-bottom: 15px;
+            color: var(--yunoxa-light-text);
+        }
+        
+        .terms-content {
+            white-space: pre-line;
+            word-wrap: break-word;
+        }
+        
+        .terms-content ul,
+        .terms-content ol {
+            margin-bottom: 15px;
+            color: var(--yunoxa-light-text);
+            padding-left: 25px;
+        }
+        
+        .terms-content li {
+            margin-bottom: 10px;
+            display: list-item;
+            list-style-position: outside;
+        }
+        
+        .terms-content ul {
+            list-style-type: disc;
+        }
+        
+        .terms-content ol {
+            list-style-type: decimal;
+        }
+        
+        .effective-date {
+            font-style: italic;
+            text-align: right;
+            margin-top: 30px;
+            color: var(--yunoxa-light-text);
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0,0,0,.1);
+            border-radius: 50%;
+            border-top-color: var(--yunoxa-red);
+            animation: spin 1s ease-in-out infinite;
+            margin: 20px auto;
+            display: block;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--yunoxa-light-text);
+            font-size: 12px;
+        }
+
+        .nav-item.active {
+            color: var(--yunoxa-red);
+        }
+
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 3px;
+        }
+        
+        @media (max-width: 768px) {
+            .termsandconditions-header h1 {
+                font-size: 28px;
+            }
+            
+            .termsandconditions-section h2 {
+                font-size: 22px;
+            }
+            
+            .termsandconditions-content {
+                padding: 20px;
+            }
+            
+            .terms-content ul,
+            .terms-content ol {
+                padding-left: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="termsandconditions-header">
+        <div class="container">
+            <h1><i class="fas fa-shield-alt"></i> Yunoxa  Terms and Conditions</h1>
+            <p id="last-updated">Loading...</p>
+        </div>
+    </header>
+    <div class="container">
+        <div class="termsandconditions-content">
+            <div class="termsandconditions-section" id="termsandconditions-content">
+                <div class="loading-spinner"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home nav-icon"></i>
+            <span>Home</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="fas fa-search nav-icon"></i>
+            <span>Search</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="fas fa-gift nav-icon"></i>
+            <span>Deals</span>
+        </a>
+        <a href="favorites.html" class="nav-item">
+            <i class="fas fa-heart nav-icon"></i>
+            <span>Favorites</span>
+        </a>
+    </nav>
+
+    <script type="module">
+        import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+        
+        // Initialize Supabase
+        const supabaseUrl = 'https://qopdjgfciakmvhlriixt.supabase.co'
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFvcGRqZ2ZjaWFrbXZobHJpaXh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk0NDA2NDAsImV4cCI6MjA1NTAxNjY0MH0.5UAelwww7WpDUExqhc5dH2JhUWlGNgUNjh8fzxPNZvs'
+        const supabase = createClient(supabaseUrl, supabaseKey)
+
+        // Function to fetch all termsandconditions policies from Supabase
+        async function fetchtermsandconditionsPolicies() {
+            try {
+                const { data, error } = await supabase
+                    .from('termsandconditions')
+                    .select('*')
+                    .order('updated_at', { ascending: false }) // Newest first
+
+                if (error) throw error
+                
+                if (data && data.length > 0) {
+                    // Update the "last updated" date with the most recent terms
+                    const lastUpdated = new Date(data[0].updated_at);
+                    document.getElementById('last-updated').textContent = `Last updated: ${lastUpdated.toLocaleDateString('en-US', { 
+                        year: 'numeric', 
+                        month: 'long', 
+                        day: 'numeric' 
+                    })}`;
+                    
+                    // Generate HTML for all policies
+                    let policiesHTML = '';
+                    
+                    data.forEach((terms, index) => {
+                        const isCurrent = index === 0 ? '<span style="color: var(--yunoxa-red); font-size: 0.8em;"> (Current Version)</span>' : '';
+                        const effectiveDate = new Date(terms.updated_at).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        });
+                        
+                        policiesHTML += `
+                            <div class="termsandconditions-section">
+                                <h2>${terms.title}${isCurrent}</h2>
+                                <p><strong>Effective Date:</strong> ${effectiveDate}</p>
+                                <div class="terms-content">${terms.termsandconditions}</div>
+                            </div>
+                            ${index < data.length - 1 ? '<hr style="margin: 30px 0; border: 0; border-top: 1px dashed #eee;">' : ''}
+                        `;
+                    });
+                    
+                    document.getElementById('termsandconditions-content').innerHTML = policiesHTML;
+                    
+                    // Ensure lists are properly formatted after insertion
+                    formatLists();
+                } else {
+                    // Fallback if no policies are found
+                    document.getElementById('termsandconditions-content').innerHTML = `
+                        <div class="termsandconditions-section">
+                            <h2>termsandconditions</h2>
+                            <p>Our termsandconditions is currently unavailable. Please check back later or contact us for more information.</p>
+                            <p>You can reach our termsandconditions team at <a href="mailto:termsandconditions@yunoxa.com">termsandconditions@yunoxa.com</a></p>
+                        </div>
+                    `;
+                    document.getElementById('last-updated').textContent = "termsandconditions currently unavailable";
+                }
+            } catch (error) {
+                console.error('Error fetching termsandconditions policies:', error);
+                document.getElementById('termsandconditions-content').innerHTML = `
+                    <div class="termsandconditions-section">
+                        <h2>Error Loading Policies</h2>
+                        <p>We're unable to load our termsandconditions policies at this time. Please try again later.</p>
+                        <p>If the problem persists, please contact us at <a href="mailto:termsandconditions@yunoxa.com">termsandconditions@yunoxa.com</a></p>
+                    </div>
+                `;
+                document.getElementById('last-updated').textContent = "Error loading terms";
+            }
+        }
+
+        // Function to ensure lists are properly formatted
+        function formatLists() {
+            const termsContents = document.querySelectorAll('.terms-content');
+            
+            termsContents.forEach(content => {
+                // Convert text lists to proper HTML lists
+                let html = content.innerHTML;
+                
+                // Convert unordered lists
+                html = html.replace(/\* (.*?)(<br>|\n|$)/g, '<ul><li>$1</li></ul>');
+                html = html.replace(/<\/ul><ul>/g, '');
+                
+                // Convert numbered lists
+                html = html.replace(/(\d+)\. (.*?)(<br>|\n|$)/g, '<ol><li>$2</li></ol>');
+                html = html.replace(/<\/ol><ol>/g, '');
+                
+                content.innerHTML = html;
+            });
+        }
+
+        // Fetch all termsandconditions policies when the page loads
+        document.addEventListener('DOMContentLoaded', fetchtermsandconditionsPolicies);
+    </script>
+</body>
+</html>
