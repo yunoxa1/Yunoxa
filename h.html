@@ -191,12 +191,12 @@
 async function initializeSupabase() {
   try {
     const response = await fetch('https://api-proxy.yunoxa1.workers.dev', {
-      headers: {
-        'x-verified-source': 'yunoxa-web-app',
-        'Content-Type': 'application/json'
-      },
-      credentials: 'omit' // Important for CORS
-    });
+  headers: {
+    'x-verified-source': 'yunoxa-web-app',
+    'Content-Type': 'application/json'
+  },
+  credentials: 'omit' // Important for CORS with different origins
+});
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
