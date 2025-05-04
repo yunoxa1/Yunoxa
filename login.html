@@ -6,6 +6,7 @@
   <title>Login | Yunoxa: Endless Choices, One Marketplace</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/compressorjs@1.1.1/dist/compressor.min.js"></script>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 <style>
@@ -121,7 +122,7 @@
     }
     
     .login-btn:hover {
-      background-color: #e05d00;
+      background-color: #a52727;
     }
     
     .divider {
@@ -339,6 +340,20 @@
   text-decoration: underline;
 }
 
+/* Add to your existing CSS */
+.cf-turnstile {
+  margin: 15px 0;
+  display: flex;
+  justify-content: center;
+}
+
+/* For dark mode support */
+@media (prefers-color-scheme: dark) {
+  .cf-turnstile {
+    color-scheme: light dark;
+  }
+}
+
   </style>
 </head>
 <body>
@@ -400,10 +415,14 @@
                 I agree to the <a href="termsandconditions.html" class="terms-links">Terms and Conditions</a> and have read the <a href="privacypolicy.html" class="terms-links">Privacy Policy</a>
               </label>
             </div>
+            <div class="form-group">
+              <div class="cf-turnstile" data-sitekey="0x4AAAAAABaJQXRPZk-Sud0O" data-theme="light"></div>
+            </div>
             <button type="submit" class="login-btn">Login</button>
             <div id="login-error" class="error"></div>
           </form>
-          
+          <!-- Add this to your login form, just before the submit button -->
+
           
           
           
@@ -458,6 +477,9 @@
                 I agree to the <a href="#" class="terms-links">Terms and Conditions</a> and have read the <a href="#" class="terms-links">Privacy Policy</a>
               </label>
             </div>
+            <div class="form-group">
+              <div class="cf-turnstile" data-sitekey="0x4AAAAAABaJQXRPZk-Sud0O" data-theme="light"></div>
+            </div>
 
             <button type="submit" class="login-btn">Sign Up</button>
             <div id="signup-error" class="error"></div>
@@ -491,381 +513,438 @@
   <script type="module">
     import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
-    // Initialize Supabase
-    const supabaseUrl = 'https://qopdjgfciakmvhlriixt.supabase.co'
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFvcGRqZ2ZjaWFrbXZobHJpaXh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk0NDA2NDAsImV4cCI6MjA1NTAxNjY0MH0.5UAelwww7WpDUExqhc5dH2JhUWlGNgUNjh8fzxPNZvs'
-    const supabase = createClient(supabaseUrl, supabaseKey)
+// Initialize Supabase
+const supabaseUrl = 'https://qopdjgfciakmvhlriixt.supabase.co'
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFvcGRqZ2ZjaWFrbXZobHJpaXh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk0NDA2NDAsImV4cCI6MjA1NTAxNjY0MH0.5UAelwww7WpDUExqhc5dH2JhUWlGNgUNjh8fzxPNZvs'
+const supabase = createClient(supabaseUrl, supabaseKey)
 
-    // DOM Elements
-    const tabs = document.querySelectorAll('.tab')
-    const formContainers = document.querySelectorAll('.form-container')
-    const loginForm = document.getElementById('loginForm')
-    const signupForm = document.getElementById('signupForm')
-    const resetForm = document.getElementById('resetForm')
-    const showResetLink = document.getElementById('show-reset')
-    const profilePicInput = document.getElementById('profile-pic-input')
-    const profilePicPreview = document.getElementById('profile-pic-preview')
+// DOM Elements
+const tabs = document.querySelectorAll('.tab')
+const formContainers = document.querySelectorAll('.form-container')
+const loginForm = document.getElementById('loginForm')
+const signupForm = document.getElementById('signupForm')
+const resetForm = document.getElementById('resetForm')
+const showResetLink = document.getElementById('show-reset')
+const profilePicInput = document.getElementById('profile-pic-input')
+const profilePicPreview = document.getElementById('profile-pic-preview')
 
-    // Variables
-    let profilePicFile = null
-    let cartSyncInterval = null
+// Variables
+let profilePicFile = null
+let cartSyncInterval = null
 
-    // Tab switching
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        const tabName = tab.getAttribute('data-tab')
-        showTab(tabName)
+// Turnstile Verification Function
+async function verifyTurnstileToken(token) {
+  try {
+    const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        secret: '0x4AAAAAABaJQbopK1MhENd7LP67cejUWVg',
+        response: token
       })
-    })
+    });
+    
+    const data = await response.json();
+    return data.success;
+  } catch (error) {
+    console.error('Turnstile verification error:', error);
+    return false;
+  }
+}
 
-    // Show reset password form
-    showResetLink.addEventListener('click', (e) => {
-      e.preventDefault()
-      showTab('reset')
-    })
+// Tab switching
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    const tabName = tab.getAttribute('data-tab')
+    showTab(tabName)
+  })
+})
 
-    function showTab(tabName) {
-      // Update active tab
-      tabs.forEach(tab => {
-        tab.classList.toggle('active', tab.getAttribute('data-tab') === tabName)
-      })
+// Show reset password form
+showResetLink.addEventListener('click', (e) => {
+  e.preventDefault()
+  showTab('reset')
+})
 
-      // Show corresponding form
-      formContainers.forEach(container => {
-        container.classList.toggle('active', container.id === `${tabName}-form`)
-      })
-    }
+function showTab(tabName) {
+  // Update active tab
+  tabs.forEach(tab => {
+    tab.classList.toggle('active', tab.getAttribute('data-tab') === tabName)
+  })
 
-    // Profile picture upload handler
-    profilePicInput.addEventListener('change', (e) => {
-      const file = e.target.files[0]
-      if (file) {
-        console.log('Original file:', file)
-        
-        // Compress the image
-        new Compressor(file, {
-          quality: 0.6,
-          maxWidth: 200,
-          maxHeight: 200,
-          convertSize: 50000, // 50KB
-          success(result) {
-            console.log('Compressed file:', result)
-            profilePicFile = result
-            const reader = new FileReader()
-            reader.onload = (event) => {
-              profilePicPreview.src = event.target.result
-            }
-            reader.readAsDataURL(result)
-          },
-          error(err) {
-            console.error('Image compression error:', err)
-            // Fallback to original file if compression fails
-            profilePicFile = file
-            const reader = new FileReader()
-            reader.onload = (event) => {
-              profilePicPreview.src = event.target.result
-            }
-            reader.readAsDataURL(file)
-          }
-        })
-      }
-    })
+  // Show corresponding form
+  formContainers.forEach(container => {
+    container.classList.toggle('active', container.id === `${tabName}-form`)
+  })
+}
 
-    // Ensure bucket exists and has proper permissions
-    async function ensureBucketExists() {
-      try {
-        console.log('Checking if bucket exists...')
-        const { data, error } = await supabase.storage.getBucket('user.profile')
-        
-        if (error && error.message.includes('not found')) {
-          console.log('Bucket not found, creating...')
-          // Create the bucket if it doesn't exist
-          const { data: createData, error: createError } = await supabase.storage.createBucket('user.profile', {
-            public: true,
-            allowedMimeTypes: ['image/*'],
-            fileSizeLimit: 1024 * 1024 * 5 // 5MB
-          })
-          
-          if (createError) throw createError
-          console.log('Bucket created successfully')
-          
-          // Update bucket policy
-          const { data: policyData, error: policyError } = await supabase
-            .storage
-            .updateBucket('user.profile', {
-              public: true,
-              allowedMimeTypes: ['image/*'],
-              fileSizeLimit: '5MB'
-            })
-          
-          if (policyError) throw policyError
-          console.log('Bucket policy updated')
+// Profile picture upload handler
+profilePicInput.addEventListener('change', (e) => {
+  const file = e.target.files[0]
+  if (file) {
+    console.log('Original file:', file)
+    
+    // Compress the image
+    new Compressor(file, {
+      quality: 0.6,
+      maxWidth: 200,
+      maxHeight: 200,
+      convertSize: 50000, // 50KB
+      success(result) {
+        console.log('Compressed file:', result)
+        profilePicFile = result
+        const reader = new FileReader()
+        reader.onload = (event) => {
+          profilePicPreview.src = event.target.result
         }
-      } catch (error) {
-        console.error('Error ensuring bucket exists:', error)
+        reader.readAsDataURL(result)
+      },
+      error(err) {
+        console.error('Image compression error:', err)
+        // Fallback to original file if compression fails
+        profilePicFile = file
+        const reader = new FileReader()
+        reader.onload = (event) => {
+          profilePicPreview.src = event.target.result
+        }
+        reader.readAsDataURL(file)
       }
-    }
+    })
+  }
+})
 
-    // Upload profile picture to Supabase Storage
-    async function uploadProfilePicture(userId) {
-      if (!profilePicFile) {
-        console.log('No profile picture selected')
-        return null
-      }
+// Ensure bucket exists and has proper permissions
+async function ensureBucketExists() {
+  try {
+    console.log('Checking if bucket exists...')
+    const { data, error } = await supabase.storage.getBucket('user.profile')
+    
+    if (error && error.message.includes('not found')) {
+      console.log('Bucket not found, creating...')
+      // Create the bucket if it doesn't exist
+      const { data: createData, error: createError } = await supabase.storage.createBucket('user.profile', {
+        public: true,
+        allowedMimeTypes: ['image/*'],
+        fileSizeLimit: 1024 * 1024 * 5 // 5MB
+      })
       
-      try {
-        console.log('Starting profile picture upload...')
-        await ensureBucketExists()
-        
-        // Generate unique filename
-        const fileExt = profilePicFile.name.split('.').pop()
-        const fileName = `${userId}-${Date.now()}.${fileExt}`
-        console.log('Generated filename:', fileName)
-        
-        // Get current session
-        const { data: { session } } = await supabase.auth.getSession()
-        console.log('Current session:', session)
-        
-        // Upload file to the "user.profile" bucket
-        console.log('Uploading file...')
-        const { data, error } = await supabase.storage
-          .from('user.profile')
-          .upload(`public/${fileName}`, profilePicFile, {
-            cacheControl: '3600',
-            upsert: false,
-            contentType: profilePicFile.type
-          })
-        
-        if (error) throw error
-        console.log('Upload successful:', data)
-        
-        // Get public URL
-        const { data: { publicUrl } } = supabase.storage
-          .from('user.profile')
-          .getPublicUrl(`public/${fileName}`)
-        
-        console.log('Public URL:', publicUrl)
-        return publicUrl
-      } catch (error) {
-        console.error('Error uploading profile picture:', error)
-        return null
-      }
+      if (createError) throw createError
+      console.log('Bucket created successfully')
+      
+      // Update bucket policy
+      const { data: policyData, error: policyError } = await supabase
+        .storage
+        .updateBucket('user.profile', {
+          public: true,
+          allowedMimeTypes: ['image/*'],
+          fileSizeLimit: '5MB'
+        })
+      
+      if (policyError) throw policyError
+      console.log('Bucket policy updated')
     }
+  } catch (error) {
+    console.error('Error ensuring bucket exists:', error)
+  }
+}
 
+// Upload profile picture to Supabase Storage
+async function uploadProfilePicture(userId) {
+  if (!profilePicFile) {
+    console.log('No profile picture selected')
+    return null
+  }
+  
+  try {
+    console.log('Starting profile picture upload...')
+    await ensureBucketExists()
+    
+    // Generate unique filename
+    const fileExt = profilePicFile.name.split('.').pop()
+    const fileName = `${userId}-${Date.now()}.${fileExt}`
+    console.log('Generated filename:', fileName)
+    
+    // Get current session
+    const { data: { session } } = await supabase.auth.getSession()
+    console.log('Current session:', session)
+    
+    // Upload file to the "user.profile" bucket
+    console.log('Uploading file...')
+    const { data, error } = await supabase.storage
+      .from('user.profile')
+      .upload(`public/${fileName}`, profilePicFile, {
+        cacheControl: '3600',
+        upsert: false,
+        contentType: profilePicFile.type
+      })
+    
+    if (error) throw error
+    console.log('Upload successful:', data)
+    
+    // Get public URL
+    const { data: { publicUrl } } = supabase.storage
+      .from('user.profile')
+      .getPublicUrl(`public/${fileName}`)
+    
+    console.log('Public URL:', publicUrl)
+    return publicUrl
+  } catch (error) {
+    console.error('Error uploading profile picture:', error)
+    return null
+  }
+}
+
+// Start cart synchronization
+function startCartSync(userId) {
+  // Clear any existing interval
+  if (cartSyncInterval) clearInterval(cartSyncInterval)
+  
+  // Sync immediately
+  syncCartWithServer(userId)
+  
+  // Then sync every 10 seconds
+  cartSyncInterval = setInterval(() => {
+    syncCartWithServer(userId)
+  }, 10000)
+}
+
+// Sync cart data between localStorage and server
+async function syncCartWithServer(userId) {
+  try {
+    // Get cart from localStorage with key "cart"
+    const localCart = localStorage.getItem('cart')
+    const cartData = localCart ? JSON.parse(localCart) : []
+    
+    // Update cart in database
+    const { data, error } = await supabase
+      .from('userdata')
+      .update({ cart: cartData })
+      .eq('id', userId)
+      .select()
+    
+    if (error) throw error
+    
+    console.log('Cart synchronized successfully:', cartData)
+  } catch (error) {
+    console.error('Error syncing cart:', error)
+  }
+}
+
+// Sign up handler
+signupForm.addEventListener('submit', async (e) => {
+  e.preventDefault()
+  const username = document.getElementById('signup-username').value
+  const email = document.getElementById('signup-email').value
+  const mobile = document.getElementById('signup-mobile').value
+  const password = document.getElementById('signup-password').value
+  const confirmPassword = document.getElementById('signup-confirm-password').value
+  const errorElement = document.getElementById('signup-error')
+  const successElement = document.getElementById('signup-success')
+  
+  // Address fields
+  const street = document.getElementById('address-street').value
+  const city = document.getElementById('address-city').value
+  const state = document.getElementById('address-state').value
+  const zip = document.getElementById('address-zip').value
+  const country = document.getElementById('address-country').value
+  const termsAgreed = document.getElementById('signup-terms').checked
+
+  if (!termsAgreed) {
+    errorElement.textContent = 'You must agree to the Terms of Service and Privacy Policy'
+    return
+  }
+  
+  errorElement.textContent = ''
+  successElement.textContent = ''
+  
+  // Basic validation
+  if (password !== confirmPassword) {
+    errorElement.textContent = 'Passwords do not match'
+    return
+  }
+
+  // Get the Turnstile token
+  const token = document.querySelector('#signup-form iframe[data-turnstile]')?.dataset?.response
+  
+  if (!token) {
+    errorElement.textContent = 'Please complete the CAPTCHA'
+    return
+  }
+  
+  // Verify the token
+  const isTokenValid = await verifyTurnstileToken(token)
+  
+  if (!isTokenValid) {
+    errorElement.textContent = 'CAPTCHA verification failed. Please try again.'
+    return
+  }
+  
+  try {
+    console.log('Starting signup process...')
+    
+    // Create user in Auth
+    const { data: authData, error: authError } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          username,
+          mobile
+        }
+      }
+    })
+    
+    if (authError) throw authError
+    console.log('Auth user created:', authData)
+    
+    // Upload profile picture if selected
+    const profilePicUrl = await uploadProfilePicture(authData.user.id)
+    console.log('Profile picture URL:', profilePicUrl)
+    
+    // Create user in userdata table
+    const homeAddress = {
+      street,
+      city,
+      state,
+      zip,
+      country
+    }
+    
+    const { data: userData, error: userError } = await supabase
+      .from('userdata')
+      .insert([{
+        id: authData.user.id,
+        username,
+        email,
+        mobile,
+        profile_pic: profilePicUrl,
+        home_address: homeAddress,
+        created_at: new Date().toISOString(),
+        cart: [] // Initialize empty cart
+      }])
+      
+    
+    if (userError) throw userError
+    console.log('User data created:', userData)
+    
+    successElement.textContent = 'Account created successfully! Check your email for confirmation.'
+    
     // Start cart synchronization
-    function startCartSync(userId) {
-      // Clear any existing interval
-      if (cartSyncInterval) clearInterval(cartSyncInterval)
-      
-      // Sync immediately
-      syncCartWithServer(userId)
-      
-      // Then sync every 10 seconds
-      cartSyncInterval = setInterval(() => {
-        syncCartWithServer(userId)
-      }, 10000)
+    startCartSync(authData.user.id)
+    
+    // Automatically login after successful signup
+    const { error: loginError } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    })
+    
+    if (loginError) throw loginError
+    
+    // Redirect to home page
+    window.location.href = '/'
+  } catch (error) {
+    console.error('Signup error:', error)
+    errorElement.textContent = error.message
+  }
+})
+
+// Login handler
+loginForm.addEventListener('submit', async (e) => {
+  e.preventDefault()
+  const identifier = document.getElementById('login-identifier').value
+  const password = document.getElementById('login-password').value
+  const errorElement = document.getElementById('login-error')
+  const termsAgreed = document.getElementById('login-terms').checked
+
+  if (!termsAgreed) {
+    errorElement.textContent = 'You must agree to the Terms of Service'
+    return
+  }
+  
+  errorElement.textContent = ''
+  
+  // Get the Turnstile token
+  const token = document.querySelector('#login-form iframe[data-turnstile]')?.dataset?.response
+  
+  if (!token) {
+    errorElement.textContent = 'Please complete the CAPTCHA'
+    return
+  }
+  
+  // Verify the token
+  const isTokenValid = await verifyTurnstileToken(token)
+  
+  if (!isTokenValid) {
+    errorElement.textContent = 'CAPTCHA verification failed. Please try again.'
+    return
+  }
+  
+  try {
+    let credentials = {}
+    if (identifier.includes('@')) {
+      credentials.email = identifier
+    } else {
+      credentials.phone = identifier
     }
+    credentials.password = password
+    
+    const { data, error } = await supabase.auth.signInWithPassword(credentials)
+    
+    if (error) throw error
+    
+    // Save the full session to localStorage
+    localStorage.setItem('supabase_session', JSON.stringify({
+      user: data.user,
+      session: data.session
+    }))
+    
+    // Start cart synchronization
+    startCartSync(data.user.id)
+    
+    // Login successful - redirect
+    window.location.href = '/index.html'
+  } catch (error) {
+    errorElement.textContent = error.message
+  }
+})
 
-    // Sync cart data between localStorage and server
-    async function syncCartWithServer(userId) {
-      try {
-        // Get cart from localStorage with key "cart"
-        const localCart = localStorage.getItem('cart')
-        const cartData = localCart ? JSON.parse(localCart) : []
-        
-        // Update cart in database
-        const { data, error } = await supabase
-          .from('userdata')
-          .update({ cart: cartData })
-          .eq('id', userId)
-          .select()
-        
-        if (error) throw error
-        
-        console.log('Cart synchronized successfully:', cartData)
-      } catch (error) {
-        console.error('Error syncing cart:', error)
-      }
+// Reset password handler
+resetForm.addEventListener('submit', async (e) => {
+  e.preventDefault()
+  const email = document.getElementById('reset-email').value
+  const errorElement = document.getElementById('reset-error')
+  const successElement = document.getElementById('reset-success')
+  
+  errorElement.textContent = ''
+  successElement.textContent = ''
+  
+  try {
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: 'http://localhost:3000/update-password'
+    })
+    
+    if (error) throw error
+    
+    successElement.textContent = 'Password reset link sent to your email!'
+  } catch (error) {
+    errorElement.textContent = error.message
+  }
+})
+
+// Initialize the page
+document.addEventListener('DOMContentLoaded', () => {
+  showTab('login')
+  
+  // Check if user is already logged in
+  supabase.auth.getSession().then(({ data: { session } }) => {
+    if (session) {
+      // Start cart synchronization
+      startCartSync(session.user.id)
     }
-
-    // Sign up handler
-    signupForm.addEventListener('submit', async (e) => {
-      e.preventDefault()
-      const username = document.getElementById('signup-username').value
-      const email = document.getElementById('signup-email').value
-      const mobile = document.getElementById('signup-mobile').value
-      const password = document.getElementById('signup-password').value
-      const confirmPassword = document.getElementById('signup-confirm-password').value
-      const errorElement = document.getElementById('signup-error')
-      const successElement = document.getElementById('signup-success')
-      
-      // Address fields
-      const street = document.getElementById('address-street').value
-      const city = document.getElementById('address-city').value
-      const state = document.getElementById('address-state').value
-      const zip = document.getElementById('address-zip').value
-      const country = document.getElementById('address-country').value
-      const termsAgreed = document.getElementById('signup-terms').checked
-if (!termsAgreed) {
-  errorElement.textContent = 'You must agree to the Terms of Service and Privacy Policy'
-  return
-}
-      
-      errorElement.textContent = ''
-      successElement.textContent = ''
-      
-      // Basic validation
-      if (password !== confirmPassword) {
-        errorElement.textContent = 'Passwords do not match'
-        return
-      }
-      
-      try {
-        console.log('Starting signup process...')
-        
-        // Create user in Auth
-        const { data: authData, error: authError } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            data: {
-              username,
-              mobile
-            }
-          }
-        })
-        
-        if (authError) throw authError
-        console.log('Auth user created:', authData)
-        
-        // Upload profile picture if selected
-        const profilePicUrl = await uploadProfilePicture(authData.user.id)
-        console.log('Profile picture URL:', profilePicUrl)
-        
-        // Create user in userdata table
-        const homeAddress = {
-          street,
-          city,
-          state,
-          zip,
-          country
-        }
-        
-        const { data: userData, error: userError } = await supabase
-          .from('userdata')
-          .insert([{
-            id: authData.user.id,
-            username,
-            email,
-            mobile,
-            profile_pic: profilePicUrl,
-            home_address: homeAddress,
-            created_at: new Date().toISOString(),
-            cart: [] // Initialize empty cart
-          }])
-          
-        
-        if (userError) throw userError
-        console.log('User data created:', userData)
-        
-        successElement.textContent = 'Account created successfully! Check your email for confirmation.'
-        
-        // Start cart synchronization
-        startCartSync(authData.user.id)
-        
-        // Automatically login after successful signup
-        const { error: loginError } = await supabase.auth.signInWithPassword({
-          email,
-          password
-        })
-        
-        if (loginError) throw loginError
-        
-        // Redirect to home page
-        window.location.href = '/'
-      } catch (error) {
-        console.error('Signup error:', error)
-        errorElement.textContent = error.message
-      }
-    })
-
-    // Login handler
-    loginForm.addEventListener('submit', async (e) => {
-      e.preventDefault()
-      const identifier = document.getElementById('login-identifier').value
-      const password = document.getElementById('login-password').value
-      const errorElement = document.getElementById('login-error')
-      const termsAgreed = document.getElementById('login-terms').checked
-if (!termsAgreed) {
-  errorElement.textContent = 'You must agree to the Terms of Service'
-  return
-}
-      errorElement.textContent = ''
-      
-      try {
-        let credentials = {}
-        if (identifier.includes('@')) {
-          credentials.email = identifier
-        } else {
-          credentials.phone = identifier
-        }
-        credentials.password = password
-        
-        const { data, error } = await supabase.auth.signInWithPassword(credentials)
-        
-        if (error) throw error
-        
-        // Save the full session to localStorage
-        localStorage.setItem('supabase_session', JSON.stringify({
-          user: data.user,
-          session: data.session
-        }))
-        
-        // Start cart synchronization
-        startCartSync(data.user.id)
-        
-        // Login successful - redirect
-        window.location.href = '/index.html'
-      } catch (error) {
-        errorElement.textContent = error.message
-      }
-    })
-
-    // Reset password handler
-    resetForm.addEventListener('submit', async (e) => {
-      e.preventDefault()
-      const email = document.getElementById('reset-email').value
-      const errorElement = document.getElementById('reset-error')
-      const successElement = document.getElementById('reset-success')
-      
-      errorElement.textContent = ''
-      successElement.textContent = ''
-      
-      try {
-        const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: 'http://localhost:3000/update-password'
-        })
-        
-        if (error) throw error
-        
-        successElement.textContent = 'Password reset link sent to your email!'
-      } catch (error) {
-        errorElement.textContent = error.message
-      }
-    })
-
-    // Initialize the page
-    document.addEventListener('DOMContentLoaded', () => {
-      showTab('login')
-      
-      // Check if user is already logged in
-      supabase.auth.getSession().then(({ data: { session } }) => {
-        if (session) {
-          // Start cart synchronization
-          startCartSync(session.user.id)
-        }
-      })
-    })
+  })
+})
   </script>
 </body>
 </html>
