@@ -197,6 +197,28 @@
     align-items: center;
     justify-content: center;
 }
+
+/* Add this to your existing styles */
+body {
+    overflow-x: hidden; /* This prevents horizontal scrolling */
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Ensure all containers respect the viewport width */
+.yunoxa-header, 
+.favorites-container, 
+.bottom-nav {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box; /* Include padding in width calculations */
+}
+
+/* Make sure images don't cause overflow */
+img {
+    max-width: 100%;
+    height: auto;
+}
     </style>
 </head>
 
