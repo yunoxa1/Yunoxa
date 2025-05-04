@@ -843,7 +843,7 @@ if (!termsAgreed) {
       
       try {
         const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: 'http://localhost:3000/update-password'
+          redirectTo: 'https://yunoxa.com/'
         })
         
         if (error) throw error
