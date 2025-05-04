@@ -416,7 +416,7 @@
               </label>
             </div>
             <div class="form-group">
-              <div class="cf-turnstile" data-sitekey="0x4AAAAAABaJQXRPZk-Sud0O" data-theme="light"></div>
+              <div id="login-captcha" class="cf-turnstile" data-sitekey="0x4AAAAAABaJQXRPZk-Sud0O" data-callback="loginCaptchaCallback"></div>
             </div>
             <button type="submit" class="login-btn">Login</button>
             <div id="login-error" class="error"></div>
@@ -478,7 +478,7 @@
               </label>
             </div>
             <div class="form-group">
-              <div class="cf-turnstile" data-sitekey="0x4AAAAAABaJQXRPZk-Sud0O" data-theme="light"></div>
+              <div id="signup-captcha" class="cf-turnstile" data-sitekey="0x4AAAAAABaJQXRPZk-Sud0O" data-callback="signupCaptchaCallback"></div>
             </div>
 
             <button type="submit" class="login-btn">Sign Up</button>
@@ -531,6 +531,19 @@ const profilePicPreview = document.getElementById('profile-pic-preview')
 // Variables
 let profilePicFile = null
 let cartSyncInterval = null
+let loginCaptchaToken = null
+let signupCaptchaToken = null
+
+// Turnstile Callbacks
+window.loginCaptchaCallback = function(token) {
+  loginCaptchaToken = token
+  console.log('Login CAPTCHA token received:', token)
+}
+
+window.signupCaptchaCallback = function(token) {
+  signupCaptchaToken = token
+  console.log('Signup CAPTCHA token received:', token)
+}
 
 // Turnstile Verification Function
 async function verifyTurnstileToken(token) {
@@ -544,13 +557,31 @@ async function verifyTurnstileToken(token) {
         secret: '0x4AAAAAABaJQbopK1MhENd7LP67cejUWVg',
         response: token
       })
-    });
+    })
     
-    const data = await response.json();
-    return data.success;
+    const data = await response.json()
+    return data.success
   } catch (error) {
-    console.error('Turnstile verification error:', error);
-    return false;
+    console.error('Turnstile verification error:', error)
+    return false
+  }
+}
+
+// Reset CAPTCHA widgets
+function resetCaptcha() {
+  const loginCaptchaElement = document.getElementById('login-captcha')
+  const signupCaptchaElement = document.getElementById('signup-captcha')
+  
+  if (window.turnstile) {
+    if (loginCaptchaElement) {
+      loginCaptchaToken = null
+      window.turnstile.reset(loginCaptchaElement)
+    }
+    
+    if (signupCaptchaElement) {
+      signupCaptchaToken = null
+      window.turnstile.reset(signupCaptchaElement)
+    }
   }
 }
 
@@ -569,6 +600,9 @@ showResetLink.addEventListener('click', (e) => {
 })
 
 function showTab(tabName) {
+  // Reset CAPTCHA when switching tabs
+  resetCaptcha()
+  
   // Update active tab
   tabs.forEach(tab => {
     tab.classList.toggle('active', tab.getAttribute('data-tab') === tabName)
@@ -765,19 +799,22 @@ signupForm.addEventListener('submit', async (e) => {
     return
   }
 
-  // Get the Turnstile token
-  const token = document.querySelector('#signup-form iframe[data-turnstile]')?.dataset?.response
-  
-  if (!token) {
+  // CAPTCHA validation
+  if (!signupCaptchaToken) {
     errorElement.textContent = 'Please complete the CAPTCHA'
     return
   }
   
   // Verify the token
-  const isTokenValid = await verifyTurnstileToken(token)
+  const isTokenValid = await verifyTurnstileToken(signupCaptchaToken)
   
   if (!isTokenValid) {
     errorElement.textContent = 'CAPTCHA verification failed. Please try again.'
+    signupCaptchaToken = null
+    if (window.turnstile) {
+      const captchaElement = document.getElementById('signup-captcha')
+      if (captchaElement) window.turnstile.reset(captchaElement)
+    }
     return
   }
   
@@ -865,19 +902,22 @@ loginForm.addEventListener('submit', async (e) => {
   
   errorElement.textContent = ''
   
-  // Get the Turnstile token
-  const token = document.querySelector('#login-form iframe[data-turnstile]')?.dataset?.response
-  
-  if (!token) {
+  // CAPTCHA validation
+  if (!loginCaptchaToken) {
     errorElement.textContent = 'Please complete the CAPTCHA'
     return
   }
   
   // Verify the token
-  const isTokenValid = await verifyTurnstileToken(token)
+  const isTokenValid = await verifyTurnstileToken(loginCaptchaToken)
   
   if (!isTokenValid) {
     errorElement.textContent = 'CAPTCHA verification failed. Please try again.'
+    loginCaptchaToken = null
+    if (window.turnstile) {
+      const captchaElement = document.getElementById('login-captcha')
+      if (captchaElement) window.turnstile.reset(captchaElement)
+    }
     return
   }
   
