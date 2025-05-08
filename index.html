@@ -338,7 +338,7 @@
                 flashDealsContainer.innerHTML = '';
                 
                 const discountedProducts = data.filter(product => product.discount > 0);
-                discountedProducts.slice(0, 12).forEach(product => {
+                discountedProducts.slice(0, 50).forEach(product => {
                     const sold = Math.floor(Math.random() * 500) + 50;
                     flashDealsContainer.innerHTML += `
                         <div class="deal-card">
