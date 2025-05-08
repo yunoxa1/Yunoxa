@@ -1107,3 +1107,15 @@ html, body {
     transform: translateY(-0.5px);
     box-shadow: 0 2px 5px rgba(212, 175, 55, 0.4);
 }
+
+.category-nav.hidden {
+    transform: translateY(-100%);
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+    transition: transform 0.9s ease, opacity 0.3s ease, height 0.3s ease;
+}
+
+.category-nav {
+    transition: transform 0.9s ease, opacity 0.9s ease;
+}
