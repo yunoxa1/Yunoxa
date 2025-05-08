@@ -344,7 +344,7 @@
                         <div class="deal-card">
                             <a href="open.html?id=${product.id}">
                                 <span class="deal-badge">${product.discount}% OFF</span>
-                                <img src="${product.image || 'https://via.placeholder.com/150'}" alt="${product.name}" class="deal-image">
+                                <img src="${product.image || 'https://via.placeholder.com/150'}" alt="" class="deal-image">
                                 <div class="deal-price">LKR ${(product.price * (1 - product.discount/100)).toFixed(2)}</div>
                                 <div class="deal-original-price">LKR ${product.price.toFixed(2)}</div>
                                 <div class="deal-sold">${sold} sold</div>
@@ -366,7 +366,7 @@
                             <a href="open.html?id=${product.id}">
                                 ${product.discount > 0 ? `<span class="product-badge">${product.discount}% OFF</span>` : ''}
                                 <div class="image-container">
-                                    <img src="${product.image || 'https://via.placeholder.com/250'}" alt="${product.name}" class="product-image">
+                                    <img src="${product.image || 'https://via.placeholder.com/250'}" alt="" class="product-image">
                                 </div>
                                 <div class="product-info"></a>
                                     <div class="product-price">
@@ -434,7 +434,7 @@
                                 ${product.discount > 0 ? `<span class="product-badge">${product.discount}% OFF</span>` : ''}
                                 <div class="image-container">
                                     <img src="${product.image || 'https://via.placeholder.com/250'}" 
-                                         alt="${product.name}" 
+                                         alt="" 
                                          class="product-image">
                                 </div>
                                 <div class="product-info"></a>
@@ -509,7 +509,7 @@
                             ${product.discount > 0 ? `<span class="product-badge">${product.discount}% OFF</span>` : ''}
                             <div class="image-container">
                                 <a href="open.html?id=${product.id}">
-                                <img src="${product.image || 'https://via.placeholder.com/250'}" alt="${product.name}" class="product-image">
+                                <img src="${product.image || 'https://via.placeholder.com/250'}" alt="" class="product-image">
                             </div>
                             <div class="product-info">
                                 <div class="product-price">
