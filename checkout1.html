@@ -530,7 +530,7 @@
                 
                 const productLink = `${window.location.origin}/open.html?id=${productId}`;
                 
-                let message = `Hello Yunoxa!%0A%0A` +
+                let message = `Hello Seller!%0A%0A` +
                        `I would like to order:%0A%0A` +
                        `*Product:* ${productData.name}%0A` +
                        `*Quantity:* ${quantity}%0A` +
@@ -561,7 +561,7 @@
             } catch (error) {
                 console.error("Error generating WhatsApp message:", error);
                 // Return a basic message without user info if there's an error
-                return `Hello Yunoxa!%0A%0AI would like to place an order. Please contact me.`;
+                return `Hello Seller!%0A%0AI would like to place an order. Please contact me.`;
             }
         }
         
