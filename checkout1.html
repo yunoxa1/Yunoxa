@@ -403,7 +403,7 @@
                 }
         
                 // Set delivery price
-                deliveryPrice = product.delivery || 500; // Default to 500 if not set
+                deliveryPrice = product.delivery || 350; // Default to 500 if not set
         
                 // Update product display
                 updateProductDisplay();
@@ -428,7 +428,7 @@
             container.innerHTML = `
                 <div class="order-item">
                     <div class="item-image">
-                        <img src="${productData.image}" alt="${productData.name}">
+                        <img src="${productData.image}" alt="">
                     </div>
                     <div class="item-details">
                         <h3>${productData.name}</h3>
