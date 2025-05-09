@@ -9,6 +9,18 @@
     <!-- Favicon -->
     <link rel="icon" href="img/Favicon.png" type="image/jpeg">
 
+    <!-- Open Graph Meta Tags (Dynamic for Social Sharing) -->
+    <meta property="og:title" id="og-title" content="Yunoxa - Amazing Deals">
+    <meta property="og:description" id="og-description" content="Check out this product on Yunoxa!">
+    <meta property="og:image" id="og-image" content="https://yunoxa.com/img/default-product-image.jpg">
+    <meta property="og:url" id="og-url" content="">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Yunoxa">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" id="twitter-title" content="Yunoxa - Amazing Deals">
+    <meta name="twitter:description" id="twitter-description" content="Check out this product on Yunoxa!">
+    <meta name="twitter:image" id="twitter-image" content="https://yunoxa.com/img/default-product-image.jpg">
+
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
@@ -17,6 +29,12 @@
 
     <!-- CSS -->
     <link href="css/open.css" rel="stylesheet">
+
+    <!-- Preload OG Tags (Fallback for WhatsApp) -->
+    <script>
+        // Set default OG tags (fallback if JS fails)
+        document.getElementById('og-url').content = window.location.href;
+    </script>
 </head>
 
 <body>
@@ -178,13 +196,16 @@
         updatefavoritesCount();
 
         async function loadProductDetails() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('id');
+
     if (!productId) {
-        document.body.innerHTML = '<div class="loading-state"><div class="loading-spinner"></div></div>';
+        document.body.innerHTML = '<div class="error">Product not found</div>';
         return;
     }
 
     try {
-        // Fetch product details
+        // Fetch product data from Supabase
         const { data: product, error } = await supabase
             .from('products')
             .select('*')
@@ -194,36 +215,32 @@
 
         if (error) throw error;
         if (!product) {
-            document.body.innerHTML = '<h1>Product not found</h1>';
+            document.body.innerHTML = '<div class="error">Product not found</div>';
             return;
         }
 
-        // Update product details
+        // Update product details in UI
         document.querySelector('.product-title').textContent = product.name;
         
-        // Handle price display based on discount status
+        // Calculate and display price
         const currentPrice = product.discount > 0 
             ? (product.price * (1 - product.discount/100)).toFixed(2)
             : product.price.toFixed(2);
         
-        document.querySelector('.current-price').textContent = `LKR ${currentPrice}`;
-        
         const priceContainer = document.querySelector('.price-container');
         priceContainer.innerHTML = `
             <span class="current-price">LKR ${currentPrice}</span>
-            ${product.discount !== null && product.discount > 0 ? `
+            ${product.discount > 0 ? `
                 <span class="original-price">LKR ${product.price.toFixed(2)}</span>
                 <span class="discount-badge">${product.discount}% OFF</span>
-            ` : `
-                ${product.discount === null ? `
-                    <span class="discount-badge offer-ended">Offer Ended</span>
-                ` : ''}
-            `}
+            ` : ''}
         `;
 
         // Update product description
-        document.getElementById('product-description-text').textContent = product.description || 'No description available';
-        document.getElementById('product-details-text').textContent = product.details || 'No details available';
+        document.getElementById('product-description-text').textContent = 
+            product.description || 'No description available';
+        document.getElementById('product-details-text').textContent = 
+            product.details || 'No details available';
 
         // Update product images
         const images = [
@@ -235,7 +252,10 @@
         ].filter(img => img);
 
         if (images.length > 0) {
-            document.getElementById('main-product-image').src = images[0];
+            const mainImg = document.getElementById('main-product-image');
+            mainImg.src = images[0];
+            mainImg.onload = () => mainImg.classList.remove('loading-shimmer');
+            
             const gallery = document.querySelector('.image-gallery');
             gallery.innerHTML = images.map((img, index) => `
                 <img class="thumbnail ${index === 0 ? 'active' : ''}" 
@@ -245,6 +265,9 @@
             `).join('');
         }
 
+        // Update Open Graph meta tags for social sharing
+        updateOpenGraphTags(product);
+
         // Load recommended products
         loadRecommendedProducts(product.categorize);
 
@@ -253,6 +276,32 @@
         document.querySelector('.product-title').textContent = "Error loading product";
     }
 }
+
+function updateOpenGraphTags(product) {
+    // Ensure product.image is an absolute URL
+    const absoluteImageUrl = product.image.startsWith('http') 
+        ? product.image 
+        : `https://yunoxa.com/${product.image.replace(/^\//, '')}`;
+
+    // Update OG tags dynamically
+    document.querySelector('meta[property="og:title"]').content = product.name;
+    document.querySelector('meta[property="og:description"]').content = 
+        product.description || "Amazing product on Yunoxa";
+    document.querySelector('meta[property="og:image"]').content = absoluteImageUrl;
+    document.querySelector('meta[property="og:url"]').content = window.location.href;
+    
+    // Update Twitter card tags
+    document.querySelector('meta[name="twitter:title"]').content = product.name;
+    document.querySelector('meta[name="twitter:description"]').content = 
+        product.description || "Amazing product on Yunoxa";
+    document.querySelector('meta[name="twitter:image"]').content = absoluteImageUrl;
+}
+
+// Initialize when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    loadProductDetails();
+    updatefavoritesCount();
+});
 
 // Add this function to your script
 window.buyNow = async function() {
