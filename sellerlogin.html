@@ -547,6 +547,7 @@
   </main>
 
   <script type="module">
+    import { v4 as uuidv4 } from 'https://esm.sh/uuid@9'
     import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
     // Initialize Supabase
@@ -694,45 +695,45 @@
 
     // Upload profile picture to Supabase Storage
     async function uploadProfilePicture(userId, file) {
-      const fileExt = file.name.split('.').pop()
-      const fileName = `${userId}-profile.${fileExt}`
-      
-      const { data, error } = await supabase.storage
-        .from('user.profile')
-        .upload(fileName, file, {
-          cacheControl: '3600',
-          contentType: file.type
-        })
-      
-      if (error) throw error
-      
-      const { data: { publicUrl } } = supabase.storage
-        .from('user.profile')
-        .getPublicUrl(fileName)
-      
-      return publicUrl
-    }
+  const fileExt = file.name.split('.').pop()
+  const fileName = `${userId}-profile-${uuidv4()}.${fileExt}` // Add UUID
+  
+  const { data, error } = await supabase.storage
+    .from('user.profile')
+    .upload(fileName, file, {
+      cacheControl: '3600',
+      contentType: file.type
+    })
+  
+  if (error) throw error
+  
+  const { data: { publicUrl } } = supabase.storage
+    .from('user.profile')
+    .getPublicUrl(fileName)
+  
+  return publicUrl
+}
 
     // Upload NIC document to Supabase Storage
     async function uploadNicDocument(userId, file, type) {
-      const fileExt = file.name.split('.').pop()
-      const fileName = `${userId}-nic-${type}.${fileExt}`
-      
-      const { data, error } = await supabase.storage
-        .from('creators')
-        .upload(fileName, file, {
-          cacheControl: '3600',
-          contentType: file.type
-        })
-      
-      if (error) throw error
-      
-      const { data: { publicUrl } } = supabase.storage
-        .from('creators')
-        .getPublicUrl(fileName)
-      
-      return publicUrl
-    }
+  const fileExt = file.name.split('.').pop()
+  const fileName = `${userId}-nic-${type}-${uuidv4()}.${fileExt}` // Add UUID
+  
+  const { data, error } = await supabase.storage
+    .from('creators')
+    .upload(fileName, file, {
+      cacheControl: '3600',
+      contentType: file.type
+    })
+  
+  if (error) throw error
+  
+  const { data: { publicUrl } } = supabase.storage
+    .from('creators')
+    .getPublicUrl(fileName)
+  
+  return publicUrl
+}
 
     // Sign up handler
     signupForm.addEventListener('submit', async (e) => {
