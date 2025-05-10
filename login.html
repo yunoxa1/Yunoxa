@@ -489,6 +489,7 @@
   </main>
 
   <script type="module">
+    import { v4 as uuidv4 } from 'https://esm.sh/uuid@9'
     import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
     // Initialize Supabase
@@ -608,49 +609,49 @@
 
     // Upload profile picture to Supabase Storage
     async function uploadProfilePicture(userId) {
-      if (!profilePicFile) {
-        console.log('No profile picture selected')
-        return null
-      }
-      
-      try {
-        console.log('Starting profile picture upload...')
-        await ensureBucketExists()
-        
-        // Generate unique filename
-        const fileExt = profilePicFile.name.split('.').pop()
-        const fileName = `${userId}-${Date.now()}.${fileExt}`
-        console.log('Generated filename:', fileName)
-        
-        // Get current session
-        const { data: { session } } = await supabase.auth.getSession()
-        console.log('Current session:', session)
-        
-        // Upload file to the "user.profile" bucket
-        console.log('Uploading file...')
-        const { data, error } = await supabase.storage
-          .from('user.profile')
-          .upload(`public/${fileName}`, profilePicFile, {
-            cacheControl: '3600',
-            upsert: false,
-            contentType: profilePicFile.type
-          })
-        
-        if (error) throw error
-        console.log('Upload successful:', data)
-        
-        // Get public URL
-        const { data: { publicUrl } } = supabase.storage
-          .from('user.profile')
-          .getPublicUrl(`public/${fileName}`)
-        
-        console.log('Public URL:', publicUrl)
-        return publicUrl
-      } catch (error) {
-        console.error('Error uploading profile picture:', error)
-        return null
-      }
-    }
+  if (!profilePicFile) {
+    console.log('No profile picture selected')
+    return null
+  }
+  
+  try {
+    console.log('Starting profile picture upload...')
+    await ensureBucketExists()
+    
+    // Generate unique filename with UUID
+    const fileExt = profilePicFile.name.split('.').pop()
+    const fileName = `${userId}-profile-${uuidv4()}.${fileExt}` // Changed to UUID
+    console.log('Generated filename:', fileName)
+    
+    // Get current session
+    const { data: { session } } = await supabase.auth.getSession()
+    console.log('Current session:', session)
+    
+    // Upload file to the "user.profile" bucket
+    console.log('Uploading file...')
+    const { data, error } = await supabase.storage
+      .from('user.profile')
+      .upload(`public/${fileName}`, profilePicFile, {
+        cacheControl: '3600',
+        upsert: false,
+        contentType: profilePicFile.type
+      })
+    
+    if (error) throw error
+    console.log('Upload successful:', data)
+    
+    // Get public URL
+    const { data: { publicUrl } } = supabase.storage
+      .from('user.profile')
+      .getPublicUrl(`public/${fileName}`)
+    
+    console.log('Public URL:', publicUrl)
+    return publicUrl
+  } catch (error) {
+    console.error('Error uploading profile picture:', error)
+    return null
+  }
+}
 
     // Start cart synchronization
     function startCartSync(userId) {
