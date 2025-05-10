@@ -323,7 +323,7 @@
             try {
                 document.getElementById('loading').style.display = 'flex';
                 
-                let query = supabase.from('products').select('*').eq('verification', 1); // Only verified products
+                let query = supabase.from('products').select('*').eq('verification', 1) .order('created_at', { ascending: false }); // Only verified products
                 
                 if (category) {
                     query = query.eq('categorize', category);
@@ -410,7 +410,8 @@
                     .from('products')
                     .select('*')
                     .eq('categorize', category)
-                    .eq('verification', 1);
+                    .eq('verification', 1)
+                    .order('created_at', { ascending: false });
                 
                 if (error) throw error;
                 
