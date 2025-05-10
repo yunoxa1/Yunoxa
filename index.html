@@ -184,19 +184,37 @@
 
     <!-- JavaScript -->
     <script type="module">
-        import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-        
-        const supabaseUrl = 'https://qopdjgfciakmvhlriixt.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFvcGRqZ2ZjaWFrbXZobHJpaXh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk0NDA2NDAsImV4cCI6MjA1NTAxNjY0MH0.5UAelwww7WpDUExqhc5dH2JhUWlGNgUNjh8fzxPNZvs';
-        const supabase = createClient(supabaseUrl, supabaseKey);
+        // Cloudflare Worker Proxy URL (replace with your actual worker URL)
+        const PROXY_API_URL = 'https://api-proxy.yunoxa1.workers.dev';
         
         // Initialize favorites count
         updatefavoritesCount();
         
-        // Countdown timer
+        // Modified fetch function that uses the proxy
+        async function fetchFromProxy(endpoint, method = 'GET', body = null) {
+            const headers = {
+                'Content-Type': 'application/json',
+            };
+            
+            try {
+                const response = await fetch(`${PROXY_API_URL}${endpoint}`, {
+                    method,
+                    headers,
+                    body: body ? JSON.stringify(body) : null
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                return await response.json();
+            } catch (error) {
+                console.error('Error fetching from proxy:', error);
+                throw error;
+            }
+        }
         
-        
-        // Generate star rating
+        // Generate star rating (unchanged)
         function generateStarRating() {
             const rating = (Math.random() * (5 - 3.7) + 3.7).toFixed(1);
             const fullStars = Math.floor(rating);
@@ -217,28 +235,28 @@
             return { starHtml, rating };
         }
         
-        // favorites functions
+        // favorites functions (unchanged)
         function addTofavorites(product) {
             let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
              const discountedPrice = product.discount > 0 
         ? product.price * (1 - product.discount/100)
         : product.price;
     
-    const existingItem = favorites.find(item => item.id === product.id);
-
-    if (existingItem) {
-        existingItem.quantity += 1;
-    } else {
-        favorites.push({
-            id: product.id,
-            name: product.name,
-            price: discountedPrice, // Store the discounted price
-            originalPrice: product.price, // Store original for reference
-            quantity: 1,
-            image: product.image,
-            discount: product.discount || 0
-        });
-    }
+        const existingItem = favorites.find(item => item.id === product.id);
+    
+        if (existingItem) {
+            existingItem.quantity += 1;
+        } else {
+            favorites.push({
+                id: product.id,
+                name: product.name,
+                price: discountedPrice,
+                originalPrice: product.price,
+                quantity: 1,
+                image: product.image,
+                discount: product.discount || 0
+            });
+        }
         
             localStorage.setItem('favorites', JSON.stringify(favorites));
             updatefavoritesCount();
@@ -262,7 +280,7 @@
             }, 3000);
         }
         
-        // Event binding functions
+        // Event binding functions (unchanged)
         function bindAddTofavoritesEvents() {
             document.querySelectorAll('.add-to-favorites').forEach(button => {
                 button.replaceWith(button.cloneNode(true));
@@ -282,56 +300,51 @@
         }
         
         function bindBuyNowEvents() {
-    document.querySelectorAll('.buy-now').forEach(button => {
-        button.replaceWith(button.cloneNode(true));
-    });
-    
-    document.querySelectorAll('.buy-now').forEach(button => {
-        button.addEventListener('click', async function(e) {
-            e.preventDefault();
-            try {
-                const product = JSON.parse(this.dataset.product.replace(/&apos;/g, "'"));
-                
-                // Create a new favorites with just this product
-                const favorites = [{
-                    id: product.id,
-                    name: product.name,
-                    price: product.discount > 0 
-                        ? product.price * (1 - product.discount/100)
-                        : product.price,
-                    originalPrice: product.price,
-                    quantity: 1, // Default to 1 for buy now
-                    image: product.image,
-                    discount: product.discount || 0
-                }];
-                
-                localStorage.setItem('favorites', JSON.stringify(favorites));
-                updatefavoritesCount();
-                
-                // Redirect to checkout with product ID
-                window.location.href = `checkout1.html?id=${product.id}`;
-            } catch (error) {
-                console.error("Error processing buy now:", error);
-                showToast("Error processing your order");
-            }
-        });
-    });
-}
+            document.querySelectorAll('.buy-now').forEach(button => {
+                button.replaceWith(button.cloneNode(true));
+            });
+            
+            document.querySelectorAll('.buy-now').forEach(button => {
+                button.addEventListener('click', async function(e) {
+                    e.preventDefault();
+                    try {
+                        const product = JSON.parse(this.dataset.product.replace(/&apos;/g, "'"));
+                        
+                        const favorites = [{
+                            id: product.id,
+                            name: product.name,
+                            price: product.discount > 0 
+                                ? product.price * (1 - product.discount/100)
+                                : product.price,
+                            originalPrice: product.price,
+                            quantity: 1,
+                            image: product.image,
+                            discount: product.discount || 0
+                        }];
+                        
+                        localStorage.setItem('favorites', JSON.stringify(favorites));
+                        updatefavoritesCount();
+                        
+                        window.location.href = `checkout1.html?id=${product.id}`;
+                    } catch (error) {
+                        console.error("Error processing buy now:", error);
+                        showToast("Error processing your order");
+                    }
+                });
+            });
+        }
         
-        // Product loading functions
+        // Updated product loading functions using proxy
         async function fetchProducts(category = null) {
             try {
                 document.getElementById('loading').style.display = 'flex';
                 
-                let query = supabase.from('products').select('*').eq('verification', 1) .order('created_at', { ascending: false }); // Only verified products
-                
+                let endpoint = '/rest/v1/products?select=*&verification=eq.1&order=created_at.desc';
                 if (category) {
-                    query = query.eq('categorize', category);
+                    endpoint += `&categorize=eq.${encodeURIComponent(category)}`;
                 }
                 
-                const { data, error } = await query;
-                
-                if (error) throw error;
+                const data = await fetchFromProxy(endpoint);
                 
                 // Display flash deals
                 const flashDealsContainer = document.getElementById('flash-deals');
@@ -406,14 +419,7 @@
                 document.getElementById('loading').style.display = 'flex';
                 document.getElementById('products').innerHTML = '';
                 
-                const { data, error } = await supabase
-                    .from('products')
-                    .select('*')
-                    .eq('categorize', category)
-                    .eq('verification', 1)
-                    .order('created_at', { ascending: false });
-                
-                if (error) throw error;
+                const data = await fetchFromProxy(`/rest/v1/products?select=*&categorize=eq.${encodeURIComponent(category)}&verification=eq.1&order=created_at.desc`);
                 
                 const productsContainer = document.getElementById('products');
                 
@@ -476,7 +482,7 @@
             }
         }
         
-        // Search function
+        // Updated search function
         async function searchProducts() {
             const query = document.getElementById('search-input').value.toLowerCase();
             if (query.length < 2) {
@@ -487,13 +493,7 @@
             try {
                 document.getElementById('loading').style.display = 'flex';
                 
-                const { data, error } = await supabase
-                    .from('products')
-                    .select('*')
-                    .ilike('name', `%${query}%`)
-                    .eq('verification', 1);
-                
-                if (error) throw error;
+                const data = await fetchFromProxy(`/rest/v1/products?select=*&name=ilike.%25${encodeURIComponent(query)}%25&verification=eq.1`);
                 
                 const productsContainer = document.getElementById('products');
                 productsContainer.innerHTML = '';
@@ -541,7 +541,7 @@
             }
         }
         
-        // Category functions
+        // Category functions (unchanged)
         window.showMoreCategories = function() {
             const moreCategories = document.getElementById('more-categories');
             moreCategories.style.display = moreCategories.style.display === 'none' ? 'flex' : 'none';
@@ -562,40 +562,36 @@
             });
         }
         
-        // Initialize
+        // Initialize (unchanged)
         document.addEventListener('DOMContentLoaded', function() {
             setupCategoryListeners();
             fetchProducts();
             document.getElementById('search-input').addEventListener('input', searchProducts);
         });
-
-        // Scroll-based hide/show for category nav
-let lastScrollPosition = 0;
-const categoryNav = document.getElementById('categoryNav');
-
-window.addEventListener('scroll', function() {
-    const currentScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
     
-    if (currentScrollPosition > lastScrollPosition) {
-        // Scrolling down - hide nav
-        categoryNav.classList.add('hidden');
-    } else {
-        // Scrolling up - show nav
-        categoryNav.classList.remove('hidden');
-    }
+        // Scroll-based hide/show for category nav (unchanged)
+        let lastScrollPosition = 0;
+        const categoryNav = document.getElementById('categoryNav');
     
-    lastScrollPosition = currentScrollPosition;
-});
-
-// Still hide after 5 seconds if no scrolling
-setTimeout(() => {
-    categoryNav.classList.add('hidden');
-}, 5000);
-
-// Show when hovering over header area
-document.querySelector('.yunoxa-header').addEventListener('mouseenter', () => {
-    categoryNav.classList.remove('hidden');
-});
-        </script>
+        window.addEventListener('scroll', function() {
+            const currentScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (currentScrollPosition > lastScrollPosition) {
+                categoryNav.classList.add('hidden');
+            } else {
+                categoryNav.classList.remove('hidden');
+            }
+            
+            lastScrollPosition = currentScrollPosition;
+        });
+    
+        setTimeout(() => {
+            categoryNav.classList.add('hidden');
+        }, 5000);
+    
+        document.querySelector('.yunoxa-header').addEventListener('mouseenter', () => {
+            categoryNav.classList.remove('hidden');
+        });
+    </script>
 </body>
 </html>
