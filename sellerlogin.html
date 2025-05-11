@@ -6,7 +6,6 @@
   <title>Login | Yunoxa : Endless Choices, One Marketplace</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/compressorjs@1.1.1/dist/compressor.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/heic2any@2.0.5/dist/heic2any.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
 
@@ -453,7 +452,7 @@
             <div class="profile-pic-upload">
               <img id="profile-pic-preview" src="img/profile.avif" class="profile-pic-preview" alt="Profile Preview">
               <label for="profile-pic-input" class="profile-pic-label">Choose Profile Picture</label>
-              <input type="file" id="profile-pic-input" accept="image/jpeg,image/png,image/heic,image/heif" class="profile-pic-input" accept="image/*">
+              <input type="file" id="profile-pic-input" class="profile-pic-input" accept="image/*">
             </div>
             
             <div class="form-group">
@@ -488,13 +487,13 @@
             
             <div class="nic-upload-container">
               <label for="nic-front-input" class="nic-upload-label">NIC Front Photo</label>
-              <input type="file" id="nic-front-input" class="profile-pic-input" accept="image/jpeg,image/png,image/heic,image/heif" required>
+              <input type="file" id="nic-front-input" class="profile-pic-input" accept="image/*" required>
               <img id="nic-front-preview" class="nic-upload-preview" alt="NIC Front Preview">
             </div>
             
             <div class="nic-upload-container">
               <label for="nic-back-input" class="nic-upload-label">NIC Back Photo</label>
-              <input type="file" id="nic-back-input" class="profile-pic-input" accept="image/jpeg,image/png,image/heic,image/heif" required>
+              <input type="file" id="nic-back-input" class="profile-pic-input" accept="image/*" required>
               <img id="nic-back-preview" class="nic-upload-preview" alt="NIC Back Preview">
             </div>
             
@@ -604,121 +603,95 @@
     }
 
     // Profile picture upload handler
-    // ====== Constants ======
-const MAX_FILE_SIZE_KB = 50; // Strict 50KB limit
-const PROFILE_PIC_SETTINGS = { maxWidth: 500, maxHeight: 500, quality: 0.5 };
-const NIC_PIC_SETTINGS = { maxWidth: 800, maxHeight: 800, quality: 0.6 };
-
-// ====== New Profile Picture Handler ======
-profilePicInput.addEventListener('change', async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-
-  try {
-    const processedFile = await processImage(file, PROFILE_PIC_SETTINGS);
-    profilePicFile = processedFile;
-    updateImagePreview(profilePicPreview, processedFile);
-  } catch (error) {
-    alert(error.message); // Shows specific error
-    e.target.value = ''; // Clears invalid file
-  }
-});
-
-// ====== New NIC Front/Back Handlers ======
-[nicFrontInput, nicBackInput].forEach((input, index) => {
-  input.addEventListener('change', async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    try {
-      // Process image (convert + compress)
-      const processedFile = await processImage(file, NIC_PIC_SETTINGS);
-      
-      // Validate size
-      if (processedFile.size / 1024 > MAX_FILE_SIZE_KB) {
-        throw new Error("NIC image must be smaller than 50KB");
+    profilePicInput.addEventListener('change', (e) => {
+      const file = e.target.files[0]
+      if (file) {
+        new Compressor(file, {
+          quality: 0.6,
+          maxWidth: 200,
+          maxHeight: 200,
+          success(result) {
+            profilePicFile = result
+            const reader = new FileReader()
+            reader.onload = (event) => {
+              profilePicPreview.src = event.target.result
+            }
+            reader.readAsDataURL(result)
+          },
+          error(err) {
+            console.error('Image compression error:', err)
+            profilePicFile = file
+            const reader = new FileReader()
+            reader.onload = (event) => {
+              profilePicPreview.src = event.target.result
+            }
+            reader.readAsDataURL(file)
+          }
+        })
       }
+    })
 
-      // Store file (front or back)
-      if (index === 0) nicFrontFile = processedFile;
-      else nicBackFile = processedFile;
-      
-      // Update correct preview
-      const previewElement = index === 0 ? nicFrontPreview : nicBackPreview;
-      updateImagePreview(previewElement, processedFile);
+    // NIC Front upload handler
+    nicFrontInput.addEventListener('change', (e) => {
+      const file = e.target.files[0]
+      if (file) {
+        new Compressor(file, {
+          quality: 0.7,
+          maxWidth: 800,
+          maxHeight: 800,
+          success(result) {
+            nicFrontFile = result
+            const reader = new FileReader()
+            reader.onload = (event) => {
+              nicFrontPreview.src = event.target.result
+              nicFrontPreview.style.display = 'block'
+            }
+            reader.readAsDataURL(result)
+          },
+          error(err) {
+            console.error('Image compression error:', err)
+            nicFrontFile = file
+            const reader = new FileReader()
+            reader.onload = (event) => {
+              nicFrontPreview.src = event.target.result
+              nicFrontPreview.style.display = 'block'
+            }
+            reader.readAsDataURL(file)
+          }
+        })
+      }
+    })
 
-    } catch (error) {
-      showUploadError(input, error, "NIC upload:");
-    }
-  });
-});
-
-// ====== Helper Functions ======
-async function processImage(file, settings) {
-  // Validate file type
-  const validTypes = ['image/jpeg', 'image/png', 'image/heic', 'image/heif'];
-  if (!validTypes.includes(file.type)) {
-    throw new Error("Please upload only JPEG/PNG images");
-  }
-
-  // Convert HEIC to JPEG
-  let processedFile = file;
-  if (file.type === 'image/heic' || file.type === 'image/heif') {
-    try {
-      processedFile = await convertHeicToJpeg(file);
-    } catch (error) {
-      throw new Error("iPhone users: Please convert HEIC to JPEG first");
-    }
-  }
-
-  // Compress image
-  return new Promise((resolve, reject) => {
-    new Compressor(processedFile, {
-      ...settings,
-      mimeType: "image/jpeg",
-      success(result) {
-        if (result.size / 1024 > MAX_FILE_SIZE_KB) {
-          reject(new Error("Image must be smaller than 50KB"));
-        } else {
-          resolve(result);
-        }
-      },
-      error: () => reject(new Error("Compression failed"))
-    });
-  });
-}
-
-async function convertHeicToJpeg(heicFile) {
-  try {
-    // Load heic2any if not available
-    if (typeof heic2any === 'undefined') {
-      const heicModule = await import('https://cdn.jsdelivr.net/npm/heic2any@2.0.5/dist/heic2any.min.js');
-      window.heic2any = heicModule.default;
-    }
-
-    const result = await heic2any({
-      blob: heicFile,
-      toType: "image/jpeg",
-      quality: 0.8
-    });
-
-    return new File([result], heicFile.name.replace(/\.[^/.]+$/, '.jpg'), {
-      type: "image/jpeg"
-    });
-  } catch (error) {
-    console.error("HEIC conversion failed:", error);
-    throw error; // Re-throw to show user message
-  }
-}
-
-function updateImagePreview(element, file) {
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    element.src = e.target.result;
-    element.style.display = "block";
-  };
-  reader.readAsDataURL(file);
-}
+    // NIC Back upload handler
+    nicBackInput.addEventListener('change', (e) => {
+      const file = e.target.files[0]
+      if (file) {
+        new Compressor(file, {
+          quality: 0.7,
+          maxWidth: 800,
+          maxHeight: 800,
+          success(result) {
+            nicBackFile = result
+            const reader = new FileReader()
+            reader.onload = (event) => {
+              nicBackPreview.src = event.target.result
+              nicBackPreview.style.display = 'block'
+            }
+            reader.readAsDataURL(result)
+          },
+          error(err) {
+            console.error('Image compression error:', err)
+            nicBackFile = file
+            const reader = new FileReader()
+            reader.onload = (event) => {
+              nicBackPreview.src = event.target.result
+              nicBackPreview.style.display = 'block'
+            }
+            reader.readAsDataURL(file)
+          }
+        })
+      }
+    })
 
     // Upload profile picture to Supabase Storage
     async function uploadProfilePicture(userId, file) {
