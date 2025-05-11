@@ -634,18 +634,20 @@ profilePicInput.addEventListener('change', async (e) => {
 
     try {
       const processedFile = await processImage(file, NIC_PIC_SETTINGS);
-      if (processedFile.size / 1024 > MAX_FILE_SIZE_KB) throw new Error("NIC image must be <50KB");
+      if (processedFile.size / 1024 > MAX_FILE_SIZE_KB) {
+        throw new Error("NIC image must be <50KB");
+      }
       
-      // Store file based on type (front or back)
+      // Store and preview
       if (index === 0) nicFrontFile = processedFile;
       else nicBackFile = processedFile;
       
-      // Update correct preview element
       const previewElement = index === 0 ? nicFrontPreview : nicBackPreview;
       updateImagePreview(previewElement, processedFile);
+      
     } catch (error) {
-      alert(`NIC upload error: ${error.message}`);
-      console.error(error);
+      alert(error.message); // Shows user-friendly error
+      console.error("NIC upload failed:", error);
     }
   });
 });
@@ -670,14 +672,23 @@ async function processImage(file, settings) {
 }
 
 async function convertHeicToJpeg(heicFile) {
-  const result = await heic2any({
-    blob: heicFile,
-    toType: "image/jpeg",
-    quality: 0.8
-  });
-  return new File([result], heicFile.name.replace(/\.heic$/i, '.jpg'), {
-    type: "image/jpeg"
-  });
+  try {
+    // Dynamically import heic2any only when needed
+    const heic2any = await import('https://cdn.jsdelivr.net/npm/heic2any@2.0.5/dist/heic2any.min.js');
+    
+    const result = await heic2any.default({
+      blob: heicFile,
+      toType: "image/jpeg",
+      quality: 0.8
+    });
+    
+    return new File([result], heicFile.name.replace(/\.heic$/i, '.jpg'), {
+      type: "image/jpeg"
+    });
+  } catch (error) {
+    console.error("HEIC conversion failed:", error);
+    throw new Error("Failed to process image. Please upload a JPEG/PNG instead.");
+  }
 }
 
 function updateImagePreview(element, file) {
