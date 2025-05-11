@@ -6,6 +6,7 @@
   <title>Login | Yunoxa : Endless Choices, One Marketplace</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/compressorjs@1.1.1/dist/compressor.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/heic2any@2.0.5/dist/heic2any.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
 
@@ -603,95 +604,90 @@
     }
 
     // Profile picture upload handler
-    profilePicInput.addEventListener('change', (e) => {
-      const file = e.target.files[0]
-      if (file) {
-        new Compressor(file, {
-          quality: 0.6,
-          maxWidth: 200,
-          maxHeight: 200,
-          success(result) {
-            profilePicFile = result
-            const reader = new FileReader()
-            reader.onload = (event) => {
-              profilePicPreview.src = event.target.result
-            }
-            reader.readAsDataURL(result)
-          },
-          error(err) {
-            console.error('Image compression error:', err)
-            profilePicFile = file
-            const reader = new FileReader()
-            reader.onload = (event) => {
-              profilePicPreview.src = event.target.result
-            }
-            reader.readAsDataURL(file)
-          }
-        })
-      }
-    })
+    // ====== Constants ======
+const MAX_FILE_SIZE_KB = 50; // Strict 50KB limit
+const PROFILE_PIC_SETTINGS = { maxWidth: 500, maxHeight: 500, quality: 0.5 };
+const NIC_PIC_SETTINGS = { maxWidth: 800, maxHeight: 800, quality: 0.6 };
 
-    // NIC Front upload handler
-    nicFrontInput.addEventListener('change', (e) => {
-      const file = e.target.files[0]
-      if (file) {
-        new Compressor(file, {
-          quality: 0.7,
-          maxWidth: 800,
-          maxHeight: 800,
-          success(result) {
-            nicFrontFile = result
-            const reader = new FileReader()
-            reader.onload = (event) => {
-              nicFrontPreview.src = event.target.result
-              nicFrontPreview.style.display = 'block'
-            }
-            reader.readAsDataURL(result)
-          },
-          error(err) {
-            console.error('Image compression error:', err)
-            nicFrontFile = file
-            const reader = new FileReader()
-            reader.onload = (event) => {
-              nicFrontPreview.src = event.target.result
-              nicFrontPreview.style.display = 'block'
-            }
-            reader.readAsDataURL(file)
-          }
-        })
-      }
-    })
+// ====== New Profile Picture Handler ======
+profilePicInput.addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
 
-    // NIC Back upload handler
-    nicBackInput.addEventListener('change', (e) => {
-      const file = e.target.files[0]
-      if (file) {
-        new Compressor(file, {
-          quality: 0.7,
-          maxWidth: 800,
-          maxHeight: 800,
-          success(result) {
-            nicBackFile = result
-            const reader = new FileReader()
-            reader.onload = (event) => {
-              nicBackPreview.src = event.target.result
-              nicBackPreview.style.display = 'block'
-            }
-            reader.readAsDataURL(result)
-          },
-          error(err) {
-            console.error('Image compression error:', err)
-            nicBackFile = file
-            const reader = new FileReader()
-            reader.onload = (event) => {
-              nicBackPreview.src = event.target.result
-              nicBackPreview.style.display = 'block'
-            }
-            reader.readAsDataURL(file)
-          }
-        })
-      }
-    })
+  try {
+    const processedFile = await processImage(file, PROFILE_PIC_SETTINGS);
+    if (processedFile.size / 1024 > MAX_FILE_SIZE_KB) throw new Error("Image must be <50KB");
+    
+    profilePicFile = processedFile;
+    updateImagePreview(profilePicPreview, processedFile);
+  } catch (error) {
+    alert(`Profile pic error: ${error.message}`);
+    console.error(error);
+  }
+});
+
+// ====== New NIC Front/Back Handlers ======
+[nicFrontInput, nicBackInput].forEach((input, index) => {
+  input.addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    try {
+      const processedFile = await processImage(file, NIC_PIC_SETTINGS);
+      if (processedFile.size / 1024 > MAX_FILE_SIZE_KB) throw new Error("NIC image must be <50KB");
+      
+      // Store file based on type (front or back)
+      if (index === 0) nicFrontFile = processedFile;
+      else nicBackFile = processedFile;
+      
+      // Update correct preview element
+      const previewElement = index === 0 ? nicFrontPreview : nicBackPreview;
+      updateImagePreview(previewElement, processedFile);
+    } catch (error) {
+      alert(`NIC upload error: ${error.message}`);
+      console.error(error);
+    }
+  });
+});
+
+// ====== Helper Functions ======
+async function processImage(file, settings) {
+  // Convert HEIC to JPEG if needed
+  let convertedFile = file;
+  if (file.type === "image/heic" || file.name.toLowerCase().endsWith('.heic')) {
+    convertedFile = await convertHeicToJpeg(file);
+  }
+
+  // Compress the image
+  return new Promise((resolve, reject) => {
+    new Compressor(convertedFile, {
+      ...settings,
+      mimeType: "image/jpeg", // Force JPEG output
+      success: resolve,
+      error: () => reject(new Error("Compression failed"))
+    });
+  });
+}
+
+async function convertHeicToJpeg(heicFile) {
+  const result = await heic2any({
+    blob: heicFile,
+    toType: "image/jpeg",
+    quality: 0.8
+  });
+  return new File([result], heicFile.name.replace(/\.heic$/i, '.jpg'), {
+    type: "image/jpeg"
+  });
+}
+
+function updateImagePreview(element, file) {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    element.src = e.target.result;
+    element.style.display = "block";
+  };
+  reader.readAsDataURL(file);
+}
 
     // Upload profile picture to Supabase Storage
     async function uploadProfilePicture(userId, file) {
