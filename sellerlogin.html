@@ -604,94 +604,177 @@
 
     // Profile picture upload handler
     profilePicInput.addEventListener('change', (e) => {
-      const file = e.target.files[0]
-      if (file) {
-        new Compressor(file, {
-          quality: 0.6,
-          maxWidth: 200,
-          maxHeight: 200,
-          success(result) {
-            profilePicFile = result
-            const reader = new FileReader()
-            reader.onload = (event) => {
-              profilePicPreview.src = event.target.result
+  const file = e.target.files[0]
+  if (file) {
+    new Compressor(file, {
+      quality: 0.5, // Reduced from 0.6
+      maxWidth: 150, // Reduced from 200
+      maxHeight: 150, // Reduced from 200
+      convertSize: 50000, // Convert to JPEG if file size is over 50KB
+      success(result) {
+        if (result.size > 50000) {
+          // If still too large, compress further
+          new Compressor(result, {
+            quality: 0.4,
+            maxWidth: 120,
+            maxHeight: 120,
+            success(finalResult) {
+              profilePicFile = finalResult
+              const reader = new FileReader()
+              reader.onload = (event) => {
+                profilePicPreview.src = event.target.result
+              }
+              reader.readAsDataURL(finalResult)
+            },
+            error(err) {
+              console.error('Second compression failed:', err)
+              handleCompressionFallback(result)
             }
-            reader.readAsDataURL(result)
-          },
-          error(err) {
-            console.error('Image compression error:', err)
-            profilePicFile = file
-            const reader = new FileReader()
-            reader.onload = (event) => {
-              profilePicPreview.src = event.target.result
-            }
-            reader.readAsDataURL(file)
+          })
+        } else {
+          profilePicFile = result
+          const reader = new FileReader()
+          reader.onload = (event) => {
+            profilePicPreview.src = event.target.result
           }
-        })
+          reader.readAsDataURL(result)
+        }
+      },
+      error(err) {
+        console.error('Image compression error:', err)
+        handleCompressionFallback(file)
       }
     })
+  }
+})
+
+function handleCompressionFallback(file) {
+  // Fallback compression with more aggressive settings
+  new Compressor(file, {
+    quality: 0.3,
+    maxWidth: 100,
+    maxHeight: 100,
+    convertSize: 0, // Always convert
+    success(result) {
+      profilePicFile = result
+      const reader = new FileReader()
+      reader.onload = (event) => {
+        profilePicPreview.src = event.target.result
+      }
+      reader.readAsDataURL(result)
+    },
+    error(err) {
+      console.error('Fallback compression failed:', err)
+      // Use original file as last resort
+      profilePicFile = file
+      const reader = new FileReader()
+      reader.onload = (event) => {
+        profilePicPreview.src = event.target.result
+      }
+      reader.readAsDataURL(file)
+    }
+  })
+}
 
     // NIC Front upload handler
-    nicFrontInput.addEventListener('change', (e) => {
-      const file = e.target.files[0]
-      if (file) {
-        new Compressor(file, {
-          quality: 0.7,
-          maxWidth: 800,
-          maxHeight: 800,
-          success(result) {
-            nicFrontFile = result
-            const reader = new FileReader()
-            reader.onload = (event) => {
-              nicFrontPreview.src = event.target.result
-              nicFrontPreview.style.display = 'block'
+    // NIC Front upload handler
+nicFrontInput.addEventListener('change', (e) => {
+  const file = e.target.files[0]
+  if (file) {
+    new Compressor(file, {
+      quality: 0.5, // Reduced from 0.7
+      maxWidth: 600, // Reduced from 800
+      maxHeight: 600, // Reduced from 800
+      convertSize: 50000,
+      success(result) {
+        if (result.size > 50000) {
+          new Compressor(result, {
+            quality: 0.4,
+            maxWidth: 500,
+            maxHeight: 500,
+            success(finalResult) {
+              nicFrontFile = finalResult
+              const reader = new FileReader()
+              reader.onload = (event) => {
+                nicFrontPreview.src = event.target.result
+                nicFrontPreview.style.display = 'block'
+              }
+              reader.readAsDataURL(finalResult)
+            },
+            error(err) {
+              console.error('Second compression failed:', err)
+              handleNicCompressionFallback(result, 'front')
             }
-            reader.readAsDataURL(result)
-          },
-          error(err) {
-            console.error('Image compression error:', err)
-            nicFrontFile = file
-            const reader = new FileReader()
-            reader.onload = (event) => {
-              nicFrontPreview.src = event.target.result
-              nicFrontPreview.style.display = 'block'
-            }
-            reader.readAsDataURL(file)
+          })
+        } else {
+          nicFrontFile = result
+          const reader = new FileReader()
+          reader.onload = (event) => {
+            nicFrontPreview.src = event.target.result
+            nicFrontPreview.style.display = 'block'
           }
-        })
+          reader.readAsDataURL(result)
+        }
+      },
+      error(err) {
+        console.error('Image compression error:', err)
+        handleNicCompressionFallback(file, 'front')
       }
     })
+  }
+})
 
-    // NIC Back upload handler
-    nicBackInput.addEventListener('change', (e) => {
-      const file = e.target.files[0]
-      if (file) {
-        new Compressor(file, {
-          quality: 0.7,
-          maxWidth: 800,
-          maxHeight: 800,
-          success(result) {
-            nicBackFile = result
-            const reader = new FileReader()
-            reader.onload = (event) => {
-              nicBackPreview.src = event.target.result
-              nicBackPreview.style.display = 'block'
+// NIC Back upload handler (similar to front)
+nicBackInput.addEventListener('change', (e) => {
+  // Same implementation as nicFrontInput but for back
+})
+
+// NIC Back upload handler
+nicBackInput.addEventListener('change', (e) => {
+  const file = e.target.files[0]
+  if (file) {
+    new Compressor(file, {
+      quality: 0.7,
+      maxWidth: 800,
+      maxHeight: 800,
+      convertSize: 50000,
+      success(result) {
+        if (result.size > 50000) {
+          new Compressor(result, {
+            quality: 0.4,
+            maxWidth: 500,
+            maxHeight: 500,
+            success(finalResult) {
+              nicBackFile = finalResult
+              const reader = new FileReader()
+              reader.onload = (event) => {
+                nicBackPreview.src = event.target.result
+                nicBackPreview.style.display = 'block'
+              }
+              reader.readAsDataURL(finalResult)
+            },
+            error(err) {
+              console.error('Second compression failed:', err)
+              handleNicCompressionFallback(result, 'front')
             }
-            reader.readAsDataURL(result)
-          },
-          error(err) {
-            console.error('Image compression error:', err)
-            nicBackFile = file
-            const reader = new FileReader()
-            reader.onload = (event) => {
-              nicBackPreview.src = event.target.result
-              nicBackPreview.style.display = 'block'
-            }
-            reader.readAsDataURL(file)
+          })
+        } else {
+          nicBackFile = result
+          const reader = new FileReader()
+          reader.onload = (event) => {
+            nicBackPreview.src = event.target.result
+            nicBackPreview.style.display = 'block'
           }
-        })
+          reader.readAsDataURL(result)
+        }
+      },
+      error(err) {
+        console.error('Image compression error:', err)
+        handleNicCompressionFallback(file, 'front')
       }
     })
+  }
+})
 
     // Upload profile picture to Supabase Storage
     async function uploadProfilePicture(userId, file) {
