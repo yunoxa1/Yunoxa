@@ -453,7 +453,7 @@
             <div class="profile-pic-upload">
               <img id="profile-pic-preview" src="img/profile.avif" class="profile-pic-preview" alt="Profile Preview">
               <label for="profile-pic-input" class="profile-pic-label">Choose Profile Picture</label>
-              <input type="file" id="profile-pic-input" class="profile-pic-input" accept="image/*">
+              <input type="file" id="profile-pic-input" accept="image/jpeg,image/png,image/heic,image/heif" class="profile-pic-input" accept="image/*">
             </div>
             
             <div class="form-group">
@@ -488,13 +488,13 @@
             
             <div class="nic-upload-container">
               <label for="nic-front-input" class="nic-upload-label">NIC Front Photo</label>
-              <input type="file" id="nic-front-input" class="profile-pic-input" accept="image/*" required>
+              <input type="file" id="nic-front-input" class="profile-pic-input" accept="image/jpeg,image/png,image/heic,image/heif" required>
               <img id="nic-front-preview" class="nic-upload-preview" alt="NIC Front Preview">
             </div>
             
             <div class="nic-upload-container">
               <label for="nic-back-input" class="nic-upload-label">NIC Back Photo</label>
-              <input type="file" id="nic-back-input" class="profile-pic-input" accept="image/*" required>
+              <input type="file" id="nic-back-input" class="profile-pic-input" accept="image/jpeg,image/png,image/heic,image/heif" required>
               <img id="nic-back-preview" class="nic-upload-preview" alt="NIC Back Preview">
             </div>
             
@@ -616,13 +616,11 @@ profilePicInput.addEventListener('change', async (e) => {
 
   try {
     const processedFile = await processImage(file, PROFILE_PIC_SETTINGS);
-    if (processedFile.size / 1024 > MAX_FILE_SIZE_KB) throw new Error("Image must be <50KB");
-    
     profilePicFile = processedFile;
     updateImagePreview(profilePicPreview, processedFile);
   } catch (error) {
-    alert(`Profile pic error: ${error.message}`);
-    console.error(error);
+    alert(error.message); // Shows specific error
+    e.target.value = ''; // Clears invalid file
   }
 });
 
@@ -633,42 +631,47 @@ profilePicInput.addEventListener('change', async (e) => {
     if (!file) return;
 
     try {
+      // Process image (convert + compress)
       const processedFile = await processImage(file, NIC_PIC_SETTINGS);
       
-      // Store file
+      // Validate size
+      if (processedFile.size / 1024 > MAX_FILE_SIZE_KB) {
+        throw new Error("NIC image must be smaller than 50KB");
+      }
+
+      // Store file (front or back)
       if (index === 0) nicFrontFile = processedFile;
       else nicBackFile = processedFile;
       
-      // Update preview
+      // Update correct preview
       const previewElement = index === 0 ? nicFrontPreview : nicBackPreview;
       updateImagePreview(previewElement, processedFile);
 
     } catch (error) {
-      // User-friendly error messages
-      let errorMessage = error.message;
-      if (error.message.includes("HEIC conversion failed")) {
-        errorMessage = "HEIC images not supported. Please upload JPEG/PNG.";
-      }
-      alert(errorMessage);
-      console.error("Upload failed:", error);
+      showUploadError(input, error, "NIC upload:");
     }
   });
 });
 
 // ====== Helper Functions ======
 async function processImage(file, settings) {
-  // Skip processing for non-image files
-  if (!file.type.startsWith('image/')) {
-    throw new Error("Please upload an image file (JPEG/PNG)");
+  // Validate file type
+  const validTypes = ['image/jpeg', 'image/png', 'image/heic', 'image/heif'];
+  if (!validTypes.includes(file.type)) {
+    throw new Error("Please upload only JPEG/PNG images");
   }
 
-  // Convert HEIC to JPEG if needed
+  // Convert HEIC to JPEG
   let processedFile = file;
-  if (file.type === "image/heic" || file.name.toLowerCase().endsWith('.heic')) {
-    processedFile = await convertHeicToJpeg(file);
+  if (file.type === 'image/heic' || file.type === 'image/heif') {
+    try {
+      processedFile = await convertHeicToJpeg(file);
+    } catch (error) {
+      throw new Error("iPhone users: Please convert HEIC to JPEG first");
+    }
   }
 
-  // Compress the image
+  // Compress image
   return new Promise((resolve, reject) => {
     new Compressor(processedFile, {
       ...settings,
@@ -680,16 +683,15 @@ async function processImage(file, settings) {
           resolve(result);
         }
       },
-      error: () => reject(new Error("Failed to compress image"))
+      error: () => reject(new Error("Compression failed"))
     });
   });
 }
 
 async function convertHeicToJpeg(heicFile) {
   try {
-    // Check if heic2any is available
+    // Load heic2any if not available
     if (typeof heic2any === 'undefined') {
-      // Load dynamically if not available
       const heicModule = await import('https://cdn.jsdelivr.net/npm/heic2any@2.0.5/dist/heic2any.min.js');
       window.heic2any = heicModule.default;
     }
@@ -700,13 +702,12 @@ async function convertHeicToJpeg(heicFile) {
       quality: 0.8
     });
 
-    return new File([result], heicFile.name.replace(/\.heic$/i, '.jpg'), {
+    return new File([result], heicFile.name.replace(/\.[^/.]+$/, '.jpg'), {
       type: "image/jpeg"
     });
   } catch (error) {
     console.error("HEIC conversion failed:", error);
-    // Fallback: Return original file if conversion fails
-    return heicFile;
+    throw error; // Re-throw to show user message
   }
 }
 
