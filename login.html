@@ -6,17 +6,19 @@
   <title>Login | Yunoxa: Endless Choices, One Marketplace</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <style>
-    :root {
-      --yunoxa-red: #e02f2f;
-      --yunoxa-dark-red: #c41e1e;
-      --yunoxa-yellow: #ffd700;
-      --yunoxa-orange: #ff9500;
-      --yunoxa-blue: #2e8bff;
-      --yunoxa-bg: #f8f8f8;
-      --yunoxa-text: #333;
-      --yunoxa-light-text: #666;
-    }
+
+<style>
+
+:root {
+            --yunoxa-red: #e02f2f;
+            --yunoxa-dark-red: #c41e1e;
+            --yunoxa-yellow: #ffd700;
+            --yunoxa-orange: #ff9500;
+            --yunoxa-blue: #2e8bff;
+            --yunoxa-bg: #f8f8f8;
+            --yunoxa-text: #333;
+            --yunoxa-light-text: #666;
+        }
     * {
       margin: 0;
       padding: 0;
@@ -147,7 +149,6 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
-      margin-top: 20px;
     }
     
     .social-btn {
@@ -160,11 +161,6 @@
       background-color: white;
       cursor: pointer;
       font-size: 14px;
-      transition: all 0.3s ease;
-    }
-    
-    .social-btn:hover {
-      background-color: #f5f5f5;
     }
     
     .social-btn img {
@@ -247,69 +243,57 @@
     
     /* Bottom Navigation */
     .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background-color: white;
-      display: flex;
-      justify-content: space-around;
-      padding: 10px 0;
-      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-      z-index: 1000;
-    }
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
 
-    .nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-decoration: none;
-      color: var(--yunoxa-light-text);
-      font-size: 12px;
-    }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--yunoxa-light-text);
+            font-size: 12px;
+        }
 
-    .nav-item.active {
-      color: var(--yunoxa-red);
-    }
+        .nav-item.active {
+            color: var(--yunoxa-red);
+        }
 
-    .nav-icon {
-      font-size: 20px;
-      margin-bottom: 3px;
-    }
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 3px;
+        }
 
-    /* Terms text */
-    .terms-text {
-      font-size: 12px;
-      color: var(--yunoxa-light-text);
-      text-align: center;
-      margin-top: 20px;
-      line-height: 1.4;
-    }
+        .terms-checkbox {
+  display: flex;
+  align-items: flex-start;
+  margin: 15px 0;
+  font-size: 12px;
+}
 
-    .terms-links {
-      color: var(--yunoxa-red);
-      text-decoration: none;
-    }
+.terms-checkbox input {
+  margin-right: 8px;
+  margin-top: 2px;
+}
 
-    .terms-links:hover {
-      text-decoration: underline;
-    }
+.terms-links {
+  color: var(--yunoxa-red);
+  text-decoration: none;
+}
 
-    /* Loading spinner */
-    .spinner {
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      border: 3px solid rgba(255,255,255,.3);
-      border-radius: 50%;
-      border-top-color: #fff;
-      animation: spin 1s ease-in-out infinite;
-      margin-right: 8px;
-    }
+.terms-links:hover {
+  text-decoration: underline;
+}
 
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
   </style>
 </head>
 <body>
@@ -318,6 +302,7 @@
       <img src="img/Favicon.png" alt="Yunoxa Logo" class="logo">
     </div>
   </header>
+
 
   <nav class="bottom-nav">
     <a href="index.html" class="nav-item">
@@ -336,7 +321,8 @@
         <i class="fas fa-heart nav-icon"></i>
         <span>favorites</span>
     </a>
-  </nav>
+
+</nav>
   
   <main class="main">
     <div class="container">
@@ -363,28 +349,15 @@
                 <a href="#" id="show-reset">Forgot password?</a>
               </div>
             </div>
-            <button type="submit" class="login-btn" id="login-submit">
-              <span id="login-text">Login</span>
-              <span id="login-spinner" class="spinner" style="display: none;"></span>
-            </button>
+            <div class="terms-checkbox">
+              <input type="checkbox" id="login-terms" required>
+              <label for="login-terms">
+                I agree to the <a href="termsandconditions.html" class="terms-links">Terms and Conditions</a> and have read the <a href="privacypolicy.html" class="terms-links">Privacy Policy</a>
+              </label>
+            </div>
+            <button type="submit" class="login-btn">Login</button>
             <div id="login-error" class="error"></div>
           </form>
-
-          <div class="divider">or continue with</div>
-
-          <div class="social-login">
-            <button class="social-btn" id="google-login">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google logo">
-              Continue with Google
-            </button>
-          </div>
-
-          <p class="terms-text">
-            By clicking "Login" or "Continue with Google", you agree to the 
-            <a href="termsandconditions.html" class="terms-links">Yunoxa Terms and Services</a> 
-            and acknowledge the 
-            <a href="privacypolicy.html" class="terms-links">Privacy Policy</a>.
-          </p>
         </div>
         
         <!-- Sign Up Form -->
@@ -404,20 +377,17 @@
               <label for="signup-confirm-password" class="form-label">Confirm Password</label>
               <input type="password" id="signup-confirm-password" class="form-input" placeholder="Confirm password" required>
             </div>
+            
+            <div class="terms-checkbox">
+              <input type="checkbox" id="signup-terms" required>
+              <label for="signup-terms">
+                I agree to the <a href="#" class="terms-links">Terms and Conditions</a> and have read the <a href="#" class="terms-links">Privacy Policy</a>
+              </label>
+            </div>
 
-            <button type="submit" class="login-btn" id="signup-submit">
-              <span id="signup-text">Create account</span>
-              <span id="signup-spinner" class="spinner" style="display: none;"></span>
-            </button>
+            <button type="submit" class="login-btn">Sign Up</button>
             <div id="signup-error" class="error"></div>
             <div id="signup-success" class="success"></div>
-
-            <p class="terms-text">
-              By clicking "Create account" or "Continue with Google", you agree to the 
-              <a href="termsandconditions.html" class="terms-links">Yunoxa Terms and Services</a> 
-              and acknowledge the 
-              <a href="privacypolicy.html" class="terms-links">Privacy Policy</a>.
-            </p>
           </form>
         </div>
         
@@ -429,10 +399,7 @@
               <label for="reset-email" class="form-label">Email</label>
               <input type="email" id="reset-email" class="form-input" placeholder="Enter your email address" required>
             </div>
-            <button type="submit" class="login-btn" id="reset-submit">
-              <span id="reset-text">Send Reset Link</span>
-              <span id="reset-spinner" class="spinner" style="display: none;"></span>
-            </button>
+            <button type="submit" class="login-btn">Send Reset Link</button>
             <div id="reset-error" class="error"></div>
             <div id="reset-success" class="success"></div>
           </form>
@@ -462,11 +429,9 @@
     const signupForm = document.getElementById('signupForm')
     const resetForm = document.getElementById('resetForm')
     const showResetLink = document.getElementById('show-reset')
-    const googleLoginBtn = document.getElementById('google-login')
 
     // Variables
     let cartSyncInterval = null
-    let authSubscription = null
 
     // Tab switching
     tabs.forEach(tab => {
@@ -530,156 +495,6 @@
       }
     }
 
-    // Show loading state for buttons
-    function showLoading(buttonId) {
-      const button = document.getElementById(buttonId)
-      const textSpan = button.querySelector('span:first-child')
-      const spinnerSpan = button.querySelector('span:last-child')
-      
-      textSpan.style.display = 'none'
-      spinnerSpan.style.display = 'inline-block'
-      button.disabled = true
-    }
-
-    // Hide loading state for buttons
-    function hideLoading(buttonId) {
-      const button = document.getElementById(buttonId)
-      const textSpan = button.querySelector('span:first-child')
-      const spinnerSpan = button.querySelector('span:last-child')
-      
-      textSpan.style.display = 'inline'
-      spinnerSpan.style.display = 'none'
-      button.disabled = false
-    }
-
-    // Save session to localStorage in the correct format
-    function saveSessionToStorage(session) {
-      // Save in the format Supabase expects
-      localStorage.setItem(
-        `sb-${supabaseUrl.split('//')[1].split('.')[0]}-auth-token`,
-        JSON.stringify({
-          access_token: session.access_token,
-          expires_at: session.expires_at,
-          expires_in: session.expires_in,
-          refresh_token: session.refresh_token,
-          token_type: session.token_type,
-          user: {
-            id: session.user.id,
-            aud: session.user.aud,
-            role: session.user.role,
-            email: session.user.email,
-            phone: session.user.phone,
-            app_metadata: session.user.app_metadata,
-            user_metadata: session.user.user_metadata
-          }
-        })
-      )
-      
-      // Also save a simplified version for our own use
-      localStorage.setItem('supabase_session', JSON.stringify({
-        access_token: session.access_token,
-        expires_at: Date.now() + (session.expires_in * 1000),
-        refresh_token: session.refresh_token,
-        user: {
-          id: session.user.id,
-          email: session.user.email
-        }
-      }))
-    }
-
-    // Create user record in creatordata table
-    async function createUserRecord(user) {
-      try {
-        // Check if user already exists
-        const { data: existingUser, error: fetchError } = await supabase
-          .from('creatordata')
-          .select()
-          .eq('id', user.id)
-          .single()
-        
-        if (fetchError && fetchError.code !== 'PGRST116') throw fetchError
-        
-        // If user doesn't exist, create record
-        if (!existingUser) {
-          const { data, error } = await supabase
-            .from('creatordata')
-            .insert([{
-              id: user.id,
-              email: user.email,
-              created_at: new Date().toISOString(),
-              auth_method: user.app_metadata.provider || 'email',
-              cart: []
-            }])
-            .select()
-          
-          if (error) throw error
-          console.log('User record created in creatordata table:', data)
-          return data
-        }
-        return existingUser
-      } catch (error) {
-        console.error('Error creating user record:', error)
-        throw error
-      }
-    }
-
-    // Google Login Handler
-    googleLoginBtn.addEventListener('click', async (e) => {
-      e.preventDefault()
-      const errorElement = document.getElementById('login-error')
-      
-      errorElement.textContent = ''
-      
-      try {
-        // Show loading state
-        showLoading('login-submit')
-        
-        // Set up auth state listener first
-        if (authSubscription) authSubscription.unsubscribe()
-        
-        authSubscription = supabase.auth.onAuthStateChange(async (event, session) => {
-          if (event === 'SIGNED_IN' && session) {
-            try {
-              // Save session to localStorage
-              saveSessionToStorage(session)
-              
-              // Create user record in creatordata table
-              await createUserRecord(session.user)
-              
-              // Start cart synchronization
-              startCartSync(session.user.id)
-              
-              // Redirect to home page
-              window.location.href = '/index.html'
-            } catch (error) {
-              console.error('Post-auth error:', error)
-              errorElement.textContent = 'Error completing sign-in. Please try again.'
-              hideLoading('login-submit')
-            }
-          }
-        })
-        
-        // Initiate Google OAuth
-        const { error } = await supabase.auth.signInWithOAuth({
-          provider: 'google',
-          options: {
-            redirectTo: window.location.origin,
-            queryParams: {
-              access_type: 'offline',
-              prompt: 'consent'
-            }
-          }
-        })
-        
-        if (error) throw error
-        
-      } catch (error) {
-        console.error('Google auth error:', error)
-        errorElement.textContent = error.message || 'Authentication failed. Please try again.'
-        hideLoading('login-submit')
-      }
-    })
-
     // Sign up handler
     signupForm.addEventListener('submit', async (e) => {
       e.preventDefault()
@@ -688,6 +503,12 @@
       const confirmPassword = document.getElementById('signup-confirm-password').value
       const errorElement = document.getElementById('signup-error')
       const successElement = document.getElementById('signup-success')
+      const termsAgreed = document.getElementById('signup-terms').checked
+      
+      if (!termsAgreed) {
+        errorElement.textContent = 'You must agree to the Terms of Service and Privacy Policy'
+        return
+      }
       
       errorElement.textContent = ''
       successElement.textContent = ''
@@ -699,47 +520,49 @@
       }
       
       try {
-        showLoading('signup-submit')
+        console.log('Starting signup process...')
         
         // Create user in Auth
         const { data: authData, error: authError } = await supabase.auth.signUp({
           email,
-          password,
-          options: {
-            data: {
-              username: email.split('@')[0] // Set default username
-            }
-          }
+          password
         })
         
         if (authError) throw authError
+        console.log('Auth user created:', authData)
         
-        // Create user record in creatordata table
-        await createUserRecord(authData.user)
+        // Create user in creatordata table with password
+        const { data: userData, error: userError } = await supabase
+          .from('creatordata')
+          .insert([{
+            id: authData.user.id,
+            email,
+            password: password, // Store password in creatordata table
+            created_at: new Date().toISOString(),
+            cart: [] // Initialize empty cart
+          }])
+          
+        if (userError) throw userError
+        console.log('User data created:', userData)
         
         successElement.textContent = 'Account created successfully! Check your email for confirmation.'
         
+        // Start cart synchronization
+        startCartSync(authData.user.id)
+        
         // Automatically login after successful signup
-        const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
+        const { error: loginError } = await supabase.auth.signInWithPassword({
           email,
           password
         })
         
         if (loginError) throw loginError
         
-        // Save session to localStorage
-        saveSessionToStorage(loginData.session)
-        
-        // Start cart synchronization
-        startCartSync(loginData.user.id)
-        
         // Redirect to home page
-        window.location.href = '/index.html'
+        window.location.href = '/'
       } catch (error) {
         console.error('Signup error:', error)
-        errorElement.textContent = error.message || 'Error creating account. Please try again.'
-      } finally {
-        hideLoading('signup-submit')
+        errorElement.textContent = error.message
       }
     })
 
@@ -749,12 +572,16 @@
       const email = document.getElementById('login-identifier').value
       const password = document.getElementById('login-password').value
       const errorElement = document.getElementById('login-error')
+      const termsAgreed = document.getElementById('login-terms').checked
+      
+      if (!termsAgreed) {
+        errorElement.textContent = 'You must agree to the Terms of Service'
+        return
+      }
       
       errorElement.textContent = ''
       
       try {
-        showLoading('login-submit')
-        
         const { data, error } = await supabase.auth.signInWithPassword({
           email,
           password
@@ -762,8 +589,11 @@
         
         if (error) throw error
         
-        // Save session to localStorage
-        saveSessionToStorage(data.session)
+        // Save the full session to localStorage
+        localStorage.setItem('supabase_session', JSON.stringify({
+          user: data.user,
+          session: data.session
+        }))
         
         // Start cart synchronization
         startCartSync(data.user.id)
@@ -771,9 +601,7 @@
         // Login successful - redirect
         window.location.href = '/index.html'
       } catch (error) {
-        errorElement.textContent = error.message || 'Login failed. Please try again.'
-      } finally {
-        hideLoading('login-submit')
+        errorElement.textContent = error.message
       }
     })
 
@@ -788,51 +616,29 @@
       successElement.textContent = ''
       
       try {
-        showLoading('reset-submit')
-        
         const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: window.location.origin + '/index.html'
+          redirectTo: 'https://yunoxa.com/'
         })
         
         if (error) throw error
         
         successElement.textContent = 'Password reset link sent to your email!'
       } catch (error) {
-        errorElement.textContent = error.message || 'Error sending reset link. Please try again.'
-      } finally {
-        hideLoading('reset-submit')
+        errorElement.textContent = error.message
       }
     })
 
     // Initialize the page
-    document.addEventListener('DOMContentLoaded', async () => {
+    document.addEventListener('DOMContentLoaded', () => {
       showTab('login')
       
-      // Check for existing session
-      const sessionKey = `sb-${supabaseUrl.split('//')[1].split('.')[0]}-auth-token`
-      const savedSession = localStorage.getItem(sessionKey)
-      
-      if (savedSession) {
-        try {
-          const session = JSON.parse(savedSession)
-          
-          // Set the session in Supabase client
-          const { data, error } = await supabase.auth.setSession({
-            access_token: session.access_token,
-            refresh_token: session.refresh_token
-          })
-          
-          if (!error && data.session) {
-            // Start cart synchronization
-            startCartSync(data.user.id)
-            
-            // Check if we need to create the user record (just in case)
-            await createUserRecord(data.user)
-          }
-        } catch (error) {
-          console.error('Error restoring session:', error)
+      // Check if user is already logged in
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        if (session) {
+          // Start cart synchronization
+          startCartSync(session.user.id)
         }
-      }
+      })
     })
   </script>
 </body>
