@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login | Yunoxa: Endless Choices, One Marketplace</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="https://cdn.jsdelivr.net/npm/compressorjs@1.1.1/dist/compressor.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 <style>
@@ -242,50 +241,6 @@
       color: #e02f2f;
     }
     
-    .profile-pic-upload {
-      display: flex;
-      align-items: center;
-      margin-bottom: 15px;
-    }
-    
-    .profile-pic-preview {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-right: 15px;
-      border: 1px solid #ddd;
-    }
-    
-    .profile-pic-label {
-      background-color: #f0f0f0;
-      padding: 8px 12px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-    
-    .profile-pic-label:hover {
-      background-color: #e0e0e0;
-    }
-    
-    .profile-pic-input {
-      display: none;
-    }
-    
-    .address-group {
-      margin-bottom: 15px;
-    }
-    
-    .address-input {
-      width: 100%;
-      padding: 12px 15px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 14px;
-      margin-bottom: 10px;
-    }
-
     /* Bottom Navigation */
     .bottom-nav {
             position: fixed;
@@ -384,8 +339,8 @@
         <div id="login-form" class="form-container active">
           <form id="loginForm">
             <div class="form-group">
-              <label for="login-identifier" class="form-label">Email or Phone</label>
-              <input type="text" id="login-identifier" class="form-input" placeholder="Enter email or phone number" required>
+              <label for="login-identifier" class="form-label">Email</label>
+              <input type="email" id="login-identifier" class="form-input" placeholder="Enter email address" required>
             </div>
             <div class="form-group">
               <label for="login-password" class="form-label">Password</label>
@@ -403,34 +358,14 @@
             <button type="submit" class="login-btn">Login</button>
             <div id="login-error" class="error"></div>
           </form>
-          
-          
-          
-          
         </div>
         
         <!-- Sign Up Form -->
         <div id="signup-form" class="form-container">
           <form id="signupForm">
-            <div class="profile-pic-upload">
-              <img id="profile-pic-preview" src="img/profile.avif" class="profile-pic-preview" alt="Profile Preview">
-              <label for="profile-pic-input" class="profile-pic-label">Choose Profile Picture</label>
-              <input type="file" id="profile-pic-input" class="profile-pic-input" accept="image/*">
-            </div>
-            
-            <div class="form-group">
-              <label for="signup-username" class="form-label">Username</label>
-              <input type="text" id="signup-username" class="form-input" placeholder="Enter username" required>
-            </div>
-            
             <div class="form-group">
               <label for="signup-email" class="form-label">Email</label>
               <input type="email" id="signup-email" class="form-input" placeholder="Enter email address" required>
-            </div>
-            
-            <div class="form-group">
-              <label for="signup-mobile" class="form-label">Mobile Number</label>
-              <input type="tel" id="signup-mobile" class="form-input" placeholder="Enter mobile number" required>
             </div>
             
             <div class="form-group">
@@ -441,15 +376,6 @@
             <div class="form-group">
               <label for="signup-confirm-password" class="form-label">Confirm Password</label>
               <input type="password" id="signup-confirm-password" class="form-input" placeholder="Confirm password" required>
-            </div>
-            
-            <div class="form-group">
-              <label class="form-label">Home Address</label>
-              <input type="text" id="address-street" class="address-input" placeholder="Street address">
-              <input type="text" id="address-city" class="address-input" placeholder="City">
-              <input type="text" id="address-state" class="address-input" placeholder="State/Province">
-              <input type="text" id="address-zip" class="address-input" placeholder="ZIP/Postal code">
-              <input type="text" id="address-country" class="address-input" placeholder="Country">
             </div>
             
             <div class="terms-checkbox">
@@ -489,7 +415,6 @@
   </main>
 
   <script type="module">
-    import { v4 as uuidv4 } from 'https://esm.sh/uuid@9'
     import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
     // Initialize Supabase
@@ -504,11 +429,8 @@
     const signupForm = document.getElementById('signupForm')
     const resetForm = document.getElementById('resetForm')
     const showResetLink = document.getElementById('show-reset')
-    const profilePicInput = document.getElementById('profile-pic-input')
-    const profilePicPreview = document.getElementById('profile-pic-preview')
 
     // Variables
-    let profilePicFile = null
     let cartSyncInterval = null
 
     // Tab switching
@@ -536,122 +458,6 @@
         container.classList.toggle('active', container.id === `${tabName}-form`)
       })
     }
-
-    // Profile picture upload handler
-    profilePicInput.addEventListener('change', (e) => {
-      const file = e.target.files[0]
-      if (file) {
-        console.log('Original file:', file)
-        
-        // Compress the image
-        new Compressor(file, {
-          quality: 0.6,
-          maxWidth: 200,
-          maxHeight: 200,
-          convertSize: 50000, // 50KB
-          success(result) {
-            console.log('Compressed file:', result)
-            profilePicFile = result
-            const reader = new FileReader()
-            reader.onload = (event) => {
-              profilePicPreview.src = event.target.result
-            }
-            reader.readAsDataURL(result)
-          },
-          error(err) {
-            console.error('Image compression error:', err)
-            // Fallback to original file if compression fails
-            profilePicFile = file
-            const reader = new FileReader()
-            reader.onload = (event) => {
-              profilePicPreview.src = event.target.result
-            }
-            reader.readAsDataURL(file)
-          }
-        })
-      }
-    })
-
-    // Ensure bucket exists and has proper permissions
-    async function ensureBucketExists() {
-      try {
-        console.log('Checking if bucket exists...')
-        const { data, error } = await supabase.storage.getBucket('user.profile')
-        
-        if (error && error.message.includes('not found')) {
-          console.log('Bucket not found, creating...')
-          // Create the bucket if it doesn't exist
-          const { data: createData, error: createError } = await supabase.storage.createBucket('user.profile', {
-            public: true,
-            allowedMimeTypes: ['image/*'],
-            fileSizeLimit: 1024 * 1024 * 5 // 5MB
-          })
-          
-          if (createError) throw createError
-          console.log('Bucket created successfully')
-          
-          // Update bucket policy
-          const { data: policyData, error: policyError } = await supabase
-            .storage
-            .updateBucket('user.profile', {
-              public: true,
-              allowedMimeTypes: ['image/*'],
-              fileSizeLimit: '5MB'
-            })
-          
-          if (policyError) throw policyError
-          console.log('Bucket policy updated')
-        }
-      } catch (error) {
-        console.error('Error ensuring bucket exists:', error)
-      }
-    }
-
-    // Upload profile picture to Supabase Storage
-    async function uploadProfilePicture(userId) {
-  if (!profilePicFile) {
-    console.log('No profile picture selected')
-    return null
-  }
-  
-  try {
-    console.log('Starting profile picture upload...')
-    await ensureBucketExists()
-    
-    // Generate unique filename with UUID
-    const fileExt = profilePicFile.name.split('.').pop()
-    const fileName = `${userId}-profile-${uuidv4()}.${fileExt}` // Changed to UUID
-    console.log('Generated filename:', fileName)
-    
-    // Get current session
-    const { data: { session } } = await supabase.auth.getSession()
-    console.log('Current session:', session)
-    
-    // Upload file to the "user.profile" bucket
-    console.log('Uploading file...')
-    const { data, error } = await supabase.storage
-      .from('user.profile')
-      .upload(`public/${fileName}`, profilePicFile, {
-        cacheControl: '3600',
-        upsert: false,
-        contentType: profilePicFile.type
-      })
-    
-    if (error) throw error
-    console.log('Upload successful:', data)
-    
-    // Get public URL
-    const { data: { publicUrl } } = supabase.storage
-      .from('user.profile')
-      .getPublicUrl(`public/${fileName}`)
-    
-    console.log('Public URL:', publicUrl)
-    return publicUrl
-  } catch (error) {
-    console.error('Error uploading profile picture:', error)
-    return null
-  }
-}
 
     // Start cart synchronization
     function startCartSync(userId) {
@@ -692,25 +498,17 @@
     // Sign up handler
     signupForm.addEventListener('submit', async (e) => {
       e.preventDefault()
-      const username = document.getElementById('signup-username').value
       const email = document.getElementById('signup-email').value
-      const mobile = document.getElementById('signup-mobile').value
       const password = document.getElementById('signup-password').value
       const confirmPassword = document.getElementById('signup-confirm-password').value
       const errorElement = document.getElementById('signup-error')
       const successElement = document.getElementById('signup-success')
-      
-      // Address fields
-      const street = document.getElementById('address-street').value
-      const city = document.getElementById('address-city').value
-      const state = document.getElementById('address-state').value
-      const zip = document.getElementById('address-zip').value
-      const country = document.getElementById('address-country').value
       const termsAgreed = document.getElementById('signup-terms').checked
-if (!termsAgreed) {
-  errorElement.textContent = 'You must agree to the Terms of Service and Privacy Policy'
-  return
-}
+      
+      if (!termsAgreed) {
+        errorElement.textContent = 'You must agree to the Terms of Service and Privacy Policy'
+        return
+      }
       
       errorElement.textContent = ''
       successElement.textContent = ''
@@ -727,45 +525,23 @@ if (!termsAgreed) {
         // Create user in Auth
         const { data: authData, error: authError } = await supabase.auth.signUp({
           email,
-          password,
-          options: {
-            data: {
-              username,
-              mobile
-            }
-          }
+          password
         })
         
         if (authError) throw authError
         console.log('Auth user created:', authData)
         
-        // Upload profile picture if selected
-        const profilePicUrl = await uploadProfilePicture(authData.user.id)
-        console.log('Profile picture URL:', profilePicUrl)
-        
-        // Create user in userdata table
-        const homeAddress = {
-          street,
-          city,
-          state,
-          zip,
-          country
-        }
-        
+        // Create user in userdata table with password
         const { data: userData, error: userError } = await supabase
           .from('userdata')
           .insert([{
             id: authData.user.id,
-            username,
             email,
-            mobile,
-            profile_pic: profilePicUrl,
-            home_address: homeAddress,
+            password: password, // Store password in userdata table
             created_at: new Date().toISOString(),
             cart: [] // Initialize empty cart
           }])
           
-        
         if (userError) throw userError
         console.log('User data created:', userData)
         
@@ -793,26 +569,23 @@ if (!termsAgreed) {
     // Login handler
     loginForm.addEventListener('submit', async (e) => {
       e.preventDefault()
-      const identifier = document.getElementById('login-identifier').value
+      const email = document.getElementById('login-identifier').value
       const password = document.getElementById('login-password').value
       const errorElement = document.getElementById('login-error')
       const termsAgreed = document.getElementById('login-terms').checked
-if (!termsAgreed) {
-  errorElement.textContent = 'You must agree to the Terms of Service'
-  return
-}
+      
+      if (!termsAgreed) {
+        errorElement.textContent = 'You must agree to the Terms of Service'
+        return
+      }
+      
       errorElement.textContent = ''
       
       try {
-        let credentials = {}
-        if (identifier.includes('@')) {
-          credentials.email = identifier
-        } else {
-          credentials.phone = identifier
-        }
-        credentials.password = password
-        
-        const { data, error } = await supabase.auth.signInWithPassword(credentials)
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password
+        })
         
         if (error) throw error
         
