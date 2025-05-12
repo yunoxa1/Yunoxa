@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login | Yunoxa: Endless Choices, One Marketplace</title>
+  <title>Login | Yunoxa : Endless Choices, One Marketplace</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/compressorjs@1.1.1/dist/compressor.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     :root {
@@ -17,235 +18,176 @@
       --yunoxa-text: #333;
       --yunoxa-light-text: #666;
     }
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      transition: all 0.3s ease-in-out;
     }
-    
+
     body {
-      background-color: #f8f8f8;
-      color: #333;
+      background-color: var(--yunoxa-bg);
+      color: var(--yunoxa-text);
+      animation: fadeInBody 1s ease-in forwards;
     }
-    
+
+    @keyframes fadeInBody {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
     .container {
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 15px;
+      animation: fadeIn 1.2s ease-in forwards;
     }
-    
+
     .header {
       background-color: white;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
       padding: 15px 0;
+      animation: slideDown 0.8s ease-out;
     }
-    
-    .header-container {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+
+    @keyframes slideDown {
+      from { transform: translateY(-100px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
-    
-    .logo {
-      height: 40px;
-    }
-    
-    .main {
-      padding: 30px 0;
-      min-height: calc(100vh - 120px);
-    }
-    
+
     .login-container {
       max-width: 400px;
-      margin: 0 auto;
+      margin: 50px auto;
       background-color: white;
-      border-radius: 8px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      padding: 40px;
+      animation: popIn 0.6s ease-in-out;
     }
-    
+
+    @keyframes popIn {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
     .login-title {
-      font-size: 24px;
-      font-weight: bold;
+      font-size: 26px;
+      font-weight: 700;
       margin-bottom: 20px;
       text-align: center;
-      color: #333;
+      color: var(--yunoxa-text);
     }
-    
+
     .login-subtitle {
       font-size: 14px;
-      color: #666;
+      color: var(--yunoxa-light-text);
       text-align: center;
       margin-bottom: 25px;
     }
-    
-    .form-group {
-      margin-bottom: 20px;
-    }
-    
-    .form-label {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 14px;
-      color: #333;
-    }
-    
-    .form-input {
-      width: 100%;
-      padding: 12px 15px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 14px;
-    }
-    
+
     .form-input:focus {
-      border-color: #e02f2f;
-      outline: none;
+      border-color: var(--yunoxa-red);
+      box-shadow: 0 0 5px var(--yunoxa-red);
     }
-    
+
     .login-btn {
-      width: 100%;
-      background-color: #e02f2f;
+      background: linear-gradient(45deg, var(--yunoxa-red), var(--yunoxa-dark-red));
       color: white;
       border: none;
-      border-radius: 4px;
-      padding: 12px;
+      border-radius: 8px;
+      padding: 14px;
       font-size: 16px;
       font-weight: bold;
       cursor: pointer;
-      margin-top: 10px;
+      animation: pulse 2s infinite;
     }
-    
-    .login-btn:hover {
-      background-color: #e05d00;
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
     }
-    
+
     .divider {
+      margin: 20px 0;
       display: flex;
       align-items: center;
-      margin: 20px 0;
+      justify-content: center;
+      gap: 10px;
       color: #999;
       font-size: 14px;
     }
-    
+
     .divider::before, .divider::after {
       content: "";
       flex: 1;
-      border-bottom: 1px solid #ddd;
+      height: 1px;
+      background-color: #ddd;
+      animation: expand 1s ease-in-out forwards;
     }
-    
-    .divider::before {
-      margin-right: 10px;
+
+    @keyframes expand {
+      from { width: 0; }
+      to { width: 100%; }
     }
-    
-    .divider::after {
-      margin-left: 10px;
-    }
-    
-    .social-login {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 20px;
-    }
-    
+
     .social-btn {
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 10px;
+      padding: 12px;
       border: 1px solid #ddd;
-      border-radius: 4px;
+      border-radius: 8px;
       background-color: white;
       cursor: pointer;
       font-size: 14px;
       transition: all 0.3s ease;
+      width: 100%;
+      margin-bottom: 10px;
     }
-    
+
     .social-btn:hover {
-      background-color: #f5f5f5;
+      background-color: var(--yunoxa-bg);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
     }
-    
+
     .social-btn img {
       width: 20px;
+      height: 20px;
       margin-right: 10px;
     }
-    
-    .footer-links {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin-top: 20px;
+
+    #google-login {
+      color: #4285F4;
+      border-color: #4285F4;
     }
-    
-    .footer-link {
-      color: #666;
-      font-size: 12px;
-      text-decoration: none;
+
+    #google-login:hover {
+      background-color: rgba(66, 133, 244, 0.1);
     }
-    
+
     .footer-link:hover {
-      color: #e02f2f;
+      color: var(--yunoxa-red);
+      text-shadow: 0 0 5px rgba(224, 47, 47, 0.4);
     }
-    
-    .tabs {
-      display: flex;
-      border-bottom: 1px solid #ddd;
-      margin-bottom: 20px;
-    }
-    
+
     .tab {
-      flex: 1;
-      text-align: center;
-      padding: 10px;
-      cursor: pointer;
-      font-weight: bold;
-      color: #666;
+      transition: border-bottom 0.3s;
     }
-    
+
     .tab.active {
-      color: #e02f2f;
-      border-bottom: 2px solid #e02f2f;
+      color: var(--yunoxa-red);
+      border-bottom: 3px solid var(--yunoxa-red);
+      animation: underlineSlide 0.4s ease-in-out;
     }
-    
-    .form-container {
-      display: none;
+
+    @keyframes underlineSlide {
+      from { width: 0; opacity: 0; }
+      to { width: 100%; opacity: 1; }
     }
-    
-    .form-container.active {
-      display: block;
-    }
-    
-    .error {
-      color: #ff0000;
-      font-size: 12px;
-      margin-top: 5px;
-    }
-    
-    .success {
-      color: #00a650;
-      font-size: 12px;
-      margin-top: 5px;
-    }
-    
-    .forgot-password {
-      text-align: right;
-      margin-top: -1px;
-      margin-bottom: 1px;
-    }
-    
-    .forgot-password a {
-      color: #666;
-      font-size: 12px;
-      text-decoration: none;
-    }
-    
-    .forgot-password a:hover {
-      color: #e02f2f;
-    }
-    
-    /* Bottom Navigation */
+
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -257,24 +199,69 @@
       padding: 10px 0;
       box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
       z-index: 1000;
+      animation: slideUp 0.7s ease-in;
     }
 
-    .nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-decoration: none;
-      color: var(--yunoxa-light-text);
-      font-size: 12px;
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
     }
 
     .nav-item.active {
       color: var(--yunoxa-red);
+      animation: glow 1s ease-in-out infinite alternate;
     }
 
-    .nav-icon {
-      font-size: 20px;
-      margin-bottom: 3px;
+    @keyframes glow {
+      from { text-shadow: 0 0 5px var(--yunoxa-red); }
+      to { text-shadow: 0 0 15px var(--yunoxa-red); }
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: #333;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .error {
+      color: #ff0000;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+    .success {
+      color: #00a650;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+    .forgot-password {
+      text-align: right;
+      margin-top: -1px;
+      margin-bottom: 1px;
+    }
+
+    .forgot-password a {
+      color: #666;
+      font-size: 12px;
+      text-decoration: none;
+    }
+
+    .forgot-password a:hover {
+      color: #e02f2f;
     }
 
     .terms-checkbox {
@@ -298,20 +285,81 @@
       text-decoration: underline;
     }
 
-    /* Loading spinner */
-    .spinner {
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      border: 3px solid rgba(255,255,255,.3);
-      border-radius: 50%;
-      border-top-color: #fff;
-      animation: spin 1s ease-in-out infinite;
+    .loading-indicator {
+      display: none;
+      text-align: center;
+      padding: 10px;
+      margin: 10px 0;
+    }
+
+    .loading-indicator i {
       margin-right: 8px;
+      animation: spin 1s linear infinite;
     }
 
     @keyframes spin {
-      to { transform: rotate(360deg); }
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .logo {
+      height: 40px;
+    }
+
+    .header-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid #ddd;
+      margin-bottom: 20px;
+    }
+
+    .tab {
+      flex: 1;
+      text-align: center;
+      padding: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      color: #666;
+    }
+
+    .form-container {
+      display: none;
+    }
+
+    .form-container.active {
+      display: block;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .footer-link {
+      color: #666;
+      font-size: 12px;
+      text-decoration: none;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: var(--yunoxa-light-text);
+      font-size: 12px;
+    }
+
+    .nav-icon {
+      font-size: 20px;
+      margin-bottom: 3px;
     }
   </style>
 </head>
@@ -345,11 +393,11 @@
     <div class="container">
       <div class="login-container">
         <h1 class="login-title">Welcome to Yunoxa</h1>
-        <p class="login-subtitle">Endless Choices, One Marketplace</p>
+        <p class="login-subtitle">professional seller account for free.</p>
         
         <div class="tabs">
           <div class="tab active" data-tab="login">Login</div>
-          <div class="tab" data-tab="signup">Sign Up</div>
+          <div class="tab" data-tab="signup">Sign Up as Seller</div>
         </div>
         
         <!-- Login Form -->
@@ -369,13 +417,10 @@
             <div class="terms-checkbox">
               <input type="checkbox" id="login-terms" required>
               <label for="login-terms">
-                I agree to the <a href="termsandconditions.html" class="terms-links">Terms and Conditions</a> and have read the <a href="privacypolicy.html" class="terms-links">Privacy Policy</a>
+                I agree to the <a href="termsandconditions.html" class="terms-links">Terms and Conditions</a>
               </label>
             </div>
-            <button type="submit" class="login-btn" id="login-submit">
-              <span id="login-text">Login</span>
-              <span id="login-spinner" class="spinner" style="display: none;"></span>
-            </button>
+            <button type="submit" class="login-btn">Login</button>
             <div id="login-error" class="error"></div>
           </form>
 
@@ -410,14 +455,15 @@
             <div class="terms-checkbox">
               <input type="checkbox" id="signup-terms" required>
               <label for="signup-terms">
-                I agree to the <a href="#" class="terms-links">Terms and Conditions</a> and have read the <a href="#" class="terms-links">Privacy Policy</a>
+                I agree to the <a href="termsandconditions.html" class="terms-links">Terms and Conditions</a> and have read the <a href="privacypolicy.html" class="terms-links">Privacy Policy</a>
               </label>
             </div>
-
-            <button type="submit" class="login-btn" id="signup-submit">
-              <span id="signup-text">Sign Up</span>
-              <span id="signup-spinner" class="spinner" style="display: none;"></span>
-            </button>
+            
+            <div class="loading-indicator" id="signup-loading">
+              <i class="fas fa-spinner"></i> Creating your account...
+            </div>
+            
+            <button type="submit" class="login-btn" id="signup-submit">Sign Up</button>
             <div id="signup-error" class="error"></div>
             <div id="signup-success" class="success"></div>
           </form>
@@ -431,10 +477,7 @@
               <label for="reset-email" class="form-label">Email</label>
               <input type="email" id="reset-email" class="form-input" placeholder="Enter your email address" required>
             </div>
-            <button type="submit" class="login-btn" id="reset-submit">
-              <span id="reset-text">Send Reset Link</span>
-              <span id="reset-spinner" class="spinner" style="display: none;"></span>
-            </button>
+            <button type="submit" class="login-btn">Send Reset Link</button>
             <div id="reset-error" class="error"></div>
             <div id="reset-success" class="success"></div>
           </form>
@@ -450,6 +493,7 @@
   </main>
 
   <script type="module">
+    import { v4 as uuidv4 } from 'https://esm.sh/uuid@9'
     import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
     // Initialize Supabase
@@ -464,10 +508,9 @@
     const signupForm = document.getElementById('signupForm')
     const resetForm = document.getElementById('resetForm')
     const showResetLink = document.getElementById('show-reset')
+    const signupSubmit = document.getElementById('signup-submit')
+    const signupLoading = document.getElementById('signup-loading')
     const googleLoginBtn = document.getElementById('google-login')
-
-    // Variables
-    let cartSyncInterval = null
 
     // Tab switching
     tabs.forEach(tab => {
@@ -495,65 +538,7 @@
       })
     }
 
-    // Start cart synchronization
-    function startCartSync(userId) {
-      // Clear any existing interval
-      if (cartSyncInterval) clearInterval(cartSyncInterval)
-      
-      // Sync immediately
-      syncCartWithServer(userId)
-      
-      // Then sync every 10 seconds
-      cartSyncInterval = setInterval(() => {
-        syncCartWithServer(userId)
-      }, 10000)
-    }
-
-    // Sync cart data between localStorage and server
-    async function syncCartWithServer(userId) {
-      try {
-        // Get cart from localStorage with key "cart"
-        const localCart = localStorage.getItem('cart')
-        const cartData = localCart ? JSON.parse(localCart) : []
-        
-        // Update cart in database
-        const { data, error } = await supabase
-          .from('creatordata')
-          .update({ cart: cartData })
-          .eq('id', userId)
-          .select()
-        
-        if (error) throw error
-        
-        console.log('Cart synchronized successfully:', cartData)
-      } catch (error) {
-        console.error('Error syncing cart:', error)
-      }
-    }
-
-    // Show loading state for buttons
-    function showLoading(buttonId) {
-      const button = document.getElementById(buttonId)
-      const textSpan = button.querySelector('span:first-child')
-      const spinnerSpan = button.querySelector('span:last-child')
-      
-      textSpan.style.display = 'none'
-      spinnerSpan.style.display = 'inline-block'
-      button.disabled = true
-    }
-
-    // Hide loading state for buttons
-    function hideLoading(buttonId) {
-      const button = document.getElementById(buttonId)
-      const textSpan = button.querySelector('span:first-child')
-      const spinnerSpan = button.querySelector('span:last-child')
-      
-      textSpan.style.display = 'inline'
-      spinnerSpan.style.display = 'none'
-      button.disabled = false
-    }
-
-    // Google Login Handler
+    // Google Login/Signup Handler
     googleLoginBtn.addEventListener('click', async (e) => {
       e.preventDefault()
       const errorElement = document.getElementById('login-error')
@@ -567,9 +552,6 @@
       errorElement.textContent = ''
       
       try {
-        // Show loading state
-        showLoading('login-submit')
-        
         // 1. Authenticate with Google
         const { error } = await supabase.auth.signInWithOAuth({
           provider: 'google',
@@ -580,48 +562,44 @@
         
         if (error) throw error
         
-        // 2. Listen for auth state changes to handle the redirect
-        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-          if (event === 'SIGNED_IN' && session) {
-            // 3. Check if user exists in creatordata table
-            const { data: creator, error: creatorError } = await supabase
-              .from('creatordata')
-              .select()
-              .eq('id', session.user.id)
-              .single()
-            
-            if (creatorError && creatorError.code !== 'PGRST116') throw creatorError
-            
-            // 4. If new user, create creator record
-            if (!creator) {
-              const { error: insertError } = await supabase
-                .from('creatordata')
-                .insert([{
-                  id: session.user.id,
-                  email: session.user.email,
-                  created_at: new Date().toISOString(),
-                  auth_method: 'google',
-                  cart: []
-                }])
-              
-              if (insertError) throw insertError
-            }
-            
-            // Start cart synchronization
-            startCartSync(session.user.id)
-            
-            // Redirect to home page
-            window.location.href = '/index.html'
-          }
-        })
+        // 2. Get user session
+        const { data: { user }, error: userError } = await supabase.auth.getUser()
+        if (userError) throw userError
         
-        // Unsubscribe after handling
-        setTimeout(() => subscription.unsubscribe(), 10000)
+        // 3. Check if user exists in your creatordata table
+        const { data: creator, error: creatorError } = await supabase
+          .from('creatordata')
+          .select()
+          .eq('id', user.id)
+          .single()
+        
+        if (creatorError && creatorError.code !== 'PGRST116') throw creatorError
+        
+        // 4. If new user, create creator record
+        if (!creator) {
+          const { error: insertError } = await supabase
+            .from('creatordata')
+            .insert([{
+              id: user.id,
+              email: user.email,
+              created_at: new Date().toISOString(),
+              auth_method: 'google'
+            }])
+          
+          if (insertError) throw insertError
+          
+          // Optional: Redirect to profile setup
+          window.location.href = '/complete-profile'
+          return
+        }
+        
+        // 5. Redirect existing users
+        window.location.href = '/'
         
       } catch (error) {
-        console.error('Google auth error:', error)
         errorElement.textContent = 'Authentication failed. Please try again.'
-        hideLoading('login-submit')
+        console.error('Google auth error:', error)
+        await supabase.auth.signOut() // Clean up failed auth
       }
     })
 
@@ -635,24 +613,26 @@
       const successElement = document.getElementById('signup-success')
       const termsAgreed = document.getElementById('signup-terms').checked
       
-      if (!termsAgreed) {
-        errorElement.textContent = 'You must agree to the Terms of Service and Privacy Policy'
-        return
-      }
-      
       errorElement.textContent = ''
       successElement.textContent = ''
       
       // Basic validation
+      if (!termsAgreed) {
+        errorElement.textContent = 'You must agree to the Terms of Service and Privacy Policy'
+        return
+      }
+
       if (password !== confirmPassword) {
         errorElement.textContent = 'Passwords do not match'
         return
       }
+
+      // Show loading indicator
+      signupSubmit.disabled = true
+      signupLoading.style.display = 'block'
       
       try {
-        showLoading('signup-submit')
-        
-        // Create user in Auth
+        // 1. Create auth user
         const { data: authData, error: authError } = await supabase.auth.signUp({
           email,
           password
@@ -660,24 +640,20 @@
         
         if (authError) throw authError
         
-        // Create user in creatordata table with password
-        const { data: userData, error: userError } = await supabase
+        // 2. Create creator record with password
+        const { data: creatorData, error: creatorError } = await supabase
           .from('creatordata')
           .insert([{
             id: authData.user.id,
             email,
             password: password,
             created_at: new Date().toISOString(),
-            auth_method: 'email',
-            cart: []
+            auth_method: 'email'
           }])
-          
-        if (userError) throw userError
         
-        successElement.textContent = 'Account created successfully! Check your email for confirmation.'
+        if (creatorError) throw creatorError
         
-        // Start cart synchronization
-        startCartSync(authData.user.id)
+        successElement.textContent = 'Account created successfully! Check your email for verification.'
         
         // Automatically login after successful signup
         const { error: loginError } = await supabase.auth.signInWithPassword({
@@ -688,12 +664,14 @@
         if (loginError) throw loginError
         
         // Redirect to home page
-        window.location.href = '/index.html'
+        window.location.href = '/'
+        
       } catch (error) {
         console.error('Signup error:', error)
         errorElement.textContent = error.message
       } finally {
-        hideLoading('signup-submit')
+        signupSubmit.disabled = false
+        signupLoading.style.display = 'none'
       }
     })
 
@@ -713,30 +691,32 @@
       errorElement.textContent = ''
       
       try {
-        showLoading('login-submit')
-        
-        const { data, error } = await supabase.auth.signInWithPassword({
+        // Authenticate with Supabase Auth
+        const { data: { session, user }, error: authError } = await supabase.auth.signInWithPassword({
           email,
           password
         })
         
-        if (error) throw error
+        if (authError) throw authError
         
-        // Save the full session to localStorage
-        localStorage.setItem('supabase_session', JSON.stringify({
-          user: data.user,
-          session: data.session
-        }))
+        // Get the return_to URL from query parameters
+        const urlParams = new URLSearchParams(window.location.search)
+        const returnTo = urlParams.get('return_to') || '/create.html'
         
-        // Start cart synchronization
-        startCartSync(data.user.id)
+        // Redirect with session tokens
+        if (session) {
+          const redirectUrl = new URL(returnTo, window.location.origin)
+          redirectUrl.searchParams.set('access_token', session.access_token)
+          redirectUrl.searchParams.set('refresh_token', session.refresh_token)
+          window.location.href = redirectUrl.toString()
+        }
         
-        // Login successful - redirect
-        window.location.href = '/index.html'
       } catch (error) {
         errorElement.textContent = error.message
-      } finally {
-        hideLoading('login-submit')
+        // Sign out the user if there was a verification issue
+        if (error.message.includes('not yet verified') || error.message.includes('not eligible')) {
+          await supabase.auth.signOut()
+        }
       }
     })
 
@@ -751,8 +731,6 @@
       successElement.textContent = ''
       
       try {
-        showLoading('reset-submit')
-        
         const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
           redirectTo: 'https://yunoxa.com/'
         })
@@ -762,22 +740,12 @@
         successElement.textContent = 'Password reset link sent to your email!'
       } catch (error) {
         errorElement.textContent = error.message
-      } finally {
-        hideLoading('reset-submit')
       }
     })
 
     // Initialize the page
     document.addEventListener('DOMContentLoaded', () => {
       showTab('login')
-      
-      // Check if user is already logged in
-      supabase.auth.getSession().then(({ data: { session } }) => {
-        if (session) {
-          // Start cart synchronization
-          startCartSync(session.user.id)
-        }
-      })
     })
   </script>
 </body>
