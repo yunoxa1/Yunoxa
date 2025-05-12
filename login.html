@@ -482,7 +482,7 @@
         
         // Update cart in database
         const { data, error } = await supabase
-          .from('userdata')
+          .from('creatordata')
           .update({ cart: cartData })
           .eq('id', userId)
           .select()
@@ -531,13 +531,13 @@
         if (authError) throw authError
         console.log('Auth user created:', authData)
         
-        // Create user in userdata table with password
+        // Create user in creatordata table with password
         const { data: userData, error: userError } = await supabase
-          .from('userdata')
+          .from('creatordata')
           .insert([{
             id: authData.user.id,
             email,
-            password: password, // Store password in userdata table
+            password: password, // Store password in creatordata table
             created_at: new Date().toISOString(),
             cart: [] // Initialize empty cart
           }])

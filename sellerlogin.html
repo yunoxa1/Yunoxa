@@ -247,66 +247,25 @@
       color: #e02f2f;
     }
     
-    .profile-pic-upload {
-      display: flex;
-      align-items: center;
-      margin-bottom: 15px;
-    }
-    
-    .profile-pic-preview {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-right: 15px;
-      border: 1px solid #ddd;
-    }
-    
-    .profile-pic-label {
-      background-color: #f0f0f0;
-      padding: 8px 12px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-    
-    .profile-pic-label:hover {
-      background-color: #e0e0e0;
-    }
-    
-    .profile-pic-input {
-      display: none;
-    }
-    
-    .nic-upload-container {
-      margin-bottom: 15px;
-    }
-    
-    .nic-upload-label {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 14px;
-      color: #333;
-    }
-    
-    .nic-upload-preview {
-      width: 100%;
-      max-height: 200px;
-      object-fit: contain;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      margin-top: 10px;
-      display: none;
-    }
-    
     .terms-checkbox {
-      margin: 15px 0;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
+      margin: 15px 0;
+      font-size: 12px;
     }
-    
+
     .terms-checkbox input {
-      margin-right: 10px;
+      margin-right: 8px;
+      margin-top: 2px;
+    }
+
+    .terms-links {
+      color: var(--yunoxa-red);
+      text-decoration: none;
+    }
+
+    .terms-links:hover {
+      text-decoration: underline;
     }
     
     .loading-indicator {
@@ -328,55 +287,215 @@
 
     /* Bottom Navigation */
     .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-color: white;
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 0;
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-        }
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: white;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+    }
 
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
-            color: var(--yunoxa-light-text);
-            font-size: 12px;
-        }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: var(--yunoxa-light-text);
+      font-size: 12px;
+    }
 
-        .nav-item.active {
-            color: var(--yunoxa-red);
-        }
+    .nav-item.active {
+      color: var(--yunoxa-red);
+    }
 
-        .nav-icon {
-            font-size: 20px;
-            margin-bottom: 3px;
-        }
+    .nav-icon {
+      font-size: 20px;
+      margin-bottom: 3px;
+    }
 
-        .terms-checkbox {
+    /* Root Variables */
+:root {
+  --yunoxa-red: #e02f2f;
+  --yunoxa-dark-red: #c41e1e;
+  --yunoxa-yellow: #ffd700;
+  --yunoxa-orange: #ff9500;
+  --yunoxa-blue: #2e8bff;
+  --yunoxa-bg: #f8f8f8;
+  --yunoxa-text: #333;
+  --yunoxa-light-text: #666;
+}
+
+/* Reset and Fonts */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  transition: all 0.3s ease-in-out;
+}
+
+body {
+  background-color: var(--yunoxa-bg);
+  color: var(--yunoxa-text);
+  animation: fadeInBody 1s ease-in forwards;
+}
+
+@keyframes fadeInBody {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+  animation: fadeIn 1.2s ease-in forwards;
+}
+
+.header {
+  background-color: white;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  padding: 15px 0;
+  animation: slideDown 0.8s ease-out;
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-100px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.login-container {
+  max-width: 400px;
+  margin: 50px auto;
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  padding: 40px;
+  animation: popIn 0.6s ease-in-out;
+}
+
+@keyframes popIn {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.login-title {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-align: center;
+  color: var(--yunoxa-text);
+}
+
+.login-subtitle {
+  font-size: 14px;
+  color: var(--yunoxa-light-text);
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.form-input:focus {
+  border-color: var(--yunoxa-red);
+  box-shadow: 0 0 5px var(--yunoxa-red);
+}
+
+.login-btn {
+  background: linear-gradient(45deg, var(--yunoxa-red), var(--yunoxa-dark-red));
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.divider {
+  margin: 20px 0;
   display: flex;
-  align-items: flex-start;
-  margin: 15px 0;
-  font-size: 12px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #999;
+  font-size: 14px;
 }
 
-.terms-checkbox input {
-  margin-right: 8px;
-  margin-top: 2px;
+.divider::before, .divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background-color: #ddd;
+  animation: expand 1s ease-in-out forwards;
 }
 
-.terms-links {
+@keyframes expand {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+.social-btn:hover {
+  background-color: var(--yunoxa-bg);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.footer-link:hover {
   color: var(--yunoxa-red);
-  text-decoration: none;
+  text-shadow: 0 0 5px rgba(224, 47, 47, 0.4);
 }
 
-.terms-links:hover {
-  text-decoration: underline;
+.tab {
+  transition: border-bottom 0.3s;
+}
+
+.tab.active {
+  color: var(--yunoxa-red);
+  border-bottom: 3px solid var(--yunoxa-red);
+  animation: underlineSlide 0.4s ease-in-out;
+}
+
+@keyframes underlineSlide {
+  from { width: 0; opacity: 0; }
+  to { width: 100%; opacity: 1; }
+}
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: white;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  animation: slideUp 0.7s ease-in;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.nav-item.active {
+  color: var(--yunoxa-red);
+  animation: glow 1s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from { text-shadow: 0 0 5px var(--yunoxa-red); }
+  to { text-shadow: 0 0 15px var(--yunoxa-red); }
 }
 
   </style>
@@ -384,7 +503,7 @@
 <body>
   <header class="header">
     <div class="container header-container">
-      <img src="img/Favicon.png" alt= Yunoxa  Logo class="logo">
+      <img src="img/Favicon.png" alt="Yunoxa Logo" class="logo">
     </div>
   </header>
 
@@ -405,13 +524,12 @@
         <i class="fas fa-heart nav-icon"></i>
         <span>favorites</span>
     </a>
-
-</nav>
+  </nav>
   
   <main class="main">
     <div class="container">
       <div class="login-container">
-        <h1 class="login-title">Welcome to Yunoxa </h1>
+        <h1 class="login-title">Welcome to Yunoxa</h1>
         <p class="login-subtitle">professional seller account for free.</p>
         
         <div class="tabs">
@@ -423,8 +541,8 @@
         <div id="login-form" class="form-container active">
           <form id="loginForm">
             <div class="form-group">
-              <label for="login-identifier" class="form-label">Email or Phone</label>
-              <input type="text" id="login-identifier" class="form-input" placeholder="Enter email or phone number" required>
+              <label for="login-identifier" class="form-label">Email</label>
+              <input type="email" id="login-identifier" class="form-input" placeholder="Enter email address" required>
             </div>
             <div class="form-group">
               <label for="login-password" class="form-label">Password</label>
@@ -442,32 +560,14 @@
             <button type="submit" class="login-btn">Login</button>
             <div id="login-error" class="error"></div>
           </form>
-          
-          
         </div>
         
         <!-- Sign Up Form -->
         <div id="signup-form" class="form-container">
           <form id="signupForm">
-            <div class="profile-pic-upload">
-              <img id="profile-pic-preview" src="img/profile.avif" class="profile-pic-preview" alt="Profile Preview">
-              <label for="profile-pic-input" class="profile-pic-label">Choose Profile Picture</label>
-              <input type="file" id="profile-pic-input" class="profile-pic-input" accept="image/*">
-            </div>
-            
-            <div class="form-group">
-              <label for="signup-username" class="form-label">Username</label>
-              <input type="text" id="signup-username" class="form-input" placeholder="Enter username" required>
-            </div>
-            
             <div class="form-group">
               <label for="signup-email" class="form-label">Email</label>
               <input type="email" id="signup-email" class="form-input" placeholder="Enter email address" required>
-            </div>
-            
-            <div class="form-group">
-              <label for="signup-mobile" class="form-label">Mobile Number</label>
-              <input type="tel" id="signup-mobile" class="form-input" placeholder="Enter mobile number" required>
             </div>
             
             <div class="form-group">
@@ -478,32 +578,6 @@
             <div class="form-group">
               <label for="signup-confirm-password" class="form-label">Confirm Password</label>
               <input type="password" id="signup-confirm-password" class="form-input" placeholder="Confirm password" required>
-            </div>
-            
-            <div class="form-group">
-              <label for="nic-no" class="form-label">NIC Number</label>
-              <input type="text" id="nic-no" class="form-input" placeholder="Enter NIC number" required>
-            </div>
-            
-            <div class="nic-upload-container">
-              <label for="nic-front-input" class="nic-upload-label">NIC Front Photo</label>
-              <input type="file" id="nic-front-input" class="profile-pic-input" accept="image/*" required>
-              <img id="nic-front-preview" class="nic-upload-preview" alt="NIC Front Preview">
-            </div>
-            
-            <div class="nic-upload-container">
-              <label for="nic-back-input" class="nic-upload-label">NIC Back Photo</label>
-              <input type="file" id="nic-back-input" class="profile-pic-input" accept="image/*" required>
-              <img id="nic-back-preview" class="nic-upload-preview" alt="NIC Back Preview">
-            </div>
-            
-            <div class="form-group">
-              <label class="form-label">Home Address</label>
-              <input type="text" id="address-street" class="form-input" placeholder="Street address" required>
-              <input type="text" id="address-city" class="form-input" placeholder="City" required>
-              <input type="text" id="address-state" class="form-input" placeholder="State/Province" required>
-              <input type="text" id="address-zip" class="form-input" placeholder="ZIP/Postal code" required>
-              <input type="text" id="address-country" class="form-input" placeholder="Country" required>
             </div>
             
             <div class="terms-checkbox">
@@ -562,19 +636,8 @@
     const signupForm = document.getElementById('signupForm')
     const resetForm = document.getElementById('resetForm')
     const showResetLink = document.getElementById('show-reset')
-    const profilePicInput = document.getElementById('profile-pic-input')
-    const profilePicPreview = document.getElementById('profile-pic-preview')
-    const nicFrontInput = document.getElementById('nic-front-input')
-    const nicFrontPreview = document.getElementById('nic-front-preview')
-    const nicBackInput = document.getElementById('nic-back-input')
-    const nicBackPreview = document.getElementById('nic-back-preview')
     const signupSubmit = document.getElementById('signup-submit')
     const signupLoading = document.getElementById('signup-loading')
-
-    // Variables
-    let profilePicFile = null
-    let nicFrontFile = null
-    let nicBackFile = null
 
     // Tab switching
     tabs.forEach(tab => {
@@ -602,262 +665,27 @@
       })
     }
 
-    // Profile picture upload handler
-    profilePicInput.addEventListener('change', (e) => {
-  const file = e.target.files[0]
-  if (file) {
-    new Compressor(file, {
-      quality: 0.5, // Reduced from 0.6
-      maxWidth: 150, // Reduced from 200
-      maxHeight: 150, // Reduced from 200
-      convertSize: 50000, // Convert to JPEG if file size is over 50KB
-      success(result) {
-        if (result.size > 50000) {
-          // If still too large, compress further
-          new Compressor(result, {
-            quality: 0.4,
-            maxWidth: 120,
-            maxHeight: 120,
-            success(finalResult) {
-              profilePicFile = finalResult
-              const reader = new FileReader()
-              reader.onload = (event) => {
-                profilePicPreview.src = event.target.result
-              }
-              reader.readAsDataURL(finalResult)
-            },
-            error(err) {
-              console.error('Second compression failed:', err)
-              handleCompressionFallback(result)
-            }
-          })
-        } else {
-          profilePicFile = result
-          const reader = new FileReader()
-          reader.onload = (event) => {
-            profilePicPreview.src = event.target.result
-          }
-          reader.readAsDataURL(result)
-        }
-      },
-      error(err) {
-        console.error('Image compression error:', err)
-        handleCompressionFallback(file)
-      }
-    })
-  }
-})
-
-function handleCompressionFallback(file) {
-  // Fallback compression with more aggressive settings
-  new Compressor(file, {
-    quality: 0.3,
-    maxWidth: 100,
-    maxHeight: 100,
-    convertSize: 0, // Always convert
-    success(result) {
-      profilePicFile = result
-      const reader = new FileReader()
-      reader.onload = (event) => {
-        profilePicPreview.src = event.target.result
-      }
-      reader.readAsDataURL(result)
-    },
-    error(err) {
-      console.error('Fallback compression failed:', err)
-      // Use original file as last resort
-      profilePicFile = file
-      const reader = new FileReader()
-      reader.onload = (event) => {
-        profilePicPreview.src = event.target.result
-      }
-      reader.readAsDataURL(file)
-    }
-  })
-}
-
-    // NIC Front upload handler
-    // NIC Front upload handler
-nicFrontInput.addEventListener('change', (e) => {
-  const file = e.target.files[0]
-  if (file) {
-    new Compressor(file, {
-      quality: 0.5, // Reduced from 0.7
-      maxWidth: 600, // Reduced from 800
-      maxHeight: 600, // Reduced from 800
-      convertSize: 50000,
-      success(result) {
-        if (result.size > 50000) {
-          new Compressor(result, {
-            quality: 0.4,
-            maxWidth: 500,
-            maxHeight: 500,
-            success(finalResult) {
-              nicFrontFile = finalResult
-              const reader = new FileReader()
-              reader.onload = (event) => {
-                nicFrontPreview.src = event.target.result
-                nicFrontPreview.style.display = 'block'
-              }
-              reader.readAsDataURL(finalResult)
-            },
-            error(err) {
-              console.error('Second compression failed:', err)
-              handleNicCompressionFallback(result, 'front')
-            }
-          })
-        } else {
-          nicFrontFile = result
-          const reader = new FileReader()
-          reader.onload = (event) => {
-            nicFrontPreview.src = event.target.result
-            nicFrontPreview.style.display = 'block'
-          }
-          reader.readAsDataURL(result)
-        }
-      },
-      error(err) {
-        console.error('Image compression error:', err)
-        handleNicCompressionFallback(file, 'front')
-      }
-    })
-  }
-})
-
-// NIC Back upload handler (similar to front)
-nicBackInput.addEventListener('change', (e) => {
-  // Same implementation as nicFrontInput but for back
-})
-
-// NIC Back upload handler
-nicBackInput.addEventListener('change', (e) => {
-  const file = e.target.files[0]
-  if (file) {
-    new Compressor(file, {
-      quality: 0.7,
-      maxWidth: 800,
-      maxHeight: 800,
-      convertSize: 50000,
-      success(result) {
-        if (result.size > 50000) {
-          new Compressor(result, {
-            quality: 0.4,
-            maxWidth: 500,
-            maxHeight: 500,
-            success(finalResult) {
-              nicBackFile = finalResult
-              const reader = new FileReader()
-              reader.onload = (event) => {
-                nicBackPreview.src = event.target.result
-                nicBackPreview.style.display = 'block'
-              }
-              reader.readAsDataURL(finalResult)
-            },
-            error(err) {
-              console.error('Second compression failed:', err)
-              handleNicCompressionFallback(result, 'front')
-            }
-          })
-        } else {
-          nicBackFile = result
-          const reader = new FileReader()
-          reader.onload = (event) => {
-            nicBackPreview.src = event.target.result
-            nicBackPreview.style.display = 'block'
-          }
-          reader.readAsDataURL(result)
-        }
-      },
-      error(err) {
-        console.error('Image compression error:', err)
-        handleNicCompressionFallback(file, 'front')
-      }
-    })
-  }
-})
-
-    // Upload profile picture to Supabase Storage
-    async function uploadProfilePicture(userId, file) {
-  const fileExt = file.name.split('.').pop()
-  const fileName = `${userId}-profile-${uuidv4()}.${fileExt}` // Add UUID
-  
-  const { data, error } = await supabase.storage
-    .from('user.profile')
-    .upload(fileName, file, {
-      cacheControl: '3600',
-      contentType: file.type
-    })
-  
-  if (error) throw error
-  
-  const { data: { publicUrl } } = supabase.storage
-    .from('user.profile')
-    .getPublicUrl(fileName)
-  
-  return publicUrl
-}
-
-    // Upload NIC document to Supabase Storage
-    async function uploadNicDocument(userId, file, type) {
-  const fileExt = file.name.split('.').pop()
-  const fileName = `${userId}-nic-${type}-${uuidv4()}.${fileExt}` // Add UUID
-  
-  const { data, error } = await supabase.storage
-    .from('creators')
-    .upload(fileName, file, {
-      cacheControl: '3600',
-      contentType: file.type
-    })
-  
-  if (error) throw error
-  
-  const { data: { publicUrl } } = supabase.storage
-    .from('creators')
-    .getPublicUrl(fileName)
-  
-  return publicUrl
-}
-
     // Sign up handler
     signupForm.addEventListener('submit', async (e) => {
       e.preventDefault()
-      const username = document.getElementById('signup-username').value
       const email = document.getElementById('signup-email').value
-      const mobile = document.getElementById('signup-mobile').value
       const password = document.getElementById('signup-password').value
       const confirmPassword = document.getElementById('signup-confirm-password').value
-      const nicNo = document.getElementById('nic-no').value
       const errorElement = document.getElementById('signup-error')
       const successElement = document.getElementById('signup-success')
-      
-      // Address fields
-      const street = document.getElementById('address-street').value
-      const city = document.getElementById('address-city').value
-      const state = document.getElementById('address-state').value
-      const zip = document.getElementById('address-zip').value
-      const country = document.getElementById('address-country').value
       const termsAgreed = document.getElementById('signup-terms').checked
-if (!termsAgreed) {
-  errorElement.textContent = 'You must agree to the Terms of Service and Privacy Policy'
-  return
-}
       
       errorElement.textContent = ''
       successElement.textContent = ''
       
       // Basic validation
+      if (!termsAgreed) {
+        errorElement.textContent = 'You must agree to the Terms of Service and Privacy Policy'
+        return
+      }
+
       if (password !== confirmPassword) {
         errorElement.textContent = 'Passwords do not match'
-        return
-      }
-      
-      if (!nicFrontFile || !nicBackFile) {
-        errorElement.textContent = 'Please upload both NIC front and back photos'
-        return
-      }
-      
-      if (!document.getElementById('signup-terms').checked) {
-        errorElement.textContent = 'You must agree to the terms and conditions'
         return
       }
 
@@ -869,66 +697,24 @@ if (!termsAgreed) {
         // 1. Create auth user
         const { data: authData, error: authError } = await supabase.auth.signUp({
           email,
-          password,
-          options: {
-            data: {
-              username,
-              mobile
-            }
-          }
+          password
         })
         
         if (authError) throw authError
         
-        // 2. Upload files
-        const uploadWithRetry = async (file, type) => {
-          try {
-            if (type === 'profile') {
-              return await uploadProfilePicture(authData.user.id, file)
-            } else {
-              return await uploadNicDocument(authData.user.id, file, type)
-            }
-          } catch (error) {
-            console.error(`Upload failed: ${error.message}`)
-            throw new Error(`Failed to upload ${type} image`)
-          }
-        }
-
-        const [profilePicUrl, nicFrontUrl, nicBackUrl] = await Promise.all([
-          profilePicFile ? uploadWithRetry(profilePicFile, 'profile') : null,
-          uploadWithRetry(nicFrontFile, 'front'),
-          uploadWithRetry(nicBackFile, 'back')
-        ])
-        
-        // 3. Create creator record
-        const homeAddress = {
-          street,
-          city,
-          state,
-          zip,
-          country
-        }
-        
+        // 2. Create creator record with password
         const { data: creatorData, error: creatorError } = await supabase
           .from('creatordata')
           .insert([{
             id: authData.user.id,
-            username,
             email,
-            mobile,
-            profile_pic: profilePicUrl,
-            home_address: homeAddress,
-            created_at: new Date().toISOString(),
-            nic_no: nicNo,
-            nic_front: nicFrontUrl,
-            nic_back: nicBackUrl,
-            
+            password: password, // Storing password in creatordata table
+            created_at: new Date().toISOString()
           }])
-          
         
         if (creatorError) throw creatorError
         
-        successElement.textContent = 'Account created successfully! Your account is pending verification. You will receive an email once verified.'
+        successElement.textContent = 'Account created successfully! Check your email for verification.'
         
         // Automatically login after successful signup
         const { error: loginError } = await supabase.auth.signInWithPassword({
@@ -952,72 +738,50 @@ if (!termsAgreed) {
 
     // Login handler
     loginForm.addEventListener('submit', async (e) => {
-        e.preventDefault()
-        const identifier = document.getElementById('login-identifier').value
-        const password = document.getElementById('login-password').value
-        const errorElement = document.getElementById('login-error')
-        const termsAgreed = document.getElementById('login-terms').checked
-if (!termsAgreed) {
-  errorElement.textContent = 'You must agree to the Terms of Service'
-  return
-}
+      e.preventDefault()
+      const email = document.getElementById('login-identifier').value
+      const password = document.getElementById('login-password').value
+      const errorElement = document.getElementById('login-error')
+      const termsAgreed = document.getElementById('login-terms').checked
+      
+      if (!termsAgreed) {
+        errorElement.textContent = 'You must agree to the Terms of Service'
+        return
+      }
+      
+      errorElement.textContent = ''
+      
+      try {
+        // Authenticate with Supabase Auth
+        const { data: { session, user }, error: authError } = await supabase.auth.signInWithPassword({
+          email,
+          password
+        })
         
+        if (authError) throw authError
         
-        errorElement.textContent = ''
+      
         
-        try {
-            let credentials = {}
-            if (identifier.includes('@')) {
-                credentials.email = identifier
-            } else {
-                credentials.phone = identifier
-            }
-            credentials.password = password
-            
-            // Authenticate with Supabase Auth
-            const { data: { session, user }, error: authError } = await supabase.auth.signInWithPassword(credentials)
-            
-            if (authError) throw authError
-            
-            // Check verification status
-            const { data: creatorData, error: creatorError } = await supabase
-                .from('creatordata')
-                .select('verification')
-                .eq('id', user.id)
-                .single()
-            
-            if (creatorError) throw creatorError
+        // Get the return_to URL from query parameters
+        const urlParams = new URLSearchParams(window.location.search)
+        const returnTo = urlParams.get('return_to') || '/create.html'
         
-        // Handle verification status
-        if (creatorData.verification === 0 || creatorData.verification === null) {
-                throw new Error('Your account is not yet verified by Admin. Please check back later.')
-            } else if (creatorData.verification === 3) {
-                throw new Error('You are not eligible to sell any product.')
-            } else if (creatorData.verification !== 1) {
-                throw new Error('There was an issue with your account verification. Please contact support.')
-            }
-            
-            // Get the return_to URL from query parameters
-            const urlParams = new URLSearchParams(window.location.search)
-            const returnTo = urlParams.get('return_to') || '/create.html'
-            
-            // Redirect with session tokens
-            if (session) {
-                const redirectUrl = new URL(returnTo, window.location.origin)
-                redirectUrl.searchParams.set('access_token', session.access_token)
-                redirectUrl.searchParams.set('refresh_token', session.refresh_token)
-                window.location.href = redirectUrl.toString()
-            }
-            
-        } catch (error) {
-            errorElement.textContent = error.message
-            // Sign out the user if there was a verification issue
-            if (error.message.includes('not yet verified') || error.message.includes('not eligible')) {
-                await supabase.auth.signOut()
-            }
+        // Redirect with session tokens
+        if (session) {
+          const redirectUrl = new URL(returnTo, window.location.origin)
+          redirectUrl.searchParams.set('access_token', session.access_token)
+          redirectUrl.searchParams.set('refresh_token', session.refresh_token)
+          window.location.href = redirectUrl.toString()
         }
+        
+      } catch (error) {
+        errorElement.textContent = error.message
+        // Sign out the user if there was a verification issue
+        if (error.message.includes('not yet verified') || error.message.includes('not eligible')) {
+          await supabase.auth.signOut()
+        }
+      }
     })
-
 
     // Reset password handler
     resetForm.addEventListener('submit', async (e) => {

@@ -685,18 +685,6 @@
 
     async function verifyUserAndShowForm(user) {
         try {
-            // Check verification status
-            const { data: creatorData, error: creatorError } = await supabase
-                .from('creatordata')
-                .select('verification')
-                .eq('id', user.id)
-                .single();
-            
-            if (creatorError || !creatorData || creatorData.verification !== 1) {
-                showVerificationError();
-                return;
-            }
-            
             currentUser = user;
             productForm.style.display = "block";
             loginRequired.style.display = "none";
@@ -708,7 +696,7 @@
             }, 3600000); // 1 hour in milliseconds
             
         } catch (error) {
-            console.error('Verification error:', error);
+            console.error('Error:', error);
             showLoginRequired();
         }
     }
@@ -727,16 +715,6 @@
                 window.location.href = `sellerlogin.html?return_to=${returnUrl}`;
             };
         }
-    }
-
-    function showVerificationError() {
-        loginRequired.innerHTML = `
-            <h2><i class="fas fa-exclamation-triangle"></i> Account Not Verified</h2>
-            <p>Your seller account is not yet verified or not eligible to create products.</p>
-            <a href="sellerlogin.html" class="btn"><i class="fas fa-sign-in-alt"></i> Login with Different Account</a>
-        `;
-        productForm.style.display = "none";
-        loginRequired.style.display = "block";
     }
 
     function showSessionExpired() {
@@ -926,18 +904,6 @@
         const { data: { user }, error: authError } = await supabase.auth.getUser();
         if (authError || !user) {
             showSessionExpired();
-            return;
-        }
-
-        // Verify the user is still valid
-        const { data: creatorData, error: creatorError } = await supabase
-            .from('creatordata')
-            .select('verification')
-            .eq('id', user.id)
-            .single();
-        
-        if (creatorError || !creatorData || creatorData.verification !== 1) {
-            showVerificationError();
             return;
         }
 
