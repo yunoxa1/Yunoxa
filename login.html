@@ -552,12 +552,34 @@
       button.disabled = false
     }
 
-    // Save user session to localStorage
+    // Save session to localStorage in the correct format
     function saveSessionToStorage(session) {
+      // Save in the format Supabase expects
+      localStorage.setItem(
+        `sb-${supabaseUrl.split('//')[1].split('.')[0]}-auth-token`,
+        JSON.stringify({
+          access_token: session.access_token,
+          expires_at: session.expires_at,
+          expires_in: session.expires_in,
+          refresh_token: session.refresh_token,
+          token_type: session.token_type,
+          user: {
+            id: session.user.id,
+            aud: session.user.aud,
+            role: session.user.role,
+            email: session.user.email,
+            phone: session.user.phone,
+            app_metadata: session.user.app_metadata,
+            user_metadata: session.user.user_metadata
+          }
+        })
+      )
+      
+      // Also save a simplified version for our own use
       localStorage.setItem('supabase_session', JSON.stringify({
         access_token: session.access_token,
-        refresh_token: session.refresh_token,
         expires_at: Date.now() + (session.expires_in * 1000),
+        refresh_token: session.refresh_token,
         user: {
           id: session.user.id,
           email: session.user.email
@@ -579,7 +601,7 @@
         
         // If user doesn't exist, create record
         if (!existingUser) {
-          const { error: createError } = await supabase
+          const { data, error } = await supabase
             .from('creatordata')
             .insert([{
               id: user.id,
@@ -588,10 +610,13 @@
               auth_method: user.app_metadata.provider || 'email',
               cart: []
             }])
+            .select()
           
-          if (createError) throw createError
-          console.log('User record created in creatordata table')
+          if (error) throw error
+          console.log('User record created in creatordata table:', data)
+          return data
         }
+        return existingUser
       } catch (error) {
         console.error('Error creating user record:', error)
         throw error
@@ -638,7 +663,11 @@
         const { error } = await supabase.auth.signInWithOAuth({
           provider: 'google',
           options: {
-            redirectTo: window.location.origin
+            redirectTo: window.location.origin,
+            queryParams: {
+              access_type: 'offline',
+              prompt: 'consent'
+            }
           }
         })
         
@@ -646,7 +675,7 @@
         
       } catch (error) {
         console.error('Google auth error:', error)
-        errorElement.textContent = 'Authentication failed. Please try again.'
+        errorElement.textContent = error.message || 'Authentication failed. Please try again.'
         hideLoading('login-submit')
       }
     })
@@ -675,7 +704,12 @@
         // Create user in Auth
         const { data: authData, error: authError } = await supabase.auth.signUp({
           email,
-          password
+          password,
+          options: {
+            data: {
+              username: email.split('@')[0] // Set default username
+            }
+          }
         })
         
         if (authError) throw authError
@@ -703,7 +737,7 @@
         window.location.href = '/index.html'
       } catch (error) {
         console.error('Signup error:', error)
-        errorElement.textContent = error.message
+        errorElement.textContent = error.message || 'Error creating account. Please try again.'
       } finally {
         hideLoading('signup-submit')
       }
@@ -737,7 +771,7 @@
         // Login successful - redirect
         window.location.href = '/index.html'
       } catch (error) {
-        errorElement.textContent = error.message
+        errorElement.textContent = error.message || 'Login failed. Please try again.'
       } finally {
         hideLoading('login-submit')
       }
@@ -757,14 +791,14 @@
         showLoading('reset-submit')
         
         const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: 'https://yunoxa.com/'
+          redirectTo: window.location.origin + '/index.html'
         })
         
         if (error) throw error
         
         successElement.textContent = 'Password reset link sent to your email!'
       } catch (error) {
-        errorElement.textContent = error.message
+        errorElement.textContent = error.message || 'Error sending reset link. Please try again.'
       } finally {
         hideLoading('reset-submit')
       }
@@ -775,30 +809,28 @@
       showTab('login')
       
       // Check for existing session
-      const savedSession = localStorage.getItem('supabase_session')
+      const sessionKey = `sb-${supabaseUrl.split('//')[1].split('.')[0]}-auth-token`
+      const savedSession = localStorage.getItem(sessionKey)
+      
       if (savedSession) {
         try {
           const session = JSON.parse(savedSession)
           
-          // Check if session is still valid
-          if (session.expires_at > Date.now()) {
-            // Set the session in Supabase client
-            const { data, error } = await supabase.auth.setSession({
-              access_token: session.access_token,
-              refresh_token: session.refresh_token
-            })
+          // Set the session in Supabase client
+          const { data, error } = await supabase.auth.setSession({
+            access_token: session.access_token,
+            refresh_token: session.refresh_token
+          })
+          
+          if (!error && data.session) {
+            // Start cart synchronization
+            startCartSync(data.user.id)
             
-            if (!error && data.session) {
-              // Start cart synchronization
-              startCartSync(data.user.id)
-            }
-          } else {
-            // Session expired, clear it
-            localStorage.removeItem('supabase_session')
+            // Check if we need to create the user record (just in case)
+            await createUserRecord(data.user)
           }
         } catch (error) {
           console.error('Error restoring session:', error)
-          localStorage.removeItem('supabase_session')
         }
       }
     })
