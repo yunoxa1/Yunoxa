@@ -11,7 +11,7 @@
         :root {
             --primary-color: #e02f2f;
             --secondary-color: #c41e1e;
-            --background-gradient: linear-gradient(135deg, #cf0404 20%, #ff0055 100%);
+            --background-gradient: linear-gradient(135deg, #cf0404 20%, #ff3e7e 100%);
             --box-shadow: 0 15px 30px rgba(0,0,0,0.12);
             --yunoxa-text: #333;
             --yunoxa-light-text: #666;
@@ -236,6 +236,8 @@
             margin: 15px 0;
             font-size: 12px;
             color: var(--yunoxa-light-text);
+            
+            
         }
 
         .terms-checkbox input {
@@ -353,7 +355,7 @@
         color: var(--yunoxa-light-text);
         border-bottom: 2px solid transparent;
         cursor: pointer;
-        background: #fff;
+        background: #ffffff;
     }
 
     .tab-button.active {
@@ -414,6 +416,13 @@
         <div class="form-container sign-in-container">
             <form id="loginForm">
                 <h1>Seller Login</h1>
+                <div class="terms-checkbox">
+                    
+                    <label for="signup-terms">
+                        Start Selling Items For Free With Yunoxa</a>
+                    </label>
+                </div>
+                
                 <input type="email" id="login-identifier" class="form-input" placeholder="Email" required>
                 <input type="password" id="login-password" class="form-input" placeholder="Password" required>
                 <div class="terms-checkbox">
