@@ -496,6 +496,8 @@
             resetContainer.classList.remove('active');
         });
 
+        
+
         // Signup Handler
         document.getElementById('signupForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -537,6 +539,16 @@
                         password: password,
                         created_at: new Date().toISOString()
                     }]);
+
+                    await supabase
+  .from('users')
+  .insert([{
+    id: authData.user.id,
+    email,
+    username: email.split('@')[0], // or ask for username
+    created_at: new Date().toISOString()
+  }]);
+
                 
                 if (creatorError) throw creatorError;
                 
@@ -564,45 +576,74 @@
         });
 
         // Login Handler
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('login-identifier').value;
-            const password = document.getElementById('login-password').value;
-            const errorElement = document.getElementById('login-error');
-            
-            
-            errorElement.textContent = '';
-            
-            
-            
-            try {
-                const { data: { session, user }, error: authError } = await supabase.auth.signInWithPassword({
-                    email,
-                    password
-                });
-                
-                if (authError) throw authError;
-                
-                // Get the return_to URL from query parameters
-                const urlParams = new URLSearchParams(window.location.search);
-                const returnTo = urlParams.get('return_to') || '/create.html';
-                
-                // Redirect with session tokens
-                if (session) {
-                    const redirectUrl = new URL(returnTo, window.location.origin);
-                    redirectUrl.searchParams.set('access_token', session.access_token);
-                    redirectUrl.searchParams.set('refresh_token', session.refresh_token);
-                    window.location.href = redirectUrl.toString();
-                }
-                
-            } catch (error) {
-                errorElement.textContent = error.message;
-                // Sign out the user if there was a verification issue
-                if (error.message.includes('not yet verified') || error.message.includes('not eligible')) {
-                    await supabase.auth.signOut();
-                }
-            }
+        // Login form handler
+// Login form handler with comprehensive tracking
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('login-identifier').value;
+    const password = document.getElementById('login-password').value;
+    const errorElement = document.getElementById('login-error');
+    
+    errorElement.textContent = '';
+    
+    try {
+        // 1. Authenticate user
+        const { data: { user, session }, error: authError } = await supabase.auth.signInWithPassword({
+            email,
+            password
         });
+        
+        if (authError) throw authError;
+
+        // 2. Track successful login (fire-and-forget)
+        await trackLogin(user.id, email, 'success');
+        // 3. Redirect
+        const returnTo = new URLSearchParams(window.location.search).get('return_to') || '/create.html';
+        const redirectUrl = new URL(returnTo, window.location.origin);
+        redirectUrl.searchParams.set('access_token', session.access_token);
+        redirectUrl.searchParams.set('refresh_token', session.refresh_token);
+        window.location.href = redirectUrl.toString();
+        
+    } catch (error) {
+        // Track failed login attempt
+        const email = document.getElementById('login-identifier').value;
+        trackLogin(null, email, 'failed', error.message).catch(e => console.error('Failed login tracking error:', e));
+        await trackLogin(null, email, 'failed', error.message);
+        errorElement.textContent = error.message;
+        if (error.message.includes('not yet verified')) {
+            await supabase.auth.signOut();
+        }
+    }
+});
+
+// Login tracking function
+// Enhanced login tracking function
+async function trackLogin(userId, email, status = 'success', errorMsg = null) {
+    try {
+        const { error } = await supabase
+            .from('user_logins')
+            .insert([{
+                user_id: userId,
+                email: email,
+                user_agent: navigator.userAgent || '',
+                device_type: /Mobile|Android|iP(hone|od)|IEMobile/.test(navigator.userAgent) ? 'mobile' : 'desktop',
+                login_time: new Date().toISOString(),
+                login_status: status,
+                ip_address: '', // Can't reliably get IP client-side
+                error_message: errorMsg
+            }]);
+
+            
+        
+        if (error) throw error;
+        return true;
+    } catch (error) {
+        console.error('Login tracking failed:', error);
+        return false;
+    }
+}
+
+
 
         // Reset Password Handler
         document.getElementById('resetForm').addEventListener('submit', async (e) => {
@@ -629,7 +670,10 @@
                 errorElement.textContent = error.message;
             }
         });
+
+        
     </script>
+    
 <script>
   function showTab(tab) {
     const signIn = document.querySelector('.sign-in-container');
