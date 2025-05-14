@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Update Cookie Preferences</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css"/>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f8f8;
+      color: #333;
+      padding: 40px;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+    h1 {
+      color: #2e8bff;
+    }
+    button {
+      padding: 12px 25px;
+      margin: 15px;
+      border: none;
+      border-radius: 25px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .btn-reset {
+      background-color: #2e8bff;
+      color: white;
+    }
+    .btn-reset:hover {
+      background-color: #1c6dd0;
+    }
+    .notice {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Update Your Cookie Preferences</h1>
+    <p>If you want to change your cookie decision, click the button below to reset your choice.</p>
+    <button class="btn-reset" onclick="resetConsent()">Reset Cookie Consent</button>
+    <div class="notice" id="notice"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js"></script>
+  <script>
+    function deleteCookie(name) {
+      document.cookie = name + '=; Max-Age=0; path=/; SameSite=Lax';
+      document.cookie = name + '=; Max-Age=0; path=/; domain=' + location.hostname + ';';
+    }
+
+    function resetConsent() {
+      // Remove stored consent cookie and tracking cookies
+      document.cookie = 'cookieconsent_status=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 UTC;';
+
+      // Reset overflow in case it was blocked before
+      
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+
+      // Re-show the CookieConsent banner with full settings
+      window.cookieconsent.initialise({
+        palette: {
+          popup: {
+            background: "var(--yunoxa-blkk)",
+            border: "2px solid var(--yunoxa-blue)",
+            boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)"
+          },
+          button: {
+            background: "var(--yunoxa-dark-red)",
+            text: "var(--yunoxa-text)",
+            borderRadius: "25px",
+            boxShadow: "0 4px 12px rgba(30, 36, 0, 0.69)"
+          }
+        },
+        theme: "classic",
+        position: "bottom-right",
+        type: "opt-in",
+        revokable: false,
+        dismissOnScroll: false,
+        dismissOnTimeout: false,
+        content: {
+          message: "We use cookies to enhance your experience.",
+          allow: "Accept",
+          deny: "Decline",
+          link: "Learn more",
+          href: "/privacypolicy.html"
+        },
+        onInitialise: function(status) {
+          document.getElementById("notice").textContent = "Consent re-initialized. Please make your choice again below.";
+        }
+      });
+    }
+
+    // Load root CSS variables for theming
+    const rootStyle = document.createElement("style");
+    rootStyle.textContent = `
+      :root {
+        --yunoxa-red: #e02f2f;
+        --yunoxa-dark-red: rgb(201, 6, 6);
+        --yunoxa-yellow: #ffd700;
+        --yunoxa-blkk: rgb(48, 48, 48);
+        --yunoxa-orange: #ff9500;
+        --yunoxa-blue: #2e8bff;
+        --yunoxa-bg: #f8f8f8;
+        --yunoxa-text: #333;
+        --yunoxa-light-text: #666;
+      }
+    `;
+    document.head.appendChild(rootStyle);
+  </script>
+</body>
+</html>

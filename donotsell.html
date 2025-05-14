@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Do Not Sell My Personal Information</title>
+  <style>
+    /* Original styles remain the same */
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Do Not Sell My Personal Information</h1>
+    <p>
+      Under the California Consumer Privacy Act (CCPA §1798.120), you have the right 
+      to opt out of the sale or sharing of your personal data. This action will:
+    </p>
+    <ul style="text-align: left; margin: 20px auto; max-width: 80%">
+      <li>Disable all non-essential tracking cookies</li>
+      <li>Opt you out of third-party data sharing</li>
+      <li>Preserve necessary site functionality</li>
+    </ul>
+    <button class="btn-optout" onclick="optOut()">Opt Out of Data Sharing</button>
+    <div class="notice" id="notice"></div>
+  </div>
+
+  <script>
+    function deleteCookie(name) {
+      document.cookie = name + '=; Max-Age=0; path=/; SameSite=Lax';
+      document.cookie = name + '=; Max-Age=0; path=/; domain=' + location.hostname + ';';
+    }
+
+    function optOut() {
+      // Set CCPA opt-out flag
+      document.cookie = 'ccpa_opt_out=1; path=/; SameSite=Lax';
+      
+      // Remove tracking cookies
+      ['_ga', '_gid', '_gat', '_fbp', 'cc_cookie'].forEach(deleteCookie);
+      
+      // Update UI
+      document.getElementById("notice").innerHTML = `
+        <strong>CCPA opt-out completed.</strong><br>
+        Non-essential tracking has been disabled. 
+        <a href="/privacypolicy.html">Learn more</a>.
+      `;
+    }
+  </script>
+</body>
+</html>

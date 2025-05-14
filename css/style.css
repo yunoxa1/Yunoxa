@@ -1097,6 +1097,7 @@ html, body {
     white-space: nowrap;
 }
 
+
 .sell-now-btn i,
 .sell-now-btn span {
     color: inherit !important; /* Ensures both icon and text use white */
@@ -1104,6 +1105,40 @@ html, body {
 }
 
 .sell-now-btn:hover {
+    transform: translateY(-0.5px);
+    box-shadow: 0 2px 5px rgba(212, 175, 55, 0.4);
+}
+
+.cookie-now-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: 0 10px;
+    background: linear-gradient(135deg, #ff0000 0%, #ff2f2f 100%);
+    color: #fff !important;      /* Enforce white text */
+    text-decoration: none;
+    border-radius: 40px;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.65rem;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(212, 175, 55, 0.3);
+    border: none;
+    cursor: pointer;
+    height: 25px;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+
+.cookie-now-btn i,
+.cookie-now-btn span {
+    color: inherit !important; /* Ensures both icon and text use white */
+    font-size: 14px;
+}
+
+.cookie-now-btn:hover {
     transform: translateY(-0.5px);
     box-shadow: 0 2px 5px rgba(212, 175, 55, 0.4);
 }
