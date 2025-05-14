@@ -35,15 +35,15 @@ window.addEventListener("load", function () {
     window.cookieconsent.initialise({
       palette: {
         popup: {
-          background: "var(--yunoxa-dark-red)",
+          background: "var(--yunoxa-blkk)",
           border: "2px solid var(--yunoxa-blue)",
           boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)"
         },
         button: {
-          background: "var(--yunoxa-yellow)",
+          background: "var(--yunoxa-dark-red)",
           text: "var(--yunoxa-text)",
           borderRadius: "25px",
-          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)"
+          boxShadow: "0 4px 12px rgba(30, 36, 0, 0.69)"
         }
       },
       theme: "classic",
@@ -99,7 +99,7 @@ window.addEventListener("load", function () {
       padding: 10px 20px;
       font-size: 14px;
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
       transition: background-color 0.3s ease, transform 0.3s ease;
     }
     .cc-btn-allow:hover {
@@ -133,8 +133,9 @@ window.addEventListener("load", function () {
   rootStyle.textContent = `
     :root {
       --yunoxa-red: #e02f2f;
-      --yunoxa-dark-red: rgb(27, 27, 27);
-      --yunoxa-yellow: rgb(218, 40, 40);
+      --yunoxa-dark-red: rgb(201, 6, 6);
+      --yunoxa-yellow: #ffd700;
+      --yunoxa-blkk:rgb(48, 48, 48);
       --yunoxa-orange: #ff9500;
       --yunoxa-blue: #2e8bff;
       --yunoxa-bg: #f8f8f8;
