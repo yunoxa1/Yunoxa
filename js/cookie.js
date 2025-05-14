@@ -15,7 +15,18 @@ window.addEventListener("load", function () {
     cursor: not-allowed;
   `;
   document.body.appendChild(blocker);
+
+  // Block scroll on body and html
   document.body.style.overflow = "hidden";
+  document.documentElement.style.overflow = "hidden";
+
+  // Extra: Prevent touch and wheel scroll
+  document.addEventListener("touchmove", preventScroll, { passive: false });
+  document.addEventListener("wheel", preventScroll, { passive: false });
+
+  function preventScroll(e) {
+    e.preventDefault();
+  }
 
   // 2. Load cookieconsent script
   const script = document.createElement("script");
@@ -23,24 +34,24 @@ window.addEventListener("load", function () {
   script.onload = () => {
     window.cookieconsent.initialise({
       palette: {
-        popup: { 
-          background: "var(--yunoxa-dark-red)", // Dark red for the popup background
-          border: "2px solid var(--yunoxa-blue)", // Blue border for a clean, professional look
-          boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)" // Soft shadow for depth
+        popup: {
+          background: "var(--yunoxa-dark-red)",
+          border: "2px solid var(--yunoxa-blue)",
+          boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)"
         },
-        button: { 
-          background: "var(--yunoxa-yellow)", // Default background for button
-          text: "var(--yunoxa-text)", // Dark text for the button
-          borderRadius: "25px", // Rounded corners for the button
-          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)", // Subtle shadow for button
+        button: {
+          background: "var(--yunoxa-yellow)",
+          text: "var(--yunoxa-text)",
+          borderRadius: "25px",
+          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)"
         }
       },
       theme: "classic",
       position: "bottom-right",
       type: "opt-in",
-      revokable: false, // ✅ Do not show floating consent button
-      dismissOnScroll: false, // ✅ Don't auto-dismiss on scroll
-      dismissOnTimeout: false, // ✅ Don't auto-dismiss after timeout
+      revokable: false,
+      dismissOnScroll: false,
+      dismissOnTimeout: false,
       content: {
         message: "We use cookies to enhance your experience.",
         allow: "Accept",
@@ -60,31 +71,29 @@ window.addEventListener("load", function () {
   style.href = "https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css";
   document.head.appendChild(style);
 
-  // 4. Add custom style for .cc-revoke (to hide revoke button)
+  // 4. Add custom styles
   const customStyle = document.createElement("style");
   customStyle.textContent = `
     .cc-revoke {
       display: none !important;
     }
-    /* Add custom CSS for better popup appearance */
     .cc-popup {
-      border-radius: 8px; /* Smooth rounded corners */
-      padding: 20px; /* Padding inside the popup */
+      border-radius: 8px;
+      padding: 20px;
       font-family: 'Arial', sans-serif;
       font-size: 16px;
       line-height: 1.5;
-      transition: transform 0.3s ease-out; /* Smooth slide-in animation */
-      transform: translateY(100%); /* Initially off-screen */
-      background: linear-gradient(45deg, var(--yunoxa-blue), var(--yunoxa-orange), var(--yunoxa-red)); /* Animated gradient background */
+      transition: transform 0.3s ease-out;
+      transform: translateY(100%);
+      background: linear-gradient(45deg, var(--yunoxa-blue), var(--yunoxa-orange), var(--yunoxa-red));
       background-size: 400% 400%;
-      animation: gradientBG 6s ease infinite; /* Animated gradient */
+      animation: gradientBG 6s ease infinite;
     }
     .cc-popup.cc-in {
-      transform: translateY(0); /* Slide in on initialization */
+      transform: translateY(0);
     }
-    /* Button Styling */
     .cc-btn-allow {
-      background: white !important; /* White background for Accept */
+      background: white !important;
       color: var(--yunoxa-text);
       border-radius: 25px;
       padding: 10px 20px;
@@ -95,11 +104,10 @@ window.addEventListener("load", function () {
     }
     .cc-btn-allow:hover {
       background-color: var(--yunoxa-light-text);
-      transform: translateY(-2px); /* Slight lift effect on hover */
+      transform: translateY(-2px);
     }
-
     .cc-btn-deny {
-      background: black !important; /* Black background for Decline */
+      background: black !important;
       color: white !important;
       border-radius: 25px;
       padding: 10px 20px;
@@ -110,31 +118,23 @@ window.addEventListener("load", function () {
     }
     .cc-btn-deny:hover {
       background-color: var(--yunoxa-light-text) !important;
-      transform: translateY(-2px); /* Slight lift effect on hover */
+      transform: translateY(-2px);
     }
-    
-    /* Gradient animation */
     @keyframes gradientBG {
-      0% {
-        background-position: 0% 50%;
-      }
-      50% {
-        background-position: 100% 50%;
-      }
-      100% {
-        background-position: 0% 50%;
-      }
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
   `;
   document.head.appendChild(customStyle);
 
-  // 5. Apply custom root styles to the page (in case cookieconsent needs additional styling)
+  // 5. Add root CSS variables
   const rootStyle = document.createElement("style");
   rootStyle.textContent = `
     :root {
       --yunoxa-red: #e02f2f;
-      --yunoxa-dark-red:rgb(27, 27, 27);
-      --yunoxa-yellow:rgb(218, 40, 40);
+      --yunoxa-dark-red: rgb(27, 27, 27);
+      --yunoxa-yellow: rgb(218, 40, 40);
       --yunoxa-orange: #ff9500;
       --yunoxa-blue: #2e8bff;
       --yunoxa-bg: #f8f8f8;
@@ -144,21 +144,27 @@ window.addEventListener("load", function () {
   `;
   document.head.appendChild(rootStyle);
 
-  // 6. Consent handler function
+  // 6. Handle consent decision
   function handleConsent(status) {
     if (status === "allow") {
-      document.body.style.overflow = "";
+      // Remove blocker and enable scroll
       const blocker = document.getElementById("cookie-blocker");
       if (blocker) blocker.remove();
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+      document.removeEventListener("touchmove", preventScroll);
+      document.removeEventListener("wheel", preventScroll);
       enableTrackingScripts();
     } else {
+      // Keep blocked
       document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
       disableTrackingScripts();
       window.location.href = "/blocked.html";
     }
   }
 
-  // 7. Tracking scripts loader
+  // 7. Enable analytics/tracking if accepted
   function enableTrackingScripts() {
     if (!window.gaInitialized) {
       window.gaInitialized = true;
@@ -177,6 +183,6 @@ window.addEventListener("load", function () {
 
   function disableTrackingScripts() {
     console.log("Tracking declined.");
-    // Optional: clear cookies or localStorage
+    // Optional: clear cookies/localStorage if needed
   }
 });
