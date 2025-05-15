@@ -432,6 +432,37 @@
 
     // Variables
     let cartSyncInterval = null
+    let redirectUrl = '/index.html' // Default to homepage
+
+    // Store the referring page when the page loads
+    document.addEventListener('DOMContentLoaded', () => {
+        // Get the referring URL from document.referrer or a URL parameter
+        const referrer = document.referrer
+        const urlParams = new URLSearchParams(window.location.search)
+        const fromParam = urlParams.get('from')
+        
+        // Only set redirectUrl if it's a valid internal page and not the login page itself
+        if (fromParam && fromParam !== window.location.pathname) {
+            redirectUrl = fromParam
+        } else if (referrer && referrer !== window.location.href && 
+                   new URL(referrer).origin === window.location.origin) {
+            // Preserve the full URL including query parameters and hash
+            redirectUrl = new URL(referrer).pathname + new URL(referrer).search + new URL(referrer).hash
+        }
+        
+        showTab('login')
+        
+        // Check if user is already logged in
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            if (session) {
+                // Start cart synchronization
+                startCartSync(session.user.id)
+                // Redirect to the stored URL
+                window.location.href = redirectUrl
+            }
+        })
+    })
+    
 
     // Tab switching
     tabs.forEach(tab => {
@@ -591,18 +622,18 @@
         
         // Save the full session to localStorage
         localStorage.setItem('supabase_session', JSON.stringify({
-          user: data.user,
-          session: data.session
-        }))
+                user: data.user,
+                session: data.session
+            }))
         
         // Start cart synchronization
         startCartSync(data.user.id)
         
-        // Login successful - redirect
-        window.location.href = '/index.html'
-      } catch (error) {
-        errorElement.textContent = error.message
-      }
+        // Login successful - redirect to previous page or homepage
+            window.location.href = redirectUrl
+        } catch (error) {
+            errorElement.textContent = error.message
+        }
     })
 
     // Reset password handler
