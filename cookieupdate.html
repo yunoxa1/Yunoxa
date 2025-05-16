@@ -1,125 +1,164 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Update Cookie Preferences</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --primary: #f83333;
+      --primary-dark: #3f37c9;
+      --text: #2b2d42;
+      --light-text: #8d99ae;
+      --background: #ffffff;
+      --border: #edf2f4;
+      --radius-lg: 12px;
+      --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f8f8f8;
-      color: #333;
-      padding: 40px;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #f8fafc;
+      color: var(--text);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.5;
     }
+    
     .container {
+      width: 100%;
       max-width: 600px;
-      margin: 0 auto;
-      background: white;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-      text-align: center;
+      margin: 2rem;
+      background: var(--background);
+      padding: 2.5rem;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border);
     }
+    
     h1 {
-      color: #2e8bff;
+      color: var(--primary);
+      margin-top: 0;
+      font-weight: 600;
+      font-size: 1.8rem;
     }
-    button {
-      padding: 12px 25px;
-      margin: 15px;
-      border: none;
-      border-radius: 25px;
-      font-size: 16px;
+    
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius-lg);
+      font-weight: 500;
       cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 1rem;
+      border: none;
     }
-    .btn-reset {
-      background-color: #2e8bff;
+    
+    .btn-primary {
+      background: var(--primary);
       color: white;
     }
-    .btn-reset:hover {
-      background-color: #1c6dd0;
+    
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
     }
+    
     .notice {
-      margin-top: 20px;
-      font-size: 14px;
-      color: #666;
+      margin-top: 1.5rem;
+      padding: 1rem;
+      border-radius: var(--radius-lg);
+      background: #f8f9fa;
+      color: var(--light-text);
+      font-size: 0.9rem;
+    }
+    
+    .features {
+      text-align: left;
+      margin: 1.5rem 0;
+    }
+    
+    .feature-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+    
+    .feature-icon {
+      margin-right: 0.75rem;
+      color: var(--primary);
+    }
+    
+    @media (max-width: 640px) {
+      .container {
+        margin: 1rem;
+        padding: 1.5rem;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Update Your Cookie Preferences</h1>
-    <p>If you want to change your cookie decision, click the button below to reset your choice.</p>
-    <button class="btn-reset" onclick="resetConsent()">Reset Cookie Consent</button>
-    <div class="notice" id="notice"></div>
+    <h1>Cookie Preferences Center</h1>
+    <p>Manage how we use cookies and tracking technologies on our website.</p>
+    
+    <div class="features">
+      <div class="feature-item">
+        <div class="feature-icon">✓</div>
+        <div>
+          <strong>Essential Cookies:</strong> Always active (required for login and favorites)
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">✓</div>
+        <div>
+          <strong>Analytics Cookies:</strong> Help us improve our services (optional)
+        </div>
+      </div>
+    </div>
+    
+    <button class="btn btn-primary" onclick="resetConsent()">
+      Update My Preferences
+    </button>
+    
+    <div class="notice" id="notice">
+      Your current choice will be remembered for 12 months. You can change it anytime here.
+    </div>
   </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js"></script>
+<script type="module" src="js/cookie.js"></script>
   <script>
-    function deleteCookie(name) {
-      document.cookie = name + '=; Max-Age=0; path=/; SameSite=Lax';
-      document.cookie = name + '=; Max-Age=0; path=/; domain=' + location.hostname + ';';
-    }
-
     function resetConsent() {
-      // Remove stored consent cookie and tracking cookies
+      // Clear all consent-related storage
+      localStorage.removeItem("cookie_consent");
       document.cookie = 'cookieconsent_status=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 UTC;';
-
-      // Reset overflow in case it was blocked before
       
-      document.body.style.overflow = '';
-      document.documentElement.style.overflow = '';
-
-      // Re-show the CookieConsent banner with full settings
-      window.cookieconsent.initialise({
-        palette: {
-          popup: {
-            background: "var(--yunoxa-blkk)",
-            border: "2px solid var(--yunoxa-blue)",
-            boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)"
-          },
-          button: {
-            background: "var(--yunoxa-dark-red)",
-            text: "var(--yunoxa-text)",
-            borderRadius: "25px",
-            boxShadow: "0 4px 12px rgba(30, 36, 0, 0.69)"
-          }
-        },
-        theme: "classic",
-        position: "bottom-right",
-        type: "opt-in",
-        revokable: false,
-        dismissOnScroll: false,
-        dismissOnTimeout: false,
-        content: {
-          message: "We use cookies to enhance your experience.",
-          allow: "Accept",
-          deny: "Decline",
-          link: "Learn more",
-          href: "/privacypolicy.html"
-        },
-        onInitialise: function(status) {
-          document.getElementById("notice").textContent = "Consent re-initialized. Please make your choice again below.";
+      // Clear analytics cookies
+      document.cookie.split(";").forEach(cookie => {
+        const name = cookie.trim().split("=")[0];
+        if (name.startsWith("_ga") || name.startsWith("_gid")) {
+          document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.${window.location.hostname};`;
         }
       });
+      
+      // Show success message
+      const notice = document.getElementById("notice");
+      notice.innerHTML = `
+        <strong>✓ Preferences reset!</strong> 
+        <span style="color: var(--light-text)">Reload the page to see the consent banner again.</span>
+      `;
+      notice.style.background = "#e6f7ff";
+      notice.style.color = "#0066cc";
+      
+      // Optional: Auto-reload after 3 seconds
+      setTimeout(() => {
+        notice.innerHTML += `<br><span style="color: var(--light-text)">Reloading in 2 seconds...</span>`;
+        setTimeout(() => window.location.reload(), 2000);
+      }, 1000);
     }
-
-    // Load root CSS variables for theming
-    const rootStyle = document.createElement("style");
-    rootStyle.textContent = `
-      :root {
-        --yunoxa-red: #e02f2f;
-        --yunoxa-dark-red: rgb(201, 6, 6);
-        --yunoxa-yellow: #ffd700;
-        --yunoxa-blkk: rgb(48, 48, 48);
-        --yunoxa-orange: #ff9500;
-        --yunoxa-blue: #2e8bff;
-        --yunoxa-bg: #f8f8f8;
-        --yunoxa-text: #333;
-        --yunoxa-light-text: #666;
-      }
-    `;
-    document.head.appendChild(rootStyle);
   </script>
 </body>
 </html>

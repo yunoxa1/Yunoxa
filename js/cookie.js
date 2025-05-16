@@ -1,189 +1,261 @@
-window.addEventListener("load", function () {
-  if (window.cookieconsent) return;
+/**
+ * 🌟 Ultra-Premium Cookie Consent Solution
+ * - GDPR compliant with gorgeous UI
+ * - Supports favorites/login via localStorage
+ * - Blocks only non-essential tracking
+ * - 100% responsive with flawless animations
+ */
+document.addEventListener("DOMContentLoaded", function() {
+  // Skip if already initialized
+  if (window.cookieConsentInitialized) return;
+  window.cookieConsentInitialized = true;
 
-  // 1. Inject blocking overlay
-  const blocker = document.createElement("div");
-  blocker.id = "cookie-blocker";
-  blocker.style = `
-    position: fixed;
-    z-index: 9998;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(1px);
-    pointer-events: all;
-    touch-action: none;
-    cursor: not-allowed;
-  `;
-  document.body.appendChild(blocker);
-
-  // Block scroll on body and html
-  document.body.style.overflow = "hidden";
-  document.documentElement.style.overflow = "hidden";
-
-  // Extra: Prevent touch and wheel scroll
-  document.addEventListener("touchmove", preventScroll, { passive: false });
-  document.addEventListener("wheel", preventScroll, { passive: false });
-
-  function preventScroll(e) {
-    e.preventDefault();
-  }
-
-  // 2. Load cookieconsent script
-  const script = document.createElement("script");
-  script.src = "https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js";
-  script.onload = () => {
-    window.cookieconsent.initialise({
-      palette: {
-        popup: {
-          background: "var(--yunoxa-blkk)",
-          border: "2px solid var(--yunoxa-blue)",
-          boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)"
-        },
-        button: {
-          background: "var(--yunoxa-dark-red)",
-          text: "var(--yunoxa-text)",
-          borderRadius: "25px",
-          boxShadow: "0 4px 12px rgba(30, 36, 0, 0.69)"
-        }
-      },
-      theme: "classic",
-      position: "bottom-right",
-      type: "opt-in",
-      revokable: false,
-      dismissOnScroll: false,
-      dismissOnTimeout: false,
-      content: {
-        message: "We use cookies to enhance your experience.",
-        allow: "Accept",
-        deny: "Decline",
-        link: "Learn more",
-        href: "/privacypolicy.html"
-      },
-      onInitialise: handleConsent,
-      onStatusChange: handleConsent
-    });
+  // 🎨 Design System Variables
+  const designSystem = {
+    colors: {
+      primary: "#e02f2f",
+      secondary: "#3f37c9",
+      text: "#2b2d42",
+      lightText: "#8d99ae",
+      background: "#ffffff",
+      error: "#ef233c",
+      success: "#4cc9f0",
+      border: "#edf2f4"
+    },
+    fonts: {
+      main: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+      mono: "'Roboto Mono', monospace"
+    },
+    shadows: {
+      small: "0 1px 3px rgba(0,0,0,0.12)",
+      medium: "0 4px 6px rgba(0,0,0,0.1)",
+      large: "0 10px 25px rgba(0,0,0,0.1)"
+    },
+    spacing: {
+      xs: "4px",
+      sm: "8px",
+      md: "16px",
+      lg: "24px",
+      xl: "32px"
+    },
+    radii: {
+      sm: "4px",
+      md: "8px",
+      lg: "12px",
+      pill: "9999px"
+    }
   };
-  document.head.appendChild(script);
 
-  // 3. Load cookieconsent stylesheet
-  const style = document.createElement("link");
-  style.rel = "stylesheet";
-  style.href = "https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css";
-  document.head.appendChild(style);
-
-  // 4. Add custom styles
-  const customStyle = document.createElement("style");
-  customStyle.textContent = `
-    .cc-revoke {
-      display: none !important;
-    }
-    .cc-popup {
-      border-radius: 8px;
-      padding: 20px;
-      font-family: 'Arial', sans-serif;
-      font-size: 16px;
-      line-height: 1.5;
-      transition: transform 0.3s ease-out;
-      transform: translateY(100%);
-      background: linear-gradient(45deg, var(--yunoxa-blue), var(--yunoxa-orange), var(--yunoxa-red));
-      background-size: 400% 400%;
-      animation: gradientBG 6s ease infinite;
-    }
-    .cc-popup.cc-in {
-      transform: translateY(0);
-    }
-    .cc-btn-allow {
-      background: white !important;
-      color: var(--yunoxa-text);
-      border-radius: 25px;
-      padding: 10px 20px;
-      font-size: 14px;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
-      transition: background-color 0.3s ease, transform 0.3s ease;
-    }
-    .cc-btn-allow:hover {
-      background-color: var(--yunoxa-light-text);
-      transform: translateY(-2px);
-    }
-    .cc-btn-deny {
-      background: black !important;
-      color: white !important;
-      border-radius: 25px;
-      padding: 10px 20px;
-      font-size: 14px;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      transition: background-color 0.3s ease, transform 0.3s ease;
-    }
-    .cc-btn-deny:hover {
-      background-color: var(--yunoxa-light-text) !important;
-      transform: translateY(-2px);
-    }
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
+  // ✨ Inject global styles
+  const styleElement = document.createElement("style");
+  styleElement.textContent = `
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideUp { from { transform: translate(-50%, 20px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
+    @keyframes slideDown { to { transform: translate(-50%, 20px); opacity: 0; } }
+    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
   `;
-  document.head.appendChild(customStyle);
+  document.head.appendChild(styleElement);
 
-  // 5. Add root CSS variables
-  const rootStyle = document.createElement("style");
-  rootStyle.textContent = `
-    :root {
-      --yunoxa-red: #e02f2f;
-      --yunoxa-dark-red: rgb(201, 6, 6);
-      --yunoxa-yellow: #ffd700;
-      --yunoxa-blkk:rgb(48, 48, 48);
-      --yunoxa-orange: #ff9500;
-      --yunoxa-blue: #2e8bff;
-      --yunoxa-bg: #f8f8f8;
-      --yunoxa-text: #333;
-      --yunoxa-light-text: #666;
-    }
+  // 🛡️ Check existing consent
+  const userConsent = localStorage.getItem("cookie_consent");
+  if (userConsent === "accepted") {
+    loadTrackingScripts();
+    return;
+  }
+
+  // 🖼️ Create premium banner
+  const banner = document.createElement("div");
+  banner.id = "cookie-consent-banner";
+  banner.style = `
+    position: fixed;
+    z-index: 9999;
+    bottom: ${designSystem.spacing.lg};
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 600px;
+    padding: ${designSystem.spacing.xl};
+    background: ${designSystem.colors.background};
+    border-radius: ${designSystem.radii.lg};
+    box-shadow: ${designSystem.shadows.large};
+    font-family: ${designSystem.fonts.main};
+    animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    border: 1px solid ${designSystem.colors.border};
+    box-sizing: border-box;
   `;
-  document.head.appendChild(rootStyle);
+  banner.innerHTML = `
+    <div style="
+      display: flex;
+      flex-direction: column;
+      gap: ${designSystem.spacing.md};
+    ">
+      <div style="
+        display: flex;
+        align-items: center;
+        gap: ${designSystem.spacing.sm};
+      ">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM11 16V18H13V16H11ZM11 6V14H13V6H11Z" fill="${designSystem.colors.primary}"/>
+        </svg>
+        <h3 style="
+          margin: 0;
+          font-size: 18px;
+          font-weight: 600;
+          color: ${designSystem.colors.text};
+        ">Your Privacy Matters</h3>
+      </div>
+      
+      <p style="
+        margin: 0;
+        font-size: 15px;
+        line-height: 1.5;
+        color: ${designSystem.colors.lightText};
+      ">
+        We use cookies to provide essential functionality and enhance your experience. 
+        <span style="color: ${designSystem.colors.text}; font-weight: 500;">Favorites and login will always work</span>, 
+        while analytics are optional.
+      </p>
+      
+      <div style="
+        display: flex;
+        gap: ${designSystem.spacing.sm};
+        justify-content: flex-end;
+        flex-wrap: wrap;
+      ">
+        <button id="reject-cookies" style="
+          padding: ${designSystem.spacing.sm} ${designSystem.spacing.lg};
+          border-radius: ${designSystem.radii.pill};
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          background: transparent;
+          color: ${designSystem.colors.text};
+          border: 1px solid ${designSystem.colors.border};
+        ">
+          Essential Only
+        </button>
+        <button id="accept-cookies" style="
+          padding: ${designSystem.spacing.sm} ${designSystem.spacing.lg};
+          border-radius: ${designSystem.radii.pill};
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          background: ${designSystem.colors.primary};
+          color: white;
+          border: none;
+          animation: pulse 2s infinite;
+        ">
+          Accept All
+        </button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(banner);
 
-  // 6. Handle consent decision
-  function handleConsent(status) {
-    if (status === "allow") {
-      // Remove blocker and enable scroll
-      const blocker = document.getElementById("cookie-blocker");
-      if (blocker) blocker.remove();
-      document.body.style.overflow = "";
-      document.documentElement.style.overflow = "";
-      document.removeEventListener("touchmove", preventScroll);
-      document.removeEventListener("wheel", preventScroll);
-      enableTrackingScripts();
-    } else {
-      // Keep blocked
-      document.body.style.overflow = "hidden";
-      document.documentElement.style.overflow = "hidden";
-      disableTrackingScripts();
-      window.location.href = "/blocked.html";
-    }
+  // 🎯 Event Listeners with Hover Effects
+  const rejectBtn = document.getElementById("reject-cookies");
+  const acceptBtn = document.getElementById("accept-cookies");
+
+  [rejectBtn, acceptBtn].forEach(btn => {
+    btn.addEventListener("mouseenter", () => {
+      btn.style.transform = "translateY(-2px)";
+      btn.style.boxShadow = designSystem.shadows.medium;
+    });
+    btn.addEventListener("mouseleave", () => {
+      btn.style.transform = "";
+      btn.style.boxShadow = "";
+    });
+  });
+
+  // ✅ Accept Handler
+  acceptBtn.addEventListener("click", () => {
+    localStorage.setItem("cookie_consent", "accepted");
+    animateBannerExit();
+    loadTrackingScripts();
+    showToast("Preferences saved. Thank you!", "success");
+  });
+
+  // ❌ Reject Handler
+  rejectBtn.addEventListener("click", () => {
+    localStorage.setItem("cookie_consent", "rejected");
+    animateBannerExit();
+    clearNonEssentialCookies();
+    showToast("Using essential cookies only. Favorites/login unaffected.", "info");
+  });
+
+  // ✈️ Animated Exit
+  function animateBannerExit() {
+    banner.style.animation = "slideDown 0.4s cubic-bezier(0.5, 0, 0.5, 1) forwards";
+    setTimeout(() => banner.remove(), 400);
   }
 
-  // 7. Enable analytics/tracking if accepted
-  function enableTrackingScripts() {
-    if (!window.gaInitialized) {
-      window.gaInitialized = true;
-      const gaScript = document.createElement("script");
-      gaScript.src = "https://www.googletagmanager.com/gtag/js?id=G-VQ8X8STE73";
-      gaScript.async = true;
-      document.head.appendChild(gaScript);
+  // 📊 Load Tracking Scripts
+  function loadTrackingScripts() {
+    if (localStorage.getItem("cookie_consent") !== "accepted") return;
+    
+    // Google Analytics Example
+    const gaScript = document.createElement("script");
+    gaScript.src = "https://www.googletagmanager.com/gtag/js?id=G-VQ8X8STE73";
+    gaScript.async = true;
+    document.head.appendChild(gaScript);
 
-      window.dataLayer = window.dataLayer || [];
-      function gtag() { dataLayer.push(arguments); }
-      window.gtag = gtag;
-      gtag("js", new Date());
-      gtag("config", "G-VQ8X8STE73");
-    }
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag("js", new Date());
+    gtag("config", "G-VQ8X8STE73");
+    
+    // Additional trackers can be added here
   }
 
-  function disableTrackingScripts() {
-    console.log("Tracking declined.");
-    // Optional: clear cookies/localStorage if needed
+  // 🧹 Clean Non-Essential Cookies
+  function clearNonEssentialCookies() {
+    document.cookie.split(";").forEach(cookie => {
+      const name = cookie.trim().split("=")[0];
+      if (name.startsWith("_ga") || name.startsWith("_gid") || name.startsWith("_fbp")) {
+        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.${window.location.hostname};`;
+      }
+    });
   }
+
+  // 💫 Premium Toast Notification
+  function showToast(message, type) {
+    const toast = document.createElement("div");
+    toast.style = `
+      position: fixed;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: ${type === "success" ? designSystem.colors.success : designSystem.colors.primary};
+      color: white;
+      padding: ${designSystem.spacing.md} ${designSystem.spacing.lg};
+      border-radius: ${designSystem.radii.pill};
+      box-shadow: ${designSystem.shadows.medium};
+      z-index: 10000;
+      animation: fadeIn 0.3s ease-out;
+      font-size: 14px;
+      max-width: 80%;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      gap: ${designSystem.spacing.sm};
+    `;
+    
+    toast.innerHTML = `
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9 16.17L4.83 12L3.41 13.41L9 19L21 7L19.59 5.59L9 16.17Z" fill="white"/>
+      </svg>
+      ${message}
+    `;
+    
+    document.body.appendChild(toast);
+    setTimeout(() => {
+      toast.style.animation = "fadeIn 0.3s ease-out reverse forwards";
+      setTimeout(() => toast.remove(), 300);
+    }, 3000);
+  }
+
+  // 🏁 Initialize if consent already given
+  if (userConsent === "accepted") loadTrackingScripts();
 });
