@@ -286,11 +286,27 @@
 
           
         .product-card {
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-            position: relative;
-        }
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    position: relative;
+    
+    /* Add glow effect */
+    transition: box-shadow 0.3s ease;
+}
+
+/* Glow effect on hover */
+.product-card:hover {
+    box-shadow: 0 0 15px rgba(224, 47, 47, 0.6); /* yunoxa red glow */
+}
+
+/* For a permanent glow effect (without hover) */
+.product-card.glow {
+    box-shadow: 0 0 15px rgba(224, 47, 47, 0.4);
+}
+
+/* For flash deal cards */
+
 
         .product-badge {
             position: absolute;
@@ -478,7 +494,10 @@
 }
         /* BUY NOW Button Styles */
 .buy-now {
-    background-color: #FFA500; /* Amber base color */
+    background: linear-gradient(135deg, #ff0000 0%, #0084ff 100%);
+    /* Add these for better gradient appearance */
+    background-size: 200% auto;
+    transition: all 0.3s ease;
     color: white;
     border: none;
     border-radius: 25px;

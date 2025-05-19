@@ -47,7 +47,8 @@
         </div>
         <div class="search-bar">
             <i class="fas fa-search"></i>
-            <input type="text" id="search-input" placeholder="Search for products" oninput="searchProducts()">
+            <input type="text" id="search-input" placeholder="Search for products" 
+       oninput="searchProducts()" onkeypress="handleSearchKeyPress(event)">
         </div>
         <nav class="category-nav" id="categoryNav">
             <a href="javascript:void(0)" class="category-item" data-category="Electronics">
@@ -518,28 +519,33 @@
                     const { starHtml, rating } = generateStarRating();
                     productsContainer.innerHTML += `
                         <div class="product-card">
-                            ${product.discount > 0 ? `<span class="product-badge">${product.discount}% OFF</span>` : ''}
-                            <div class="image-container">
-                                <a href="open.html?id=${product.id}">
-                                <img src="${product.image || 'https://via.placeholder.com/250'}" alt="" class="product-image">
-                            </div>
-                            <div class="product-info">
-                                <div class="product-price">
-                                    LKR ${product.discount > 0 ? (product.price * (1 - product.discount/100)).toFixed(2) : product.price.toFixed(2)}
-                                    ${product.discount > 0 ? `<span class="product-original-price">LKR ${product.price.toFixed(2)}</span>` : ''}
+                            <a href="open.html?id=${product.id}">
+                                ${product.discount > 0 ? `<span class="product-badge">${product.discount}% OFF</span>` : ''}
+                                <div class="image-container">
+                                    <img src="${product.image || 'https://via.placeholder.com/250'}" 
+                                         alt="" 
+                                         class="product-image">
                                 </div>
-                                <div class="product-title">${product.name}</div>
-                                <div class="product-rating">
-                                    <div class="stars">${starHtml}</div>
-                                    <span class="rating-count">${rating}</span>
+                                <div class="product-info"></a>
+                                    <div class="product-price">
+                                        LKR ${product.discount > 0 ? 
+                                            (product.price * (1 - product.discount/100)).toFixed(2) : 
+                                            product.price.toFixed(2)}
+                                        ${product.discount > 0 ? 
+                                            `<span class="product-original-price">LKR ${product.price.toFixed(2)}</span>` : ''}
+                                    </div>
+                                    <div class="product-title">${product.name}</div>
+                                    <div class="product-rating">
+                                        <div class="stars">${starHtml}</div>
+                                        <span class="rating-count">${rating}</span>
+                                    </div>
+                                    <button class="add-to-favorites" data-product='${JSON.stringify(product).replace(/'/g, "&apos;")}'>
+                                        <i class="fas fa-heart"></i>
+                                    </button>
+                                    <button class="buy-now" data-product='${JSON.stringify(product).replace(/'/g, "&apos;")}'>
+                                        BUY NOW
+                                    </button>
                                 </div>
-                                <button class="add-to-favorites" data-product='${JSON.stringify(product).replace(/'/g, "&apos;")}'>
-                                    <i class="fas fa-heart"></i>
-                                </button>
-                                <button class="buy-now" data-product='${JSON.stringify(product).replace(/'/g, "&apos;")}'>
-                                    BUY NOW
-                                </button>
-                            </div>
                         </div>`;
                 });
                 
@@ -557,7 +563,14 @@
             const moreCategories = document.getElementById('more-categories');
             moreCategories.style.display = moreCategories.style.display === 'none' ? 'flex' : 'none';
         }
-        
+        // Add this after your existing searchProducts() function
+function handleSearchKeyPress(event) {
+    if (event.key === 'Enter') {
+        searchProducts();
+        // Optional: blur the input to hide keyboard on mobile
+        document.getElementById('search-input').blur();
+    }
+}
         function setupCategoryListeners() {
             const categoryItems = document.querySelectorAll('.category-item[data-category]');
             categoryItems.forEach(item => {
