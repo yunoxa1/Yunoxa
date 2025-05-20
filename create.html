@@ -494,6 +494,37 @@
                 gap: 15px;
             }
         }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--yunoxa-light-text);
+            font-size: 12px;
+        }
+
+        .nav-item.active {
+            color: var(--yunoxa-red);
+        }
+
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 3px;
+        }
     </style>
 </head>
 <body>
@@ -503,7 +534,26 @@
             <p>You must login to access the product creation page.</p>
             <a href="sellerlogin.html" class="btn animate__animated animate__pulse animate__infinite"><i class="fas fa-sign-in-alt"></i> Go to Login Page</a>
         </div>
+<nav class="bottom-nav">
+        <a href="/" class="nav-item">
+            <i class="fas fa-home nav-icon"></i>
+            <span>Home</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="fas fa-search nav-icon"></i>
+            <span>Search</span>
+        </a>
+        
+        <a href="favorites.html" class="nav-item">
+            <i class="fas fa-heart nav-icon"></i>
+            <span>favorites</span>
+        </a>
 
+        <a href="myprofile.html" class="nav-item">
+            <i class="fas fa-user nav-icon"></i>
+            <span>Account</span>
+        </a>
+    </nav>
         <form id="productForm" style="display: none;">
             <div class="form-header animate__animated animate__fadeIn">
                 <h2><i class="fas fa-plus-circle"></i> Create New Product</h2>
@@ -618,6 +668,8 @@
         </form>
     </div>
 
+    
+
 <script type="module">
     import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
@@ -648,39 +700,43 @@
     const productForm = document.getElementById("productForm");
     const loginRequired = document.getElementById("loginRequired");
 
-    // Initialize with forced logout
+    // Initialize - check for existing session
     document.addEventListener('DOMContentLoaded', async () => {
-        // Always clear any existing session first
-        await supabase.auth.signOut();
+        // Check for existing session
+        const { data: { user }, error } = await supabase.auth.getUser();
         
-        // Check for OAuth callback parameters
-        const urlParams = new URLSearchParams(window.location.search);
-        const accessToken = urlParams.get('access_token');
-        const refreshToken = urlParams.get('refresh_token');
-        
-        if (accessToken && refreshToken) {
-            try {
-                // Set the session from the OAuth callback
-                const { data: { session }, error } = await supabase.auth.setSession({
-                    access_token: accessToken,
-                    refresh_token: refreshToken
-                });
-                
-                if (error) throw error;
-                
-                if (session) {
-                    await verifyUserAndShowForm(session.user);
-                    // Clean the URL after successful auth
-                    window.history.replaceState({}, document.title, window.location.pathname);
-                    return;
+        if (user) {
+            await verifyUserAndShowForm(user);
+        } else {
+            // Check for OAuth callback parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const accessToken = urlParams.get('access_token');
+            const refreshToken = urlParams.get('refresh_token');
+            
+            if (accessToken && refreshToken) {
+                try {
+                    // Set the session from the OAuth callback
+                    const { data: { session }, error } = await supabase.auth.setSession({
+                        access_token: accessToken,
+                        refresh_token: refreshToken
+                    });
+                    
+                    if (error) throw error;
+                    
+                    if (session) {
+                        await verifyUserAndShowForm(session.user);
+                        // Clean the URL after successful auth
+                        window.history.replaceState({}, document.title, window.location.pathname);
+                        return;
+                    }
+                } catch (error) {
+                    console.error('Authentication error:', error);
+                    showLoginRequired();
                 }
-            } catch (error) {
-                console.error('Authentication error:', error);
+            } else {
+                showLoginRequired();
             }
         }
-        
-        // If no valid session, show login required
-        showLoginRequired();
     });
 
     async function verifyUserAndShowForm(user) {
@@ -689,10 +745,12 @@
             productForm.style.display = "block";
             loginRequired.style.display = "none";
             
-            // Set timeout to automatically log out after 1 hour
-            setTimeout(() => {
-                supabase.auth.signOut();
-                showSessionExpired();
+            // Set timeout to automatically log out after 1 hour (optional)
+            setTimeout(async () => {
+                const { error } = await supabase.auth.getUser();
+                if (error) {
+                    showSessionExpired();
+                }
             }, 3600000); // 1 hour in milliseconds
             
         } catch (error) {
@@ -900,7 +958,7 @@
     document.getElementById("productForm").addEventListener("submit", async function (event) {
         event.preventDefault();
 
-        // Force fresh authentication check
+        // Check authentication
         const { data: { user }, error: authError } = await supabase.auth.getUser();
         if (authError || !user) {
             showSessionExpired();
@@ -986,9 +1044,20 @@
             submitButton.innerHTML = '<i class="fas fa-check"></i> Under Review!';
             submitButton.style.background = 'linear-gradient(135deg, #28a745, #5cb85c)';
             
-            // Redirect after delay
+            // Reset form but keep user logged in
             setTimeout(() => {
-                window.location.href = 'sellerlogin.html'; // Force fresh login next time
+                // Clear form fields
+                document.getElementById("productForm").reset();
+                // Clear image previews
+                imagePreview.innerHTML = "";
+                thumbnailPreview.innerHTML = "";
+                uploadedImages = [];
+                croppedImageBlobs = [];
+                // Reset button state
+                submitButton.innerHTML = '<i class="fas fa-plus-circle"></i> Add Product';
+                submitButton.style.background = 'linear-gradient(135deg, var(--yunoxa-red), var(--yunoxa-orange))';
+                submitButton.disabled = true;
+                successMessage.style.display = "none";
             }, 2000);
         } else {
             uploadError.textContent = "No images available for the product";
