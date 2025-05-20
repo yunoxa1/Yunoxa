@@ -122,7 +122,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-width: 60px;
+            min-width: 11.5%;
             text-decoration: none;
             color: var(--yunoxa-text);
         }
@@ -388,7 +388,7 @@
         .countdown-timer {
             display: flex;
             align-items: center;
-            background-color: var(--yunoxa-red);
+            background:linear-gradient(135deg, #ff0000 0%, #77008f 100%);
             color: white;
             padding: 8px 15px;
             margin-top: 10px;
@@ -1101,7 +1101,7 @@ html, body {
     justify-content: center;
     gap: 3px;
     padding: 0 10px;
-    background: linear-gradient(135deg, #ff0000 0%, #ff2f2f 100%);
+    background:linear-gradient(135deg, #ff0000 0%, #77008f 100%);
     color: #fff !important;      /* Enforce white text */
     text-decoration: none;
     border-radius: 40px;
@@ -1135,7 +1135,7 @@ html, body {
     justify-content: center;
     gap: 3px;
     padding: 0 10px;
-    background: linear-gradient(135deg, #ff0000 0%, #ff2f2f 100%);
+    background:linear-gradient(135deg, #c50101 30%, #9e02bd 100%);
     color: #fff !important;      /* Enforce white text */
     text-decoration: none;
     border-radius: 40px;
