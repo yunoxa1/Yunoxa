@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Yunoxa Giveaway - Win Exciting Prizes!</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Participate in Yunoxa's exciting giveaway and win amazing prizes!" name="description">
+
+    <!-- Favicon -->
+    <link rel="icon" href="img/Favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="img/Favicon.png" type="image/png">
+    <link rel="shortcut icon" href="img/Favicon.ico" type="image/x-icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        :root {
+            --yunoxa-red: #e02f2f;
+            --yunoxa-dark-red: #c41e1e;
+            --yunoxa-yellow: #ffd700;
+            --yunoxa-orange: #ff9500;
+            --yunoxa-blue: #2e8bff;
+            --yunoxa-bg: #f8f8f8;
+            --yunoxa-text: #333;
+            --yunoxa-light-text: #666;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--yunoxa-bg);
+            color: var(--yunoxa-text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .giveaway-header {
+            text-align: center;
+            padding: 30px 0;
+            background: linear-gradient(135deg, #ff0000 0%, #77008f 100%);
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(224, 47, 47, 0.2);
+        }
+
+        .giveaway-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .giveaway-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Countdown Timer */
+        .countdown-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        .countdown-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--yunoxa-red);
+        }
+
+        .countdown-timer {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .countdown-item {
+            background:linear-gradient(135deg, #ff0000 0%, #77008f 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .countdown-value {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .countdown-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        /* Prize Section */
+        .prize-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--yunoxa-red);
+            text-align: center;
+            position: relative;
+        }
+
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 3px;
+            background-color: var(--yunoxa-red);
+            margin: 10px auto 0;
+        }
+
+        .prize-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .prize-card {
+            background-color: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            text-align: center;
+        }
+
+        .prize-card:hover {
+            transform: translateY(-5px);
+        }
+
+       .prize-image {
+    height: 500px;
+    background-color: #f9f9f9;
+    overflow: hidden;
+}
+
+.prize-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Fill and crop as needed */
+}
+
+
+        .prize-details {
+            padding: 20px;
+        }
+
+        .prize-name {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--yunoxa-red);
+        }
+
+        .prize-value {
+            font-weight: 600;
+            color: var(--yunoxa-text);
+            margin-bottom: 15px;
+        }
+
+        .prize-description {
+            color: var(--yunoxa-light-text);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        /* How to Enter Section */
+        .how-to-enter {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .steps-list {
+            list-style-type: none;
+            counter-reset: step-counter;
+            margin-top: 20px;
+        }
+
+        .steps-list li {
+            position: relative;
+            padding-left: 60px;
+            margin-bottom: 25px;
+        }
+
+        .steps-list li:before {
+            counter-increment: step-counter;
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 40px;
+            height: 40px;
+            background:linear-gradient(135deg, #ff0000 0%, #77008f 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .step-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--yunoxa-text);
+        }
+
+        .step-description {
+            color: var(--yunoxa-light-text);
+        }
+
+        /* Entry Form */
+        .entry-form-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .entry-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+        }
+
+        .submit-btn {
+            background:linear-gradient(135deg, #ff0000 0%, #77008f 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--yunoxa-dark-red);
+            transform: translateY(-2px);
+            box-shadow: 0 3px 10px rgba(224, 47, 47, 0.3);
+        }
+
+        /* Terms Section */
+        .terms-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .terms-content {
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+
+        /* Winners Section */
+        .winners-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .winners-list {
+            margin-top: 20px;
+        }
+
+        .winner-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .winner-item:last-child {
+            border-bottom: none;
+        }
+
+        .winner-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: var(--yunoxa-red);
+            font-weight: 600;
+        }
+
+        .winner-details {
+            flex: 1;
+        }
+
+        .winner-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .winner-prize {
+            color: var(--yunoxa-light-text);
+            font-size: 0.9rem;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .faq-item {
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+
+        .faq-item:last-child {
+            margin-bottom: 0;
+            border-bottom: none;
+        }
+
+        .faq-question {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--yunoxa-red);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-answer {
+            color: var(--yunoxa-light-text);
+            display: none;
+        }
+
+        .faq-answer.show {
+            display: block;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--yunoxa-light-text);
+            font-size: 12px;
+        }
+
+        .nav-item.active {
+            color: var(--yunoxa-red);
+        }
+
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 3px;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .giveaway-header h1 {
+                font-size: 2rem;
+            }
+
+            .countdown-item {
+                min-width: 60px;
+                padding: 10px;
+            }
+
+            .countdown-value {
+                font-size: 1.5rem;
+            }
+
+            .steps-list li {
+                padding-left: 50px;
+            }
+
+            .steps-list li:before {
+                width: 35px;
+                height: 35px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .giveaway-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .countdown-timer {
+                flex-wrap: wrap;
+            }
+
+            .countdown-item {
+                min-width: 45%;
+                margin-bottom: 10px;
+            }
+        }
+
+        .profile-pic-upload {
+            margin-bottom: 20px;
+        }
+        
+        .profile-pic-preview {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 10px 0;
+            display: none;
+            border: 3px solid var(--yunoxa-red);
+        }
+        
+        .upload-btn {
+            background-color: var(--yunoxa-blue);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        
+        .upload-btn:hover {
+            background-color: #1a73e8;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .form-disabled {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .profile-pic-upload {
+            margin-bottom: 20px;
+        }
+        
+        .profile-pic-preview {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 10px 0;
+            display: none;
+            border: 3px solid var(--yunoxa-red);
+        }
+        
+        .upload-btn {
+            background-color: var(--yunoxa-blue);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        
+        .upload-btn:hover {
+            background-color: #1a73e8;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .form-disabled {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .yunoxa-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+  }
+  
+  .modal-content {
+    background-color: white;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    overflow: hidden;
+    animation: modalFadeIn 0.3s ease;
+  }
+  
+  .modal-header {
+    background-color: #e02f2f;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .modal-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+  
+  .close-modal {
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  
+  .modal-body {
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .yunoxa-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    margin-top: 15px;
+  }
+  
+  .yunoxa-btn-primary {
+    background-color: #e02f2f;
+    color: white;
+    border: none;
+  }
+  
+  .yunoxa-btn-primary:hover {
+    background-color: #c41e1e;
+    transform: translateY(-2px);
+  }
+  
+  @keyframes modalFadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.yunoxa-btn-secondary {
+  background-color: #f0f0f0;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+.yunoxa-btn-secondary:hover {
+  background-color: #e0e0e0;
+}
+
+/* Different header colors for different message types */
+.modal-header.success {
+  background:linear-gradient(135deg, #ff0000 0%, #77008f 100%);
+
+
+
+}
+
+.modal-header.error {
+  background:linear-gradient(135deg, #ff0000 0%, #77008f 100%);
+}
+
+.modal-header.warning {
+  background:linear-gradient(135deg, #ff0000 0%, #77008f 100%);
+  color: #333;
+}
+
+.modal-header.info {
+  background:linear-gradient(135deg, #ff0000 0%, #77008f 100%);
+}
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Giveaway Header -->
+        <header class="giveaway-header">
+            <h1>Yunoxa Mega Giveaway!</h1>
+            <p>Win amazing prizes just by participating in our special promotion</p>
+        </header>
+
+        <!-- Countdown Timer -->
+        <div class="countdown-container">
+            <h2 class="countdown-title">Time Remaining to Enter</h2>
+            <div class="countdown-timer" id="countdown">
+                <div class="countdown-item">
+                    <div class="countdown-value" id="days">00</div>
+                    <div class="countdown-label">Days</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-value" id="hours">00</div>
+                    <div class="countdown-label">Hours</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-value" id="minutes">00</div>
+                    <div class="countdown-label">Minutes</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-value" id="seconds">00</div>
+                    <div class="countdown-label">Seconds</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prize Section -->
+        <section class="prize-section">
+            <h2 class="section-title">Amazing Prizes You Can Win</h2>
+            <div class="prize-grid">
+                <div class="prize-card">
+                    <div class="prize-image">
+                        <img src="https://ae-pic-a1.aliexpress-media.com/kf/Sef6bf0af477c47efac09e5d3fe44e515r.jpg_960x960q75.jpg_.avif" alt="Grand Prize">
+                    </div>
+                    <div class="prize-details">
+                        <h3 class="prize-name">Grand Prize</h3>
+                        <div class="prize-value">LKR 50,000 Shopping Spree</div>
+                        <p class="prize-description">Shop to your heart's content on Yunoxa with our grand prize!</p>
+                    </div>
+                </div>
+                <div class="prize-card">
+                    <div class="prize-image">
+                        <img src="https://ae-pic-a1.aliexpress-media.com/kf/Sf62e820a0e0748eea93937b8be94e9711.jpg_960x960q75.jpg" alt="Second Prize">
+                    </div>
+                    <div class="prize-details">
+                        <h3 class="prize-name">Second Prize</h3>
+                        <div class="prize-value">Latest Smartphone</div>
+                        <p class="prize-description">Brand new flagship smartphone from a leading brand.</p>
+                    </div>
+                </div>
+                
+            </div>
+        </section>
+
+        <!-- How to Enter Section -->
+        <section class="how-to-enter">
+            <h2 class="section-title">How to Enter</h2>
+            <ul class="steps-list">
+                <li>
+                    <div class="step-title">Create a Yunoxa Account</div>
+                    <div class="step-description">Sign up or log in to your existing Yunoxa account to participate.</div>
+                </li>
+                <li>
+                    <div class="step-title">Complete the Entry Form</div>
+                    <div class="step-description">Fill out the simple form below with your details.</div>
+                </li>
+                <li>
+                    <div class="step-title">Make a Purchase (Optional)</div>
+                    <div class="step-description">Earn 5 extra entries for every purchase made during the giveaway period.</div>
+                </li>
+                <li>
+                    <div class="step-title">Share on Social Media</div>
+                    <div class="step-description">Get 2 extra entries by sharing this giveaway on your social media.</div>
+                </li>
+                <li>
+                    <div class="step-title">Wait for the Draw</div>
+                    <div class="step-description">Winners will be selected randomly and notified via email.</div>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Entry Form Section -->
+        <section class="entry-form-section">
+        <h2 class="section-title">Enter the Giveaway</h2>
+        <form class="entry-form" id="giveawayForm">
+            <div class="form-group profile-pic-upload">
+                <label>Profile Picture (Optional)</label>
+                <img id="profilePicPreview" class="profile-pic-preview" alt="Profile Preview">
+                <input type="file" id="profilePicInput" class="file-input" accept="image/*">
+                <label for="profilePicInput" class="upload-btn">
+                    <i class="fas fa-camera"></i> Choose Photo
+                </label>
+            </div>
+            <div class="form-group">
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" name="fullName" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+            <div class="form-group">
+                <label for="address">Shipping Address</label>
+                <textarea id="address" name="address" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="hearAbout">How did you hear about this giveaway?</label>
+                <select id="hearAbout" name="hearAbout">
+                    <option value="">Select an option</option>
+                    <option value="social">Social Media</option>
+                    <option value="email">Email Newsletter</option>
+                    <option value="friend">Friend or Family</option>
+                    <option value="website">Yunoxa Website</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div>
+                <label>
+                    <input type="checkbox" name="terms" required> I agree to the terms and conditions
+                </label>
+            </div>
+            <button type="submit" class="submit-btn" id="submitBtn">Submit Entry</button>
+        </form>
+    </section>
+
+        <!-- Terms Section -->
+        <section class="terms-section">
+            <h2 class="section-title">Terms & Conditions</h2>
+            <div class="terms-content">
+                <p><strong>Eligibility:</strong> This giveaway is open to all Sri Lankan residents aged 13 years or older.</p>
+                
+                <p><strong>Entry Period:</strong> The giveaway begins on June 1, 2023 and ends on June 30, 2023 at 11:59 PM. All entries must be received by the end of the entry period.</p>
+                
+                <p><strong>How to Enter:</strong> Participants must complete the entry form with all required information. Only one entry per person is allowed, unless additional entries are earned through optional methods.</p>
+                
+                <p><strong>Prize Drawing:</strong> Winners will be selected in a random drawing from all eligible entries received. The drawing will be conducted within 7 days after the giveaway ends.</p>
+                
+                <p><strong>Prize Fulfillment:</strong> Winners will be notified via email and must respond within 7 days to claim their prize. Prizes will be delivered within 30 days of winner verification.</p>
+                
+                <p><strong>General Conditions:</strong> By participating, entrants agree to these official rules. Yunoxa reserves the right to cancel or modify the giveaway if fraud or technical failures compromise its integrity.</p>
+                
+                <p><strong>Privacy:</strong> Information collected from entrants is subject to Yunoxa's privacy policy and will only be used for the purposes of this giveaway.</p>
+            </div>
+        </section>
+
+        
+        
+
+        <!-- FAQ Section -->
+        <section class="faq-section">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="faq-item">
+                <div class="faq-question">When will the winners be announced? <i class="fas fa-chevron-down"></i></div>
+                <div class="faq-answer">Winners will be announced within 7 days after the giveaway ends. All winners will be notified via email and announced on our social media channels.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">How will I know if I've won? <i class="fas fa-chevron-down"></i></div>
+                <div class="faq-answer">If you're selected as a winner, we will contact you via the email address you provided in your entry. Please make sure to check your inbox (and spam folder) regularly after the giveaway ends.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">Can I enter more than once? <i class="fas fa-chevron-down"></i></div>
+                <div class="faq-answer">Only one entry per person is allowed through the form, but you can earn additional entries by making purchases on Yunoxa during the giveaway period or by sharing the giveaway on social media.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">When will I receive my prize if I win? <i class="fas fa-chevron-down"></i></div>
+                <div class="faq-answer">Prizes will be delivered within 30 days of winner verification. Digital prizes like gift vouchers will be emailed to winners, while physical prizes will be shipped to the address provided.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">Is there any cost to enter? <i class="fas fa-chevron-down"></i></div>
+                <div class="faq-answer">No, there is no cost to enter the giveaway. Participation is completely free, though you can earn additional entries by making purchases (which are optional).</div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Universal Modal for all messages -->
+<div id="yunoxaMessageModal" class="yunoxa-modal" style="display: none;">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 id="modalTitle">Modal Title</h3>
+      <span class="close-modal">&times;</span>
+    </div>
+    <div class="modal-body">
+      <p id="modalMessage">Modal message content goes here.</p>
+      <div id="modalActions" class="modal-actions">
+        <!-- Buttons will be inserted here dynamically -->
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="/" class="nav-item">
+            <i class="fas fa-home nav-icon"></i>
+            <span>Home</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="fas fa-search nav-icon"></i>
+            <span>Search</span>
+        </a>
+        <a href="favorites.html" class="nav-item">
+            <i class="fas fa-heart nav-icon"></i>
+            <span>favorites</span>
+        </a>
+        <a href="myprofile.html" class="nav-item">
+            <i class="fas fa-user nav-icon"></i>
+            <span>Account</span>
+        </a>
+    </nav>
+
+    <script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+
+// Initialize Supabase
+const supabaseUrl = 'https://qopdjgfciakmvhlriixt.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFvcGRqZ2ZjaWFrbXZobHJpaXh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk0NDA2NDAsImV4cCI6MjA1NTAxNjY0MH0.5UAelwww7WpDUExqhc5dH2JhUWlGNgUNjh8fzxPNZvs';
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+// DOM Elements
+const profilePicInput = document.getElementById('profilePicInput');
+const profilePicPreview = document.getElementById('profilePicPreview');
+const giveawayForm = document.getElementById('giveawayForm');
+const submitBtn = document.getElementById('submitBtn');
+const entriesCounter = document.createElement('div');
+
+// Add entries counter to the form section
+giveawayForm.parentNode.insertBefore(entriesCounter, giveawayForm);
+entriesCounter.style.textAlign = 'center';
+entriesCounter.style.margin = '20px 0';
+entriesCounter.style.fontWeight = 'bold';
+entriesCounter.style.display = 'none';
+
+// Countdown Timer - 30 days from now
+const endDate = new Date();
+endDate.setDate(endDate.getDate() + 30);
+
+function updateCountdown() {
+    const now = new Date().getTime();
+    const distance = endDate - now;
+    
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    
+    document.getElementById("days").textContent = days.toString().padStart(2, "0");
+    document.getElementById("hours").textContent = hours.toString().padStart(2, "0");
+    document.getElementById("minutes").textContent = minutes.toString().padStart(2, "0");
+    document.getElementById("seconds").textContent = seconds.toString().padStart(2, "0");
+    
+    if (distance < 0) {
+        clearInterval(countdownTimer);
+        document.getElementById("countdown").innerHTML = "<div style='color: var(--yunoxa-red); font-weight: bold;'>Giveaway has ended!</div>";
+        giveawayForm.classList.add('form-disabled');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Giveaway Ended';
+    }
+}
+
+updateCountdown();
+const countdownTimer = setInterval(updateCountdown, 1000);
+
+// Profile Picture Upload
+profilePicInput.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            profilePicPreview.src = e.target.result;
+            profilePicPreview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// Form Submission
+giveawayForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+    
+    try {
+        const fullName = document.getElementById('fullName').value;
+        const email = document.getElementById('email').value;
+        const phone = document.getElementById('phone').value;
+        const address = document.getElementById('address').value;
+        const hearAbout = document.getElementById('hearAbout').value;
+        const file = profilePicInput.files[0];
+        
+        // Get referral code from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const referralCode = urlParams.get('ref');
+        
+        // Check for existing entry
+        const { data: existingEntry, error: checkError } = await supabase
+            .from('giveaway_entries')
+            .select('email, entries, referral_code')
+            .eq('email', email)
+            .single();
+        
+        if (existingEntry && !checkError) {
+            entriesCounter.style.display = 'block';
+            entriesCounter.textContent = `You currently have ${existingEntry.entries || 1} entries`;
+            entriesCounter.style.color = 'var(--yunoxa-red)';
+            throw new Error('You have already entered this giveaway!');
+        }
+        
+        // Generate referral code
+        const userReferralCode = `${email.split('@')[0]}-${Math.random().toString(36).substring(2, 8)}`.toLowerCase();
+        
+        let profilePicUrl = null;
+        
+        if (file) {
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${email}-${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
+            const filePath = `profile-pics/${fileName}`;
+            
+            const { data: uploadData, error: uploadError } = await supabase
+                .storage
+                .from('giveaway')
+                .upload(filePath, file);
+            
+            if (uploadError) throw uploadError;
+            
+            const { data: urlData } = supabase
+                .storage
+                .from('giveaway')
+                .getPublicUrl(filePath);
+            
+            profilePicUrl = urlData.publicUrl;
+        }
+        
+        // Insert new entry
+        const { data, error } = await supabase
+            .from('giveaway_entries')
+            .insert([{
+                full_name: fullName,
+                email: email,
+                phone: phone,
+                address: address,
+                hear_about: hearAbout,
+                profile_pic_url: profilePicUrl,
+                referral_code: userReferralCode,
+                referred_by: referralCode || null,
+                entries: 1,
+                created_at: new Date().toISOString()
+            }]);
+        
+        if (error) throw error;
+        
+        // Increment referrer's entries if applicable
+        if (referralCode) {
+            console.log(`Incrementing entries for referrer: ${referralCode}`);
+            const { error: incrementError } = await supabase
+                .rpc('increment_entries', { ref_code: referralCode });
+            
+            if (incrementError) {
+                console.error('Increment error:', incrementError);
+                throw incrementError;
+            }
+        }
+        
+        // Show success message
+        const entryCount = 1; // New entries start with 1
+        showSuccess('Entry Submitted!', `Thank you for entering! You currently have ${entryCount} entries.`, [
+            {
+                text: 'Close',
+                primary: true,
+                action: () => {
+                    document.getElementById('yunoxaMessageModal').style.display = 'none';
+                    giveawayForm.reset();
+                    profilePicPreview.style.display = 'none';
+                    entriesCounter.style.display = 'block';
+                    entriesCounter.textContent = `You have ${entryCount} entries`;
+                    entriesCounter.style.color = 'var(--yunoxa-red)';
+                }
+            },
+            {
+                text: 'Share to Get More Entries',
+                primary: false,
+                action: () => shareGiveaway(email, userReferralCode)
+            }
+        ]);
+        
+    } catch (error) {
+        console.error('Error:', error);
+        if (error.message.includes('row-level security policy')) {
+            showError('Login Required', 'You need to login to join the giveaway.', [
+                { text: 'Go to Login', primary: true, action: () => window.location.href = 'login.html' },
+                { text: 'Cancel', primary: false, action: () => document.getElementById('yunoxaMessageModal').style.display = 'none' }
+            ]);
+        } else {
+            showError('Error', error.message || 'An error occurred. Please try again.');
+        }
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Submit Entry';
+    }
+});
+
+// Share Functionality
+async function shareGiveaway(userEmail = null, referralCode = null) {
+    if (userEmail && !referralCode) {
+        const { data: userData, error: userError } = await supabase
+            .from('giveaway_entries')
+            .select('referral_code')
+            .eq('email', userEmail)
+            .single();
+        
+        if (!userError && userData) {
+            referralCode = userData.referral_code;
+        }
+    }
+    
+    if (!referralCode) {
+        referralCode = `temp-${Math.random().toString(36).substring(2, 8)}`;
+    }
+    
+    const shareUrl = `${window.location.origin}${window.location.pathname}?ref=${referralCode}`;
+    const shareData = {
+        title: 'Yunoxa Giveaway',
+        text: 'Enter to win amazing prizes! Use my link and I get extra entries!',
+        url: shareUrl
+    };
+
+    try {
+        if (navigator.share) {
+            await navigator.share(shareData);
+            showSuccess('Shared!', 'Thanks for sharing! You get extra entries when people use your link.');
+        } else {
+            await navigator.clipboard.writeText(shareUrl);
+            showInfo('Link Copied!', `Share this link to get more entries: ${shareUrl}`, [
+                { text: 'Open Twitter', primary: true, action: () => window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareData.text)}&url=${encodeURIComponent(shareUrl)}`, '_blank') },
+                { text: 'Close', primary: false, action: () => document.getElementById('yunoxaMessageModal').style.display = 'none' }
+            ]);
+        }
+    } catch (err) {
+        if (err.name !== 'AbortError') {
+            showError('Share Error', 'Could not share: ' + err.message);
+        }
+    }
+}
+
+// FAQ Toggle
+document.querySelectorAll('.faq-question').forEach(question => {
+    question.addEventListener('click', () => {
+        const answer = question.nextElementSibling;
+        answer.classList.toggle('show');
+        const icon = question.querySelector('i');
+        icon.classList.toggle('fa-chevron-down');
+        icon.classList.toggle('fa-chevron-up');
+    });
+});
+
+// Modal System
+function showMessage(title, message, type = 'info', buttons = []) {
+    const modal = document.getElementById('yunoxaMessageModal');
+    if (!modal) return;
+
+    const modalTitle = modal.querySelector('#modalTitle');
+    const modalMessage = modal.querySelector('#modalMessage');
+    const modalActions = modal.querySelector('#modalActions');
+    const modalHeader = modal.querySelector('.modal-header');
+
+    modalTitle.textContent = title;
+    modalMessage.textContent = message;
+    modalHeader.className = 'modal-header ' + type;
+    modalActions.innerHTML = '';
+
+    if (buttons.length > 0) {
+        buttons.forEach(button => {
+            const btn = document.createElement('button');
+            btn.className = `yunoxa-btn ${button.primary ? 'yunoxa-btn-primary' : 'yunoxa-btn-secondary'}`;
+            btn.textContent = button.text;
+            btn.onclick = (e) => {
+                e.stopPropagation();
+                if (typeof button.action === 'function') button.action();
+            };
+            modalActions.appendChild(btn);
+        });
+    } else {
+        const closeBtn = document.createElement('button');
+        closeBtn.className = 'yunoxa-btn yunoxa-btn-primary';
+        closeBtn.textContent = 'OK';
+        closeBtn.onclick = () => modal.style.display = 'none';
+        modalActions.appendChild(closeBtn);
+    }
+
+    modal.style.display = 'flex';
+    modal.querySelector('.close-modal').onclick = () => modal.style.display = 'none';
+    modal.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
+}
+
+function showSuccess(title, message, buttons = []) {
+    showMessage(title, message, 'success', buttons);
+}
+
+function showError(title, message, buttons = []) {
+    showMessage(title, message, 'error', buttons);
+}
+
+function showWarning(title, message, buttons = []) {
+    showMessage(title, message, 'warning', buttons);
+}
+
+function showInfo(title, message, buttons = []) {
+    showMessage(title, message, 'info', buttons);
+}
+
+// Initial check for referral link
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('ref')) {
+    showInfo('Referred Entry', "You're entering with a referral link! The person who shared this will get extra entries if you complete your submission.");
+}
+</script>
+</body>
+</html>
