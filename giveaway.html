@@ -736,22 +736,13 @@
         <section class="prize-section">
             <h2 class="section-title">Amazing Prizes You Can Win</h2>
             <div class="prize-grid">
-                <div class="prize-card">
-                    <div class="prize-image">
-                        <img src="https://ae-pic-a1.aliexpress-media.com/kf/Sef6bf0af477c47efac09e5d3fe44e515r.jpg_960x960q75.jpg_.avif" alt="Grand Prize">
-                    </div>
-                    <div class="prize-details">
-                        <h3 class="prize-name">Grand Prize</h3>
-                        <div class="prize-value">Snowy Night DIY Flow Ma Night Light</div>
-                        <p class="prize-description">Stand a Chance to win an Amazing price With Yunoxa </p>
-                    </div>
-                </div>
+                
                 <div class="prize-card">
                     <div class="prize-image">
                         <img src="https://ae-pic-a1.aliexpress-media.com/kf/Sf62e820a0e0748eea93937b8be94e9711.jpg_960x960q75.jpg" alt="Second Prize">
                     </div>
                     <div class="prize-details">
-                        <h3 class="prize-name">Second Prize</h3>
+                        <h3 class="prize-name">Grand Prize</h3>
                         <div class="prize-value">Latest 9D AirPods</div>
                         <p class="prize-description">Stand a Chance to win an Amazing price With Yunoxa</p>
                     </div>
@@ -1149,7 +1140,7 @@ async function shareGiveaway(userEmail = null, referralCode = null) {
     
     const shareUrl = `${window.location.origin}${window.location.pathname}?ref=${referralCode}`;
     const shareData = {
-        title: 'Yunoxa Giveaway',
+        title: 'Yunoxa Official Giveaway',
         text: 'Enter to win amazing prizes! Use my link and I get extra entries!',
         url: shareUrl
     };
