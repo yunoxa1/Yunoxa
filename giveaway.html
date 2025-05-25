@@ -667,6 +667,37 @@
 .modal-header.info {
   background:linear-gradient(135deg, #ff0000 0%, #77008f 100%);
 }
+
+.share-section {
+    background-color: white;
+    border-radius: 10px;
+    padding: 30px;
+    margin-top: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.share-section h2 {
+    color: var(--yunoxa-red);
+    margin-bottom: 20px;
+}
+
+#shareBtn {
+    background:linear-gradient(135deg, #ff0000 0%, #77008f 100%);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+}
+
+#shareBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 10px rgba(224, 47, 47, 0.3);
+}
     </style>
 </head>
 
@@ -733,18 +764,12 @@
         <section class="how-to-enter">
             <h2 class="section-title">How to Enter</h2>
             <ul class="steps-list">
-                <li>
-                    <div class="step-title">Create a Yunoxa Account</div>
-                    <div class="step-description">Sign up or log in to your existing Yunoxa account to participate.</div>
-                </li>
+                
                 <li>
                     <div class="step-title">Complete the Entry Form</div>
                     <div class="step-description">Fill out the simple form below with your details.</div>
                 </li>
-                <li>
-                    <div class="step-title">Make a Purchase (Optional)</div>
-                    <div class="step-description">Earn 5 extra entries for every purchase made during the giveaway period.</div>
-                </li>
+                
                 <li>
                     <div class="step-title">Share on Social Media</div>
                     <div class="step-description">Get 2 extra entries by sharing this giveaway on your social media.</div>
@@ -810,7 +835,7 @@
             <div class="terms-content">
                 <p><strong>Eligibility:</strong> This giveaway is open to all Sri Lankan residents aged 13 years or older.</p>
                 
-                <p><strong>Entry Period:</strong> The giveaway begins on May 25, 2025 and ends on June 25, 2025 at 11:59 PM. All entries must be received by the end of the entry period.</p>
+                <p><strong>Entry Period:</strong> The giveaway begins on May 25, 2025 and ends on June 23, 2025 at 11:59 PM. All entries must be received by the end of the entry period.</p>
                 
                 <p><strong>How to Enter:</strong> Participants must complete the entry form with all required information. Only one entry per person is allowed, unless additional entries are earned through optional methods.</p>
                 
@@ -914,31 +939,36 @@ entriesCounter.style.fontWeight = 'bold';
 entriesCounter.style.display = 'none';
 
 // Countdown Timer - 30 days from now
-const endDate = new Date();
-endDate.setDate(endDate.getDate() + 30);
+// Fixed end date (June 23, 2025 at 11:59 PM as per your terms)
+const endDate = new Date("June 23, 2025 23:59:00");
 
 function updateCountdown() {
     const now = new Date().getTime();
     const distance = endDate - now;
     
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-    
-    document.getElementById("days").textContent = days.toString().padStart(2, "0");
-    document.getElementById("hours").textContent = hours.toString().padStart(2, "0");
-    document.getElementById("minutes").textContent = minutes.toString().padStart(2, "0");
-    document.getElementById("seconds").textContent = seconds.toString().padStart(2, "0");
-    
+    // If giveaway has ended
     if (distance < 0) {
         clearInterval(countdownTimer);
         document.getElementById("countdown").innerHTML = "<div style='color: var(--yunoxa-red); font-weight: bold;'>Giveaway has ended!</div>";
         giveawayForm.classList.add('form-disabled');
         submitBtn.disabled = true;
         submitBtn.textContent = 'Giveaway Ended';
+        return;
     }
+    
+    // Calculate time units
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    
+    // Update display
+    document.getElementById("days").textContent = days.toString().padStart(2, "0");
+    document.getElementById("hours").textContent = hours.toString().padStart(2, "0");
+    document.getElementById("minutes").textContent = minutes.toString().padStart(2, "0");
+    document.getElementById("seconds").textContent = seconds.toString().padStart(2, "0");
 }
+
 
 updateCountdown();
 const countdownTimer = setInterval(updateCountdown, 1000);
@@ -956,6 +986,7 @@ profilePicInput.addEventListener('change', (event) => {
     }
 });
 
+// Form Submission
 // Form Submission
 giveawayForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -1044,27 +1075,43 @@ giveawayForm.addEventListener('submit', async (e) => {
             }
         }
         
-        // Show success message
-        const entryCount = 1; // New entries start with 1
-        showSuccess('Entry Submitted!', `Thank you for entering! You currently have ${entryCount} entries.`, [
-            {
-                text: 'Close',
-                primary: true,
-                action: () => {
-                    document.getElementById('yunoxaMessageModal').style.display = 'none';
-                    giveawayForm.reset();
-                    profilePicPreview.style.display = 'none';
-                    entriesCounter.style.display = 'block';
-                    entriesCounter.textContent = `You have ${entryCount} entries`;
-                    entriesCounter.style.color = 'var(--yunoxa-red)';
-                }
-            },
-            {
-                text: 'Share to Get More Entries',
-                primary: false,
-                action: () => shareGiveaway(email, userReferralCode)
-            }
-        ]);
+        // Hide the form and show success message with share options
+        giveawayForm.style.display = 'none';
+        
+        // Create share section
+        const shareSection = document.createElement('div');
+        shareSection.className = 'share-section';
+        shareSection.style.textAlign = 'center';
+        shareSection.style.marginTop = '30px';
+        shareSection.style.padding = '30px';
+        shareSection.style.backgroundColor = 'white';
+        shareSection.style.borderRadius = '10px';
+        shareSection.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.05)';
+        
+        shareSection.innerHTML = `
+            <h2 style="color: var(--yunoxa-red); margin-bottom: 20px;">Thanks for entering!</h2>
+            <p style="margin-bottom: 20px;">You currently have <strong>1 entry</strong> in the giveaway.</p>
+            <p style="margin-bottom: 20px;">Share your referral link to get more entries when people sign up using your link!</p>
+            <div style="margin-bottom: 20px; padding: 15px; background: #f5f5f5; border-radius: 5px; word-break: break-all;">
+                Your referral link: <br>
+                <strong>${window.location.origin}${window.location.pathname}?ref=${userReferralCode}</strong>
+            </div>
+            <button id="shareBtn" style="background:linear-gradient(135deg, #ff0000 0%, #77008f 100%); 
+                color: white; border: none; padding: 12px 25px; border-radius: 5px; 
+                font-size: 1rem; cursor: pointer; margin-bottom: 15px;">
+                <i class="fas fa-share-alt"></i> Share Now
+            </button>
+            <p style="font-size: 0.9em; color: #666;">Each successful referral gives you +1 entry</p>
+        `;
+        
+        // Insert the share section after the form section title
+        const formSection = document.querySelector('.entry-form-section');
+        formSection.appendChild(shareSection);
+        
+        // Add click handler for share button
+        document.getElementById('shareBtn').addEventListener('click', () => {
+            shareGiveaway(email, userReferralCode);
+        });
         
     } catch (error) {
         console.error('Error:', error);
