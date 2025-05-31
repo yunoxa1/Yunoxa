@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yunoxa FF Tournament - Compete for Amazing Prizes!</title>
+    <title>Yunoxa FF Tournament - Squad Registration</title>
     <!-- Favicon -->
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <!-- Fonts -->
@@ -38,18 +38,18 @@
         }
 
        body {
-    background-color: var(--darker);
-    color: var(--text);
-    min-height: 100vh;
-    overflow-x: hidden;
-    background-image: 
-        linear-gradient(rgba(122, 6, 6, 0.815), rgba(15, 25, 35, 0.9)),
-        url('img/ffbanner1.jpg');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    background-repeat: no-repeat;
-}
+            background-color: var(--darker);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: 
+                linear-gradient(rgba(122, 6, 6, 0.815), rgba(15, 25, 35, 0.9)),
+                url('img/ffbanner1.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+        }
 
         .container {
             max-width: 1200px;
@@ -193,21 +193,21 @@
         }
 
         .prize-image {
-    width: 120px;
-    height: 120px;
-    margin: 1rem auto 1.5rem;
-    border-radius: 50%;
-    background-size: cover;
-    background-position: center;
-    border: 3px solid var(--primary);
-    box-shadow: var(--glow);
-    background-color: rgba(0, 0, 0, 0.3); /* Fallback if image doesn't load */
-}
+            width: 120px;
+            height: 120px;
+            margin: 1rem auto 1.5rem;
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+            border: 3px solid var(--primary);
+            box-shadow: var(--glow);
+            background-color: rgba(0, 0, 0, 0.3); /* Fallback if image doesn't load */
+        }
 
-/* Remove the Font Awesome icon styles */
-.prize-image i {
-    display: none;
-}
+        /* Remove the Font Awesome icon styles */
+        .prize-image i {
+            display: none;
+        }
 
         .prize-name {
             font-size: 1.5rem;
@@ -250,6 +250,35 @@
         .registration-section:hover {
             border-color: var(--secondary);
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Player Form Tabs */
+        .form-tabs {
+            display: flex;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tab {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            color: var(--text-light);
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
         }
 
         /* Terms and Rules Section */
@@ -396,6 +425,53 @@
             animation: bounce 1s ease infinite;
         }
 
+        /* Navigation Buttons */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .prev-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+        }
+
+        .next-btn {
+            background: var(--primary);
+            color: var(--dark);
+        }
+
+        .prev-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .next-btn:hover {
+            background: var(--primary-dark);
+            color: white;
+        }
+
+        .skip-btn {
+            background: #979797;
+            color: var(--dark);
+        }
+
+    
+
+        .skip-btn:hover {
+            background: var(--primary-dark);
+            color: white;
+        }
+
         /* Footer */
         .footer {
             text-align: center;
@@ -485,6 +561,15 @@
             .section-title {
                 font-size: 1.8rem;
             }
+
+            .form-tabs {
+                flex-wrap: wrap;
+            }
+
+            .tab {
+                padding: 0.5rem;
+                font-size: 0.9rem;
+            }
         }
 
         @media (max-width: 480px) {
@@ -508,6 +593,15 @@
                 padding: 14px 20px;
                 font-size: 1rem;
             }
+
+            .nav-buttons {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .nav-btn {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -529,57 +623,144 @@
         
         <!-- Prizes Section -->
         <section class="prizes-section">
-    <h2 class="section-title">Tournament Prizes</h2>
-    <div class="prizes-grid">
-        <!-- 1st Prize -->
-        <div class="prize-card">
-            <div class="prize-rank">1</div>
-            <div class="prize-image" style="background-image: url('img/monthly.jpg');">
-                <!-- Image will be shown as background -->
+            <h2 class="section-title">Tournament Prizes</h2>
+            <div class="prizes-grid">
+                <!-- 1st Prize -->
+                <div class="prize-card">
+                    <div class="prize-rank">1</div>
+                    <div class="prize-image" style="background-image: url('img/cash.jpg');">
+                        <!-- Image will be shown as background -->
+                    </div>
+                    <h3 class="prize-name">Grand Prize</h3>
+                    <div class="prize-value">Cash Prize</div>
+                    <p class="prize-description">Dominate the battlefield and claim the ultimate reward for the champion!</p>
+                </div>
             </div>
-            <h3 class="prize-name">Grand Prize</h3>
-            <div class="prize-value">1 Monthly</div>
-            <p class="prize-description">Dominate the battlefield and claim the ultimate reward for the champion!</p>
-        </div>
-    </div>
-</section>
+        </section>
         
         <!-- Registration Form -->
         <section class="registration-section">
-            <h2 class="section-title">Register Now</h2>
+            <h2 class="section-title">Squad Registration</h2>
             <form id="registrationForm">
-                <div class="form-group">
-                    <label for="playerName">Your Name</label>
-                    <input type="text" id="playerName" required placeholder="Enter your full name">
+                <!-- Form Tabs -->
+                <div class="form-tabs">
+                    <div class="tab active" data-tab="squad">Squad</div>
+                    <div class="tab" data-tab="player1">Player 1</div>
+                    <div class="tab" data-tab="player2">Player 2</div>
+                    <div class="tab" data-tab="player3">Player 3</div>
+                    <div class="tab" data-tab="player4">Player 4</div>
                 </div>
                 
-                <div class="form-group">
-                    <label for="ffId">Free Fire ID</label>
-                    <input type="text" id="ffId" required placeholder="Enter your Free Fire ID">
+                <!-- Squad Tab -->
+                <div class="tab-content active" id="squad-tab">
+                    <div class="form-group">
+                        <label for="squadName">Squad Name</label>
+                        <input type="text" id="squadName" required placeholder="Enter your squad name">
+                    </div>
+                    
+                    <div class="nav-buttons">
+                        <div></div> <!-- Empty div for spacing -->
+                        <button type="button" class="nav-btn next-btn" onclick="validateAndShowTab('squad', 'player1')">Next <i class="fas fa-arrow-right"></i></button>
+
+                    </div>
                 </div>
                 
-            
-                
-                <div class="form-group">
-                    <label for="contact_number">Phone Number</label>
-                    <input type="tel" id="contact_number" placeholder="Enter your phone number">
+                <!-- Player 1 Tab -->
+                <div class="tab-content" id="player1-tab">
+                    <div class="form-group">
+                        <label for="player1Name">Player 1 Name</label>
+                        <input type="text" id="player1Name" required placeholder="Enter player 1 name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="player1Id">Player 1 Free Fire ID</label>
+                        <input type="text" id="player1Id" required placeholder="Enter player 1 Free Fire ID">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="player1Contact">Player 1 WhatsApp Number</label>
+                        <input type="tel" id="player1Contact" required placeholder="Enter player 1 WhatsApp number">
+                    </div>
+                    
+                    <div class="nav-buttons">
+                        <button type="button" class="nav-btn prev-btn" onclick="showTab('squad')"><i class="fas fa-arrow-left"></i> Previous</button>
+                        <button type="button" class="nav-btn next-btn" onclick="validateAndShowTab('player1', 'player2')">Next <i class="fas fa-arrow-right"></i></button>
+
+                    </div>
                 </div>
                 
-                <div class="form-group">
-                    <label> 
-                        By registering, I agree to the tournament rules and terms
-                    </label>
+                <!-- Player 2 Tab -->
+                <div class="tab-content" id="player2-tab">
+                    <div class="form-group">
+                        <label for="player2Name">Player 2 Name</label>
+                        <input type="text" id="player2Name" placeholder="Enter player 2 name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="player2Id">Player 2 Free Fire ID</label>
+                        <input type="text" id="player2Id" placeholder="Enter player 2 Free Fire ID">
+                    </div>
+                    
+                    <div class="nav-buttons">
+                        <button type="button" class="nav-btn prev-btn" onclick="showTab('player1')"><i class="fas fa-arrow-left"></i> Previous</button>
+                        <button type="button" class="nav-btn skip-btn" onclick="skipToTab('player4')">Skip <i class="fas fa-forward"></i></button>
+                        <button type="button" class="nav-btn next-btn" onclick="validateAndShowTab('player2', 'player3')">Next <i class="fas fa-arrow-right"></i></button>
+
+
+                    
+                    </div>
                 </div>
                 
-                <button type="submit" class="submit-btn" id="submitBtn">
-                    <span id="btnText">Register Now</span>
-                    <i class="fas fa-arrow-right" id="btnIcon" style="margin-left: 8px;"></i>
-                </button>
+                <!-- Player 3 Tab -->
+                <div class="tab-content" id="player3-tab">
+                    <div class="form-group">
+                        <label for="player3Name">Player 3 Name</label>
+                        <input type="text" id="player3Name" placeholder="Enter player 3 name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="player3Id">Player 3 Free Fire ID</label>
+                        <input type="text" id="player3Id" placeholder="Enter player 3 Free Fire ID">
+                    </div>
+                    
+                    <div class="nav-buttons">
+                        <button type="button" class="nav-btn prev-btn" onclick="showTab('player1')"><i class="fas fa-arrow-left"></i> Previous</button>
+                        <button type="button" class="nav-btn skip-btn" onclick="skipToTab('player4')">Skip <i class="fas fa-forward"></i></button>
+                        <button type="button" class="nav-btn next-btn" onclick="validateAndShowTab('player3', 'player4')">Next <i class="fas fa-arrow-right"></i></button>
+</div>
+                </div>
+                
+                <!-- Player 4 Tab -->
+                <div class="tab-content" id="player4-tab">
+                    <div class="form-group">
+                        <label for="player4Name">Player 4 Name</label>
+                        <input type="text" id="player4Name" placeholder="Enter player 4 name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="player4Id">Player 4 Free Fire ID</label>
+                        <input type="text" id="player4Id" placeholder="Enter player 4 Free Fire ID">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label> 
+                            By registering, I agree to the tournament rules and terms
+                        </label>
+                    </div>
+                    
+                    <div class="nav-buttons">
+                        <button type="button" class="nav-btn prev-btn" onclick="showTab('player3')"><i class="fas fa-arrow-left"></i> Previous</button>
+                        <button type="submit" class="submit-btn" id="submitBtn">
+                            <span id="btnText">Register Squad</span>
+                            <i class="fas fa-arrow-right" id="btnIcon" style="margin-left: 8px;"></i>
+                        </button>
+                    </div>
+                </div>
                 
                 <div class="success-message" id="successMessage">
                     <i class="fas fa-check-circle"></i>
                     <h3>Registration Successful!</h3>
-                    <p>We've received your tournament registration. You'll receive confirmation details via Whatsapp shortly.</p>
+                    <p>We've received your squad registration. You'll receive confirmation details via WhatsApp shortly.</p>
                 </div>
             </form>
         </section>
@@ -607,10 +788,46 @@
             <p>&copy; 2023 Yunoxa FF Tournament. All rights reserved.</p>
         </footer>
     </div>
+<script>
+function showTab(tabId) {
+    // Hide all tabs and remove active class
+    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+
+    // Show selected
+    document.getElementById(`${tabId}-tab`).classList.add('active');
+    document.querySelector(`.tab[data-tab="${tabId}"]`).classList.add('active');
+}
+
+// Validation on next for Squad and Player 1
+function validateAndShowTab(currentTabId, nextTabId) {
+    const currentTab = document.getElementById(`${currentTabId}-tab`);
+    const inputs = currentTab.querySelectorAll('input[required]');
+
+    let isValid = true;
+    inputs.forEach(input => {
+        if (!input.value.trim()) {
+            input.style.borderColor = 'var(--error)';
+            isValid = false;
+        } else {
+            input.style.borderColor = ''; // Reset if valid
+        }
+    });
+
+    if (isValid) {
+        showTab(nextTabId);
+    }
+}
+
+// Skip logic (used for Player 2–4)
+function skipToTab(tabId) {
+    showTab(tabId);
+}
+</script>
+
 
     <script type="module">
         // Initialize Supabase
-
         import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
         const supabaseUrl = 'https://qopdjgfciakmvhlriixt.supabase.co'
@@ -634,6 +851,9 @@
         // Change slide every 5 seconds
         setInterval(nextSlide, 5000);
         
+        // Tab Navigation
+        
+        
         // Handle form submission
         document.getElementById('registrationForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -641,24 +861,38 @@
             const submitBtn = document.getElementById('submitBtn');
             const btnText = document.getElementById('btnText');
             const btnIcon = document.getElementById('btnIcon');
-            const playerName = document.getElementById('playerName').value;
-            const ffId = document.getElementById('ffId').value;
-            const contact_number = document.getElementById('contact_number').value;
+            
+            const squadName = document.getElementById('squadName').value;
+            const player1Name = document.getElementById('player1Name').value;
+            const player1Id = document.getElementById('player1Id').value;
+            const player1Contact = document.getElementById('player1Contact').value;
+            const player2Name = document.getElementById('player2Name').value;
+            const player2Id = document.getElementById('player2Id').value;
+            const player3Name = document.getElementById('player3Name').value;
+            const player3Id = document.getElementById('player3Id').value;
+            const player4Name = document.getElementById('player4Name').value;
+            const player4Id = document.getElementById('player4Id').value;
             
             submitBtn.disabled = true;
             btnText.textContent = 'Registering...';
             btnIcon.classList.replace('fa-arrow-right', 'fa-spinner', 'fa-spin');
             
             try {
-                // Insert data into Supabase
+                // Insert squad data into Supabase
                 const { data, error } = await supabase
-                    .from('tournament_registrations')
+                    .from('squad_registrations')
                     .insert([
                         { 
-                            player_name: playerName, 
-                            ff_id: ffId,
-                            
-                            contact_number: contact_number,
+                            squad_name: squadName,
+                            player1_name: player1Name,
+                            player1_id: player1Id,
+                            player1_contact: player1Contact,
+                            player2_name: player2Name || null,
+                            player2_id: player2Id || null,
+                            player3_name: player3Name || null,
+                            player3_id: player3Id || null,
+                            player4_name: player4Name || null,
+                            player4_id: player4Id || null,
                             registered_at: new Date().toISOString()
                         }
                     ]);
@@ -679,7 +913,7 @@
                 alert('Registration failed: ' + error.message);
             } finally {
                 submitBtn.disabled = false;
-                btnText.textContent = 'Register Now';
+                btnText.textContent = 'Register Squad';
                 btnIcon.classList.replace('fa-spinner', 'fa-arrow-right');
                 btnIcon.classList.remove('fa-spin');
             }
@@ -689,6 +923,13 @@
         document.addEventListener('DOMContentLoaded', () => {
             // Start with first slide
             showSlide(0);
+            
+            // Set up tab click events
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    showTab(tab.dataset.tab);
+                });
+            });
         });
     </script>
 </body>
