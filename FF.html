@@ -819,10 +819,41 @@ function validateAndShowTab(currentTabId, nextTabId) {
     }
 }
 
-// Skip logic (used for Player 2–4)
+// Skip logic (used for Player 2-4)
 function skipToTab(tabId) {
     showTab(tabId);
 }
+
+// Handle Enter key press
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+        e.preventDefault(); // Prevent form submission
+        
+        // Get the currently active tab
+        const activeTab = document.querySelector('.tab-content.active');
+        const activeTabId = activeTab.id.replace('-tab', '');
+        
+        // Determine which tab we're on and where to go next
+        switch(activeTabId) {
+            case 'squad':
+                validateAndShowTab('squad', 'player1');
+                break;
+            case 'player1':
+                validateAndShowTab('player1', 'player2');
+                break;
+            case 'player2':
+                validateAndShowTab('player2', 'player3');
+                break;
+            case 'player3':
+                validateAndShowTab('player3', 'player4');
+                break;
+            // On the last tab, Enter will submit the form
+            case 'player4':
+                document.getElementById('submitBtn').click();
+                break;
+        }
+    }
+});
 </script>
 
 
