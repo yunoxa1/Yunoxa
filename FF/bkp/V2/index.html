@@ -1,0 +1,1765 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <!--<< Header Area >>-->
+    <head>
+       <!-- ========== Meta Tags ========== -->
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="author" content="Gramentheme">
+        <meta name="description" content="Xriders - Riders & Sports Club HTML Template">
+        <!-- ======== Page title ============ -->
+        <title>Yunoxa - Gaming and eSports Theme HTML Template</title>
+
+        <!-- Font Awesome 5 CDN -->
+<!-- Required for <model-viewer> -->
+
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+        <!--<< Favcion >>-->
+        <link rel="shortcut icon" href="assets/img/favicon.svg">
+        <!--<< Bootstrap min.css >>-->
+        <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+        <!--<< Animate.css >>-->
+        <link rel="stylesheet" href="assets/css/animate.css">
+        <!--<< Magnific Popup.css >>-->
+        <link rel="stylesheet" href="assets/css/magnific-popup.css">
+        <!--<< MeanMenu.css >>-->
+        <link rel="stylesheet" href="assets/css/meanmenu.css">
+        <!--<< Swiper Bundle.css >>-->
+        <link rel="stylesheet" href="assets/css/swiper-bundle.min.css">
+        <!--<< Nice Select.css >>-->
+        <link rel="stylesheet" href="assets/css/nice-select.css">
+        <!--<< Main.css >>-->
+        <link rel="stylesheet" href="assets/css/main.css">
+
+        <style>
+        :root {
+            --primary: #ff0000;
+            --primary-dark: #ff2525;
+            --secondary: #000000;
+            --accent: #ff4625;
+            --dark: #0F1923;
+            --darker: #0A121A;
+            --light: #F8F9FA;
+            --text: #FFFFFF;
+            --text-light: #B0B0B0;
+            --success: #4CAF50;
+            --error: #F44336;
+            --glow: 0 0 10px rgba(0, 238, 255, 0.212);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Oxanium', sans-serif;
+        }
+
+       body {
+            
+            overflow-x: hidden;
+       }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Banner Slider */
+        
+
+        /* Header Section */
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: fadeInDown 1s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 1rem;
+            background: url('img/Favicon.svg') no-repeat center;
+            background-size: contain;
+            filter: drop-shadow(var(--glow));
+        }
+
+        
+
+        .title {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+            font-family: 'Rajdhani', sans-serif;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            background: linear-gradient(to right, var(--accent), var(--primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        /* Prizes Section */
+        .prizes-section {
+            margin-bottom: 3rem;
+            animation: fadeIn 1.5s ease;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Rajdhani', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 3px;
+        }
+
+        .prizes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .prize-card {
+            background: linear-gradient(135deg, #00d9ff31 0%, #77008f2d 100%);
+            border-radius: 15px;
+            width: 300px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.6s ease;
+            border: 1px solid rgba(201, 9, 9, 0.1);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            top: 50%;
+           left: 50%;
+          transform: translate(-50%, -50%);
+        }
+
+        .prize-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+        }
+
+        .prize-card:hover {
+            transform: translate(-50%, -50%) scale(1.05);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            border-color: var(--primary);
+        }
+
+        .prize-rank {
+            position: absolute;
+            top: 10px;
+            left: 491px;
+            width: 30px;
+            height: 30px;
+            background:linear-gradient(135deg, #ff000086 0%, #77008f8e 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            border: 3px solid var(--dark);
+            z-index: 1;
+        }
+
+        .prize-image {
+            width: 120px;
+            height: 120px;
+            margin: 1rem auto 1.5rem;
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+            border: 3px solid var(--primary);
+            box-shadow: var(--glow);
+            background-color: rgba(0, 0, 0, 0.3); /* Fallback if image doesn't load */
+        }
+
+        /* Remove the Font Awesome icon styles */
+        .prize-image i {
+            display: none;
+        }
+
+        .prize-name {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--accent);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .prize-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: white;
+            font-family: 'Rajdhani', sans-serif;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+        }
+
+        .prize-description {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        /* Registration Form */
+        .registration-section {
+            background: linear-gradient(145deg, rgba(0, 0, 0, 0.8), rgba(15, 25, 35, 0.9));
+            border-radius: 15px;
+            padding: 2.5rem;
+            max-width: 920px;
+            margin: 0 auto 3rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeInUp 1s ease;
+            transition: all 0.3s ease;
+        }
+
+        .registration-section:hover {
+            border-color: var(--secondary);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Player Form Tabs */
+        .form-tabs {
+            display: flex;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tab {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            color: var(--text-light);
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Terms and Rules Section */
+        .terms-section {
+            background: linear-gradient(145deg, rgba(0, 0, 0, 0.8), rgba(15, 25, 35, 0.9));
+            border-radius: 15px;
+            padding: 2.5rem;
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgb(204, 0, 0);
+            animation: fadeInUp 1s ease;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .terms-section:hover {
+            border-color: var(--secondary);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .terms-list {
+            list-style-type: none;
+            margin-top: 1.5rem;
+        }
+
+        .terms-list li {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .terms-list li::before {
+            content: '•';
+            color: var(--accent);
+            font-size: 1.5rem;
+            position: absolute;
+            left: 0;
+            top: -3px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--accent);
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 18px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: 'Oxanium', sans-serif;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--secondary);
+            background: rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.2);
+        }
+
+        .submit-btn {
+            background: linear-gradient(45deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 16px 30px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            font-family: 'Rajdhani', sans-serif;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            transition: 0.5s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 87, 34, 0.5);
+        }
+
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+
+        .submit-btn:active {
+            transform: translateY(1px);
+        }
+
+        .submit-btn.loading {
+            pointer-events: none;
+        }
+
+        .success-message {
+            display: none;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--success);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 1.5rem;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .success-message i {
+            color: var(--success);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            animation: bounce 1s ease infinite;
+        }
+
+        /* Navigation Buttons */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .prev-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+        }
+
+        .next-btn {
+            background: var(--primary);
+            color: var(--dark);
+        }
+
+        .prev-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .next-btn:hover {
+            background: var(--primary-dark);
+            color: white;
+        }
+
+        .skip-btn {
+            background: #979797;
+            color: var(--dark);
+        }
+
+    
+
+        .skip-btn:hover {
+            background: var(--primary-dark);
+            color: white;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 2s ease;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        @keyframes slideLeft {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .banner-container {
+                height: 200px;
+            }
+            
+            .title {
+                font-size: 2.2rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .prizes-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .registration-section, .terms-section {
+                padding: 1.5rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .form-tabs {
+                flex-wrap: wrap;
+            }
+
+            .tab {
+                padding: 0.5rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .title {
+                font-size: 1.8rem;
+            }
+            
+            .prize-card {
+                padding: 1.5rem;
+            }
+            
+            .prize-name {
+                font-size: 1.3rem;
+            }
+            
+            .prize-value {
+                font-size: 1.5rem;
+            }
+            
+            .submit-btn {
+                padding: 14px 20px;
+                font-size: 1rem;
+            }
+
+            .nav-buttons {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .nav-btn {
+                width: 100%;
+            }
+        }
+    </style>
+                            
+    </head>
+    <body>
+
+        <!-- Preloader Start -->
+        <div id="preloader" class="preloader">
+            <div class="animation-preloader">
+                <div class="spinner">                
+                </div>
+                <div class="txt-loading">
+                    <span data-text-preloader="Y" class="letters-loading">
+                        Y
+                    </span>
+                    <span data-text-preloader="O" class="letters-loading">
+                        U
+                    </span>
+                    <span data-text-preloader="N" class="letters-loading">
+                        N
+                    </span>
+                    <span data-text-preloader="O" class="letters-loading">
+                        O
+                    </span>
+                    <span data-text-preloader="X" class="letters-loading">
+                        X
+                    </span>
+                    <span data-text-preloader="A" class="letters-loading">
+                        A
+                    </span>
+                </div>
+                <p class="text-center">Loading</p>
+            </div>
+            <div class="loader">
+                <div class="row">
+                    <div class="col-3 loader-section section-left">
+                        <div class="bg"></div>
+                    </div>
+                    <div class="col-3 loader-section section-left">
+                        <div class="bg"></div>
+                    </div>
+                    <div class="col-3 loader-section section-right">
+                        <div class="bg"></div>
+                    </div>
+                    <div class="col-3 loader-section section-right">
+                        <div class="bg"></div>
+                    </div>
+                </div>
+            </div>
+        </div>  
+
+        <!-- GT Back To Top Start -->
+        <button id="gt-back-top" class="gt-back-to-top show">
+            <i class="fas fa-arrow-up"></i>
+        </button>
+
+        <!-- GT MouseCursor Start -->
+        <div class="mouseCursor cursor-outer"></div>
+        <div class="mouseCursor cursor-inner"></div>
+
+        
+
+        <!-- Header Section Start -->
+        <header class="header-1" style="padding: 10px 0; background: #00000000;">
+    <div class="logo" style="text-align: center;">
+        <a href="index.html">
+            <img src="assets/img/Favicon.svg" alt="logo-img" style="height: 50px;">
+        </a>
+    </div>
+</header>
+
+
+       
+        
+        <!-- GT Shop Details Popup Start -->
+        
+
+        <section class="hero-section hero-1 fix bg-cover" style="background-image: url(assets/img/hero-bg.jpg);">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-5">
+                        <div class="hero-image wow animated-image">
+                            <img src="assets/img/Favicon.svg" alt="img">
+                        </div>
+                    </div>
+                    <div class="col-lg-7">
+                        <div class="hero-content">
+                            <h6 class="wow animated-image">your future ultimate gaming world . . .</h6>
+                            <h1 class="wow animated-image">
+                                Win Grand Prizes with Yunoxa
+                            </h1>
+                            <div class="gt-hero-button wow animated-image">
+                        <button type="button" class="gt-theme-btn" onclick="document.getElementById('registration').scrollIntoView({ behavior: 'smooth' });"><i class="fas fa-arrow-left"></i> Register Now</button>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        
+        
+        <!-- Registration Form -->
+        <section class="registration-section" id="registration">
+            <h2 class="section-title">Squad Registration</h2>
+            <form id="registrationForm">
+                <!-- Form Tabs -->
+                <div class="form-tabs" >
+                    <div class="tab active" data-tab="squad">Squad</div>
+                    <div class="tab" data-tab="player1">Player 1</div>
+                    <div class="tab" data-tab="player2">Player 2</div>
+                    <div class="tab" data-tab="player3">Player 3</div>
+                    <div class="tab" data-tab="player4">Player 4</div>
+                </div>
+                
+                <!-- Squad Tab -->
+                <div class="tab-content active" id="squad-tab">
+                    <div class="form-group">
+                        <label for="squadName">Squad Name</label>
+                        <input type="text" id="squadName" required placeholder="Enter your squad name">
+                    </div>
+                    
+                    <div class="nav-buttons">
+                        <div></div> <!-- Empty div for spacing -->
+                        <button type="button" class="nav-btn next-btn" onclick="validateAndShowTab('squad', 'player1')">Next <i class="fas fa-arrow-right"></i></button>
+
+                    </div>
+                </div>
+                
+                <!-- Player 1 Tab -->
+                <div class="tab-content" id="player1-tab">
+                    <div class="form-group">
+                        <label for="player1Name">Player 1 Name</label>
+                        <input type="text" id="player1Name" required placeholder="Enter player 1 name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="player1Id">Player 1 Free Fire ID</label>
+                        <input type="text" id="player1Id" required placeholder="Enter player 1 Free Fire ID">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="player1Contact">Player 1 WhatsApp Number</label>
+                        <input type="tel" id="player1Contact" required placeholder="Enter player 1 WhatsApp number">
+                    </div>
+                    
+                    <div class="nav-buttons">
+                        <button type="button" class="nav-btn prev-btn" onclick="showTab('squad')"><i class="fas fa-arrow-left"></i> Previous</button>
+                        <button type="button" class="nav-btn next-btn" onclick="validateAndShowTab('player1', 'player2')">Next <i class="fas fa-arrow-right"></i></button>
+
+                    </div>
+                </div>
+                
+                <!-- Player 2 Tab -->
+                <div class="tab-content" id="player2-tab">
+                    <div class="form-group">
+                        <label for="player2Name">Player 2 Name</label>
+                        <input type="text" id="player2Name" placeholder="Enter player 2 name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="player2Id">Player 2 Free Fire ID</label>
+                        <input type="text" id="player2Id" placeholder="Enter player 2 Free Fire ID">
+                    </div>
+                    
+                    <div class="nav-buttons">
+                        <button type="button" class="nav-btn prev-btn" onclick="showTab('player1')"><i class="fas fa-arrow-left"></i> Previous</button>
+                        <button type="button" class="nav-btn skip-btn" onclick="skipToTab('player4')">Skip <i class="fas fa-forward"></i></button>
+                        <button type="button" class="nav-btn next-btn" onclick="validateAndShowTab('player2', 'player3')">Next <i class="fas fa-arrow-right"></i></button>
+
+
+                    
+                    </div>
+                </div>
+                
+                <!-- Player 3 Tab -->
+                <div class="tab-content" id="player3-tab">
+                    <div class="form-group">
+                        <label for="player3Name">Player 3 Name</label>
+                        <input type="text" id="player3Name" placeholder="Enter player 3 name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="player3Id">Player 3 Free Fire ID</label>
+                        <input type="text" id="player3Id" placeholder="Enter player 3 Free Fire ID">
+                    </div>
+                    
+                    <div class="nav-buttons">
+                        <button type="button" class="nav-btn prev-btn" onclick="showTab('player1')"><i class="fas fa-arrow-left"></i> Previous</button>
+                        <button type="button" class="nav-btn skip-btn" onclick="skipToTab('player4')">Skip <i class="fas fa-forward"></i></button>
+                        <button type="button" class="nav-btn next-btn" onclick="validateAndShowTab('player3', 'player4')">Next <i class="fas fa-arrow-right"></i></button>
+</div>
+                </div>
+                
+                <!-- Player 4 Tab -->
+                <div class="tab-content" id="player4-tab">
+                    <div class="form-group">
+                        <label for="player4Name">Player 4 Name</label>
+                        <input type="text" id="player4Name" placeholder="Enter player 4 name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="player4Id">Player 4 Free Fire ID</label>
+                        <input type="text" id="player4Id" placeholder="Enter player 4 Free Fire ID">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label> 
+                            By registering, I agree to the tournament rules and terms
+                        </label>
+                    </div>
+                    
+                    <div class="nav-buttons">
+                        <button type="button" class="nav-btn prev-btn" onclick="showTab('player3')"><i class="fas fa-arrow-left"></i> Previous</button>
+                        <button type="submit" class="submit-btn" id="submitBtn">
+                            <span id="btnText">Register Squad</span>
+                            <i class="fas fa-arrow-right" id="btnIcon" style="margin-left: 8px;"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="success-message" id="successMessage">
+                    <i class="fas fa-check-circle"></i>
+                    <h3>Registration Successful!</h3>
+                    <p>We've received your squad registration. You'll receive confirmation details via WhatsApp shortly.</p>
+                </div>
+            </form>
+        </section>
+        
+        <!-- Terms and Rules Section -->
+        <section class="terms-section">
+            <h2 class="section-title">Tournament Terms & Rules</h2>
+            <ul class="terms-list">
+                <li>Each match contains 4 rounds</li>
+                <li>Matches will be played in knockout method</li>
+                <li>Entry fee: 350 LKR per person</li>
+                <li>Only Singapore region players are allowed</li>
+                <li>PC players are not allowed (mobile only)</li>
+                <li>Any use of aimbot or other cheats will result in immediate disqualification</li>
+                <li>Panel users will be disqualified</li>
+                <li>This is a headshot-only tournament</li>
+                <li>Once payment is made, no refunds will be issued</li>
+                <li>After registration, you will receive a confirmation message on your WhatsApp number</li>
+                <li>If the tournament is cancelled, all entry fees will be refunded</li>
+            </ul>
+        </section>
+        
+        
+    </div>
+        <!-- GT About Section Start -->
+        <section class="gt-about-section fix section-padding">
+            <h2 class="text">
+                Yunoxa <br>
+                2025
+            </h2>
+            <div class="left-shape">
+                <img src="assets/img/ffbanner1.jpg" alt="img">
+            </div>
+            
+                        <div class="col-lg-7">
+                            <div class="row g-4">
+                                <div class="col-xl-7 col-lg-12 col-md-7">
+                                    <div class="gt-about-image wow img-custom-anim-top" data-wow-duration="1.3s" data-wow-delay="0.3s">
+                                        <img src="assets/img/Character.png" alt="img" style="width: 100%;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- GT Marque Section Start -->
+        <div class="gt-marque-section">
+            <div class="overlay-shape">
+                <img src="assets/img/overlay.png" alt="img">
+            </div>
+        <div class="marquee-text-slider-3 style-11">
+            <div class="swiper marquee-text-slider">
+                <div class="swiper-wrapper slide-transtion">
+                    <div class="swiper-slide brand-slide-element">
+                        <div class="marquee-text-3">
+                            <span class="text-marquee">Yunoxa Free Fire Tournament Begins!</span>
+                            <span><img src="assets/img/icon-2.svg" alt="img"></span>
+                        </div>
+                    </div>
+                    <div class="swiper-slide brand-slide-element">
+                        <div class="marquee-text-3">
+                            <span class="text-marquee">Squad Up. Lock In. Take Over the Arena.</span>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            </div>
+            <div class="marquee-text-slider-3 style-12">
+            <div dir="rtl" class="swiper marquee-text-slider-2">
+                <div class="swiper-wrapper slide-transtion">
+                    <div class="swiper-slide brand-slide-element">
+                        <div class="marquee-text-3">
+                            <span class="text-marquee">Yunoxa: Battle for Glory, Only the Best Survive</span>
+                            <span><img src="assets/img/icon-2.svg" alt="img"></span>
+                        </div>
+                    </div>
+                    <div class="swiper-slide brand-slide-element">
+                        <div class="marquee-text-3">
+                            <span class="text-marquee">Knockouts. Headshots. Legends Rise.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <!-- GT Game-bg Section Start -->
+       <section class="gt-game-bg-section fix bg-cover" style="background-image: url(assets/img/ffbanner2.jpg);">
+    <div class="text-shape">
+        <img src="assets/img/home-1/game/text.png" alt="img">
+    </div>
+    <div class="container">
+        <div class="gt-gaming-bg-wrapper">
+            <div class="row g-4 justify-content-between">
+                <!-- Left Content -->
+                <div class="col-lg-5">
+                    <div class="gt-games-content">
+                        <h6 class="text-white wow animated-image">Join the Ultimate Free Fire Showdown</h6>
+                        <h2 class="text-white wow animated-image">
+                            Unleash Your Skills,<br>
+                            Dominate the Arena!
+                        </h2>
+                        
+                    </div>
+                </div>
+
+                <!-- Right Content -->
+                <div class="col-lg-5">
+                    <div class="gt-games-content style-2">
+                        <h6 class="text-white wow animated-image">Hosted by Yunoxa</h6>
+                        <h2 class="text-white wow animated-image">
+                            Squad Up, Drop In,<br>
+                            Claim Victory!
+                        </h2>
+                        <div class="gt-button gt-style-2 wow animated-image">
+    <a href="javascript:void(0);" class="gt-theme-btn gt-style-border"
+       onclick="document.getElementById('registration').scrollIntoView({ behavior: 'smooth' });">
+        Register Now
+    </a>
+</div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+       
+       
+
+       <!-- GT Video Section Start -->
+       <section class="gt-video-section section-padding pt-0 fix">
+        <div class="container">
+            <div class="gt-video-wrapper style-2 bg-cover" style="background-image: url(assets/img/home-1/feature/video-bg.jpg);">
+                <div class="gt-video-content">
+                    <h6 class="wow fadeInUp" data-wow-delay=".3s">LOVE TO PLAY</h6>
+                    <h2 class="wow fadeInUp" data-wow-delay=".5s">
+                        Sweet revenge <br>
+                        gameplay
+                    </h2>
+                    <a href="game-details.html" class="gt-theme-btn">
+                        play now
+                    </a>
+                </div>
+                <a href="https://www.youtube.com/watch?v=Cn4G2lZ_g2I" class="video-btn ripple video-popup">
+                    <i class="fa-solid fa-play"></i>
+                </a>
+            </div>
+        </div>
+       </section>
+
+       <!-- GT Shop Section Start -->
+       <section class="gt-shop-section section-padding fix bg-cover" style="background-image: url(assets/img/home-1/shop/shop-bg.jpg);">
+        <div class="container">
+            <div class="gt-section-title-2 text-center">
+                <h6 class="wow fadeInUp">gaming Accessories</h6>
+                <h2 class="wow fadeInUp" data-wow-delay=".3s">
+                    gear up gaming accessories
+                </h2>
+            </div>
+            <div class="swiper gt-shop-slider">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <div class="gt-shop-card-item">
+                            <span>25% off</span>
+                            <div class="gt-shop-image">
+                                <img src="assets/img/home-1/shop/shop-1.png" alt="img">
+                                <ul class="gt-shop-icon d-grid justify-content-center align-items-center">
+                                    <li>
+                                        <a href="shop-cart.html"><i class="far fa-heart"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="shop-cart.html">
+                                            <i class="far fa-shopping-cart"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                    <button data-bs-toggle="modal" data-bs-target="#exampleModal2">
+                                    <i class="far fa-eye"></i>
+                                    </button>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="gt-shop-content">
+                                <h5>
+                                    <a href="shop-details.html">
+                                        Virtual Reality Glasses <br>
+                                        & Controllers
+                                    </a>
+                                </h5>
+                                <p>$185.10-$285.30</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="gt-shop-card-item">
+                            <span>25% off</span>
+                            <div class="gt-shop-image">
+                                <img src="assets/img/home-1/shop/shop-2.png" alt="img">
+                                <ul class="gt-shop-icon d-grid justify-content-center align-items-center">
+                                    <li>
+                                        <a href="shop-cart.html"><i class="far fa-heart"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="shop-cart.html">
+                                            <i class="far fa-shopping-cart"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                    <button data-bs-toggle="modal" data-bs-target="#exampleModal2">
+                                    <i class="far fa-eye"></i>
+                                    </button>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="gt-shop-content">
+                                <h5>
+                                    <a href="shop-details.html">
+                                        Virtual Reality Glasses <br>
+                                        & Controllers
+                                    </a>
+                                </h5>
+                                <p>$185.10-$285.30</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="gt-shop-card-item">
+                            <span>25% off</span>
+                            <div class="gt-shop-image">
+                                <img src="assets/img/home-1/shop/shop-3.png" alt="img">
+                                <ul class="gt-shop-icon d-grid justify-content-center align-items-center">
+                                    <li>
+                                        <a href="shop-cart.html"><i class="far fa-heart"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="shop-cart.html">
+                                            <i class="far fa-shopping-cart"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                    <button data-bs-toggle="modal" data-bs-target="#exampleModal2">
+                                    <i class="far fa-eye"></i>
+                                    </button>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="gt-shop-content">
+                                <h5>
+                                    <a href="shop-details.html">
+                                        Virtual Reality Glasses <br>
+                                        & Controllers
+                                    </a>
+                                </h5>
+                                <p>$185.10-$285.30</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="gt-shop-card-item">
+                            <span>25% off</span>
+                            <div class="gt-shop-image">
+                                <img src="assets/img/home-1/shop/shop-4.png" alt="img">
+                                <ul class="gt-shop-icon d-grid justify-content-center align-items-center">
+                                    <li>
+                                        <a href="shop-cart.html"><i class="far fa-heart"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="shop-cart.html">
+                                            <i class="far fa-shopping-cart"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                    <button data-bs-toggle="modal" data-bs-target="#exampleModal2">
+                                    <i class="far fa-eye"></i>
+                                    </button>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="gt-shop-content">
+                                <h5>
+                                    <a href="shop-details.html">
+                                        Virtual Reality Glasses <br>
+                                        & Controllers
+                                    </a>
+                                </h5>
+                                <p>$185.10-$285.30</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+       </section>
+
+       <!-- GT Testimonial Section Start -->
+       
+
+
+       <!-- GT Team Section Start -->
+       <section class="gt-team-section section-padding fix bg-cover" style="background-image: url(assets/img/home-1/team/team-bg.jpg);">
+            <div class="right-shape wow animated-image">
+                <img src="assets/img/home-1/team/shape-1.png" alt="img">
+            </div>
+            <div class="container">
+                <div class="gt-team-wrapper">
+                    <div class="row g-4 align-items-center">
+                        <div class="col-lg-8">
+                            <div class="swiper gt-team-slider">
+                                <div class="swiper-wrapper">
+                                    <div class="swiper-slide">
+                                        <div class="gt-team-card-item">
+                                            <div class="gt-team-image">
+                                                <img src="assets/img/home-1/team/team-2.jpg" alt="img">
+                                                <div class="gt-team-content">
+                                                    <div class="gt-social-icon d-flex align-items-center">
+                                                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                                        <a href="#"><i class="fab fa-twitter"></i></a>
+                                                        <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+                                                        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                                                    </div>
+                                                    <h3>
+                                                        <a href="team-details.html">Chun Qing</a>
+                                                    </h3>
+                                                    <p>gaming artist</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <div class="gt-team-card-item">
+                                            <div class="gt-team-image">
+                                                <img src="assets/img/home-1/team/team-1.jpg" alt="img">
+                                                <div class="gt-team-content">
+                                                    <div class="gt-social-icon d-flex align-items-center">
+                                                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                                        <a href="#"><i class="fab fa-twitter"></i></a>
+                                                        <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+                                                        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                                                    </div>
+                                                    <h3>
+                                                        <a href="team-details.html">Chun Qing</a>
+                                                    </h3>
+                                                    <p>gaming artist</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <div class="gt-team-card-item">
+                                            <div class="gt-team-image">
+                                                <img src="assets/img/home-1/team/team-3.jpg" alt="img">
+                                                <div class="gt-team-content">
+                                                    <div class="gt-social-icon d-flex align-items-center">
+                                                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                                        <a href="#"><i class="fab fa-twitter"></i></a>
+                                                        <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+                                                        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                                                    </div>
+                                                    <h3>
+                                                        <a href="team-details.html">Chun Qing</a>
+                                                    </h3>
+                                                    <p>gaming artist</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="gt-team-cont">
+                                <div class="gt-section-title-2">
+                                    <h6 class="text-white wow fadeInUp">Our best gamer</h6>
+                                    <h2 class="text-white wow fadeInUp" data-wow-delay=".3s">
+                                        our best <br> gaming team
+                                    </h2>
+                                </div>
+                                <p class="text-white gt-text">
+                                    A game studio crafting exciting, high-quality video games, prioritizing immersive gameplay and mechanics. Hac habitasse platea
+                                </p>
+                                <div class="array-buttons wow fadeInUp" data-wow-delay=".5s">
+                                    <button class="array-prev"><i class="fa-solid fa-arrow-up"></i></button>
+                                    <button class="array-next"><i class="fa-solid fa-arrow-down"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+       </section>
+
+       <!-- GT News Section Start -->
+       <section class="gt-news-section section-padding fix">
+            <div class="container">
+                <div class="gt-section-title-area">
+                    <div class="gt-section-title-2">
+                        <h6 class="wow fadeInUp">latest news</h6>
+                        <h2 class="wow fadeInUp" data-wow-delay=".3s">
+                            latest news & blog
+                        </h2>
+                    </div>
+                    <a href="game.html" class="gt-theme-btn gt-style-border">
+                        view all blogs
+                    </a>
+                </div>
+                <div class="row">
+                    <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".3s">
+                        <div class="gt-news-card-item">
+                            <div class="gt-news-image">
+                                <img src="assets/img/home-1/news/news-1.jpg" alt="img">
+                            </div>
+                            <div class="gt-news-content">
+                                <ul class="gt-list">
+                                    <li>
+                                        <i class="fa-regular fa-calendar"></i>
+                                        30 May, 2025
+                                    </li>
+                                </ul>
+                                <h4>
+                                    <a href="news-details.html">
+                                        The evolution of online gaming and its rise
+                                    </a>
+                                </h4>
+                                <p>
+                                    Nunc consectetur ornare varius. Nulla massa velit, ultricies in volutpat a, viverra et nunc. spendisse non velit
+                                </p>
+                                <a href="news-details.html" class="icon"><i class="fa-solid fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".5s">
+                        <div class="gt-news-card-item">
+                            <div class="gt-news-image">
+                                <img src="assets/img/home-1/news/news-2.jpg" alt="img">
+                            </div>
+                            <div class="gt-news-content">
+                                <ul class="gt-list">
+                                    <li>
+                                        <i class="fa-regular fa-calendar"></i>
+                                        30 May, 2025
+                                    </li>
+                                </ul>
+                                <h4>
+                                    <a href="news-details.html">
+                                        The evolution of online gaming and its rise
+                                    </a>
+                                </h4>
+                                <p>
+                                    Nunc consectetur ornare varius. Nulla massa velit, ultricies in volutpat a, viverra et nunc. spendisse non velit
+                                </p>
+                                <a href="news-details.html" class="icon"><i class="fa-solid fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".7s">
+                        <div class="gt-news-card-item">
+                            <div class="gt-news-image">
+                                <img src="assets/img/home-1/news/news-3.jpg" alt="img">
+                            </div>
+                            <div class="gt-news-content">
+                                <ul class="gt-list">
+                                    <li>
+                                        <i class="fa-regular fa-calendar"></i>
+                                        30 May, 2025
+                                    </li>
+                                </ul>
+                                <h4>
+                                    <a href="news-details.html">
+                                        The evolution of online gaming and its rise
+                                    </a>
+                                </h4>
+                                <p>
+                                    Nunc consectetur ornare varius. Nulla massa velit, ultricies in volutpat a, viverra et nunc. spendisse non velit
+                                </p>
+                                <a href="news-details.html" class="icon"><i class="fa-solid fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+       </section>
+
+       <!-- GT News Section Start -->
+       <section class="gt-cta-bg-section fix bg-cover" style="background-image: url(assets/img/home-1/cta/cta-bg-1.jpg);">
+            <div class="container">
+                <div class="gt-cta-bg-wrapper">
+                    <div class="shape float-bob-y">
+                        <img src="assets/img/home-1/cta/shape-1.png" alt="img">
+                    </div>
+                    <div class="row g-4">
+                        <div class="col-lg-7">
+                            <div class="gt-cta-content">
+                                <h2 class="wow fadeInUp" data-wow-delay=".3s">
+                                    Join Yunoxa to <br>
+                                    Become Next PRO Gamer Today !
+                                </h2>
+                            </div>
+                        </div>
+                        <div class="col-lg-5">
+                            <div class="gt-right-image">
+                                <a href="contact.html" class="gt-theme-btn wow fadeInUp" data-wow-delay=".5s">
+                                    join community
+                                </a>
+                                <div class="gt-cta-image wow animated-image">
+                                    <img src="assets/img/home-1/cta/man.png" alt="img">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+       </section>
+
+       <!-- GT Brand Section Start -->
+       <div class="gt-brand-section section-padding fix">
+            <div class="container">
+                <div class="swiper gt-brand-slider">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <div class="gt-brand-box">
+                                <div class="gt-brand-image text-center">
+                                    <img src="assets/img/home-1/brand/b-1.png" alt="img">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="gt-brand-box">
+                                <div class="gt-brand-image text-center">
+                                    <img src="assets/img/home-1/brand/b-2.png" alt="img">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="gt-brand-box">
+                                <div class="gt-brand-image text-center">
+                                    <img src="assets/img/home-1/brand/b-3.png" alt="img">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="gt-brand-box">
+                                <div class="gt-brand-image text-center">
+                                    <img src="assets/img/home-1/brand/b-4.png" alt="img">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="gt-brand-box">
+                                <div class="gt-brand-image text-center">
+                                    <img src="assets/img/home-1/brand/b-5.png" alt="img">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="gt-brand-box">
+                                <div class="gt-brand-image text-center">
+                                    <img src="assets/img/home-1/brand/b-6.png" alt="img">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+       </div>
+
+       <!-- GT Newsletter Section Start -->
+       <section class="gt-newsletter-section fix mb-4">
+            <div class="container">
+                <div class="gt-newsletter-wrapper bg-cover" style="background-image: url(assets/img/home-1/cta/newsletter-bg.jpg);">
+                    <div class="shape">
+                        <img src="assets/img/home-1/cta/drive.png" alt="img">
+                    </div>
+                    <h4>
+                        Sign up today to get the latest <br>
+                        inspiration & insights
+                    </h4>
+                    <form action="#">
+                        <div class="form-clt">
+                            <input type="text" name="email" id="email" placeholder="Your Email Address">
+                            <button type="submit" class="gt-theme-btn">
+                                subscribe now
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+       </section>
+
+        <!-- GT Footer Section Start -->
+        <footer class="gt-footer-section section-bg">
+            <div class="container">
+                <div class="gt-footer-widget-wrapper">
+                    <div class="row justify-content-between">
+                        <div class="col-xl-4 col-lg-6 col-md-12 wow fadeInUp" data-wow-delay=".2s">
+                            <div class="gt-footer-widget-items">
+                                <div class="gt-widget-head">
+                                    <a href="index.html" class="gt-footer-logo">
+                                        <img src="assets/img/logo/white-logo.svg" alt="img">
+                                    </a>
+                                </div>
+                                <div class="gt-footer-content">
+                                    <p>
+                                        A game studio crafting exciting, high-quality video games, prioritizing immersive gameplay and mechanics. Hac habitasse platea
+                                    </p>
+                                    <div class="gt-social-icon d-flex align-items-center">
+                                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                        <a href="#"><i class="fab fa-twitter"></i></a>
+                                        <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+                                        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-2 col-lg-3 col-md-6 col-sm-6 wow fadeInUp" data-wow-delay=".4s">
+                            <div class="gt-footer-widget-items">
+                                <div class="gt-widget-head">
+                                    <h5>Our Studio</h5>
+                                </div>
+                                <ul class="gt-list-area">
+                                    <li>
+                                        <a href="about.html">
+                                            About Us
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="team.html">
+                                            our team
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="service-details.html">
+                                            Advertising
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="service-details.html">
+                                            Legal Notices
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="service-details.html">
+                                            Partnership
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-xl-2 ps-lg-3 col-lg-3 col-md-6 col-sm-6 wow fadeInUp" data-wow-delay=".6s">
+                            <div class="gt-footer-widget-items">
+                                <div class="gt-widget-head">
+                                    <h5>Utility Pages</h5>
+                                </div>
+                                <ul class="gt-list-area">
+                                    <li>
+                                        <a href="service-details.html">
+                                            Terms of Service
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="contact.html">
+                                            Privacy/Terms
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="service-details.html">
+                                            Gift Cards
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="game-details.html">
+                                            Game Reviews
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="contact.html">
+                                            Subscriptions
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 wow fadeInUp" data-wow-delay=".8s">
+                            <div class="gt-footer-widget-items">
+                                <div class="gt-widget-head">
+                                    <h5>download our games</h5>
+                                </div>
+                                <div class="gt-footer-app">
+                                    <div class="app-image">
+                                        <img src="assets/img/home-1/footer/app-1.jpg" alt="img">
+                                    </div>
+                                    <div class="app-image">
+                                        <img src="assets/img/home-1/footer/app-2.jpg" alt="img">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-bottom wow fadeInUp" data-wow-delay=".3s">
+                    <div class="footer-wrapper">
+                        <p>© 2025 Yunoxa. All Rights Reserved.</p>
+                        <ul class="gt-footer-list wow fadeInUp" data-wow-delay=".3s">
+                            <li>
+                                <a href="contact.html">Cookies</a>
+                            </li>
+                            <li>
+                                <a href="contact.html">Privacy</a>
+                            </li>
+                            <li>
+                                <a href="contact.html">Terms</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <script>
+function showTab(tabId) {
+    // Hide all tabs and remove active class
+    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+
+    // Show selected
+    document.getElementById(`${tabId}-tab`).classList.add('active');
+    document.querySelector(`.tab[data-tab="${tabId}"]`).classList.add('active');
+}
+
+// Validation on next for Squad and Player 1
+function validateAndShowTab(currentTabId, nextTabId) {
+    const currentTab = document.getElementById(`${currentTabId}-tab`);
+    const inputs = currentTab.querySelectorAll('input[required]');
+
+    let isValid = true;
+    inputs.forEach(input => {
+        if (!input.value.trim()) {
+            input.style.borderColor = 'var(--error)';
+            isValid = false;
+        } else {
+            input.style.borderColor = ''; // Reset if valid
+        }
+    });
+
+    if (isValid) {
+        showTab(nextTabId);
+    }
+}
+
+// Skip logic (used for Player 2-4)
+function skipToTab(tabId) {
+    showTab(tabId);
+}
+
+// Handle Enter key press
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+        e.preventDefault(); // Prevent form submission
+        
+        // Get the currently active tab
+        const activeTab = document.querySelector('.tab-content.active');
+        const activeTabId = activeTab.id.replace('-tab', '');
+        
+        // Determine which tab we're on and where to go next
+        switch(activeTabId) {
+            case 'squad':
+                validateAndShowTab('squad', 'player1');
+                break;
+            case 'player1':
+                validateAndShowTab('player1', 'player2');
+                break;
+            case 'player2':
+                validateAndShowTab('player2', 'player3');
+                break;
+            case 'player3':
+                validateAndShowTab('player3', 'player4');
+                break;
+            // On the last tab, Enter will submit the form
+            case 'player4':
+                document.getElementById('submitBtn').click();
+                break;
+        }
+    }
+});
+</script>
+
+
+    <script type="module">
+        // Initialize Supabase
+        import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+        const supabaseUrl = 'https://qopdjgfciakmvhlriixt.supabase.co'
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFvcGRqZ2ZjaWFrbXZobHJpaXh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk0NDA2NDAsImV4cCI6MjA1NTAxNjY0MH0.5UAelwww7WpDUExqhc5dH2JhUWlGNgUNjh8fzxPNZvs'
+        const supabase = createClient(supabaseUrl, supabaseKey)
+
+        // Banner Slider Functionality
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.banner-slide');
+        
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[index].classList.add('active');
+        }
+        
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
+        
+        // Change slide every 5 seconds
+        setInterval(nextSlide, 5000);
+        
+        // Tab Navigation
+        
+        
+        // Handle form submission
+        document.getElementById('registrationForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const btnIcon = document.getElementById('btnIcon');
+            
+            const squadName = document.getElementById('squadName').value;
+            const player1Name = document.getElementById('player1Name').value;
+            const player1Id = document.getElementById('player1Id').value;
+            const player1Contact = document.getElementById('player1Contact').value;
+            const player2Name = document.getElementById('player2Name').value;
+            const player2Id = document.getElementById('player2Id').value;
+            const player3Name = document.getElementById('player3Name').value;
+            const player3Id = document.getElementById('player3Id').value;
+            const player4Name = document.getElementById('player4Name').value;
+            const player4Id = document.getElementById('player4Id').value;
+            
+            submitBtn.disabled = true;
+            btnText.textContent = 'Registering...';
+            btnIcon.classList.replace('fa-arrow-right', 'fa-spinner', 'fa-spin');
+            
+            try {
+                // Insert squad data into Supabase
+                const { data, error } = await supabase
+                    .from('squad_registrations')
+                    .insert([
+                        { 
+                            squad_name: squadName,
+                            player1_name: player1Name,
+                            player1_id: player1Id,
+                            player1_contact: player1Contact,
+                            player2_name: player2Name || null,
+                            player2_id: player2Id || null,
+                            player3_name: player3Name || null,
+                            player3_id: player3Id || null,
+                            player4_name: player4Name || null,
+                            player4_id: player4Id || null,
+                            registered_at: new Date().toISOString()
+                        }
+                    ]);
+                
+                if (error) throw error;
+                
+                // Show success message
+                document.getElementById('successMessage').style.display = 'block';
+                document.getElementById('registrationForm').reset();
+                
+                // Hide form after successful submission
+                setTimeout(() => {
+                    document.getElementById('registrationForm').style.opacity = '0.5';
+                    document.getElementById('registrationForm').style.pointerEvents = 'none';
+                }, 500);
+                
+            } catch (error) {
+                alert('Registration failed: ' + error.message);
+            } finally {
+                submitBtn.disabled = false;
+                btnText.textContent = 'Register Squad';
+                btnIcon.classList.replace('fa-spinner', 'fa-arrow-right');
+                btnIcon.classList.remove('fa-spin');
+            }
+        });
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            // Start with first slide
+            showSlide(0);
+            
+            // Set up tab click events
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    showTab(tab.dataset.tab);
+                });
+            });
+        });
+    </script>
+         
+        <!--<< All JS Plugins >>-->
+        <script src="assets/js/jquery-3.7.1.min.js"></script>
+        <!--<< Viewport Js >>-->
+        <script src="assets/js/viewport.jquery.js"></script>
+        <!--<< Bootstrap Js >>-->
+        <script src="assets/js/bootstrap.bundle.min.js"></script>
+        <!--<< nice-selec Js >>-->
+        <script src="assets/js/jquery.nice-select.min.js"></script>
+        <!--<< Waypoints Js >>-->
+        <script src="assets/js/jquery.waypoints.js"></script>
+        <!--<< Counterup Js >>-->
+        <script src="assets/js/jquery.counterup.min.js"></script>
+        <!--<< Swiper Slider Js >>-->
+        <script src="assets/js/swiper-bundle.min.js"></script>
+        <!--<< MeanMenu Js >>-->
+        <script src="assets/js/jquery.meanmenu.min.js"></script>
+        <!--<< Magnific Popup Js >>-->
+        <script src="assets/js/jquery.magnific-popup.min.js"></script>
+        <!--<< Wow Animation Js >>-->
+        <script src="assets/js/wow.min.js"></script>
+        <!--<< Main.js >>-->
+        <script src="assets/js/main.js"></script>
+    </body>
+</html>
