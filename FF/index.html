@@ -676,13 +676,48 @@
         
 
         <!-- Header Section Start -->
-        <header class="header-1" style="padding: 10px 0; background: #00000000;">
-    <div class="logo" style="text-align: center;">
-        <a href="index.html">
-            <img src="assets/img/Favicon.svg" alt="logo-img" style="height: 50px;">
-        </a>
-    </div>
+        <style>
+  .responsive-logo {
+    height: 240px;
+  }
+
+  .logo {
+    position: absolute;
+    top: -80px;
+    left: -5px;
+  }
+
+  @media (min-width: 768px) {
+    .responsive-logo {
+      height: 370px;
+    }
+    .logo {
+      top: -150px;
+      left: 5px;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .responsive-logo {
+      height: 700px;
+    }
+    .logo {
+      top: -280px;
+      left: -20px;
+    }
+  }
+</style>
+
+<header class="header-1" style="padding: 10px 0; background: transparent; position: relative;">
+  <div class="logo">
+    <a href="index.html">
+      <img src="assets/img/FF.png" alt="logo-img" class="responsive-logo">
+    </a>
+  </div>
 </header>
+
+
+
 
 
        
@@ -702,7 +737,7 @@
                         <div class="hero-content">
                             <h6 class="wow animated-image">your future ultimate gaming world . . .</h6>
                             <h1 class="wow animated-image">
-                                Win Grand Prizes with Yunoxa
+                                Yunoxa Free Fire Tournament
                             </h1>
                             <div class="gt-hero-button wow animated-image">
                         <button type="button" class="gt-theme-btn" onclick="document.getElementById('registration').scrollIntoView({ behavior: 'smooth' });"><i class="fas fa-arrow-left"></i> Register Now</button>
@@ -742,7 +777,7 @@
             <div class="swiper-wrapper slide-transtion">
                 <div class="swiper-slide brand-slide-element">
                     <div class="marquee-text-3">
-                        <span class="text-marquee highlighted-marquee">🏆 Champion Wins 3400/= Cash Prize!</span>
+                        <span class="text-marquee highlighted-marquee">🏆 Champion Wins 5000/= Cash Prize!</span>
                         <span><img src="assets/img/Cash.png" alt="img" style="width: 140px; height: auto; vertical-align: middle;"></span>
                     </div>
                 </div>
@@ -886,7 +921,7 @@
             <ul class="terms-list">
                 <li>Each match contains 4 rounds</li>
                 <li>Matches will be played in knockout method</li>
-                <li>Entry fee: 350 LKR per person</li>
+                <li>Entry fee: 250 LKR per person</li>
                 <li>Only Singapore region players are allowed</li>
                 <li>PC players are not allowed (mobile only)</li>
                 <li>Any use of aimbot or other cheats will result in immediate disqualification</li>
@@ -914,7 +949,7 @@
                             <div class="row g-4">
                                 <div class="col-xl-7 col-lg-12 col-md-7">
                                     <div class="gt-about-image wow img-custom-anim-top" data-wow-duration="1.3s" data-wow-delay="0.3s">
-                                        <img src="assets/img/Character.png" alt="img" style="width: 100%;">
+                                        <img src="assets/img/FF.png" alt="img" style="width: 100%;">
                                     </div>
                                 </div>
                             </div>
