@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="84.249 128.278 388.864 271.722" width="388.864px" height="271.722px">
+  <defs>
+    <radialGradient gradientUnits="userSpaceOnUse" cx="311.303" cy="263.722" r="161.81" id="gradient-0">
+      <stop stop-color="#FF0808"/>
+      <stop offset="1" stop-color="#860000"/>
+    </radialGradient>
+    <radialGradient gradientUnits="userSpaceOnUse" cx="197.042" cy="271.958" r="79.567" id="gradient-1" spreadMethod="reflect">
+      <stop offset="0" style="stop-color: rgb(100% 3.1373% 3.1373%)"/>
+      <stop offset="1" style="stop-color: rgb(65.027% 0% 1.3736%)"/>
+    </radialGradient>
+    <radialGradient gradientUnits="userSpaceOnUse" cx="183.042" cy="237.884" r="90.943" id="gradient-2" gradientTransform="matrix(1, 0, 0, 1, -28.850357, 23.796175)">
+      <stop offset="0" style="stop-color: rgb(100% 3.1373% 3.1373%)"/>
+      <stop offset="1" style="stop-color: rgb(65.027% 0% 1.3736%)"/>
+    </radialGradient>
+  </defs>
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M 299.273 128.278 L 248.582 154.303 L 305.723 246.452 L 397.606 153.323 L 365.495 128.876 L 473.113 128.876 L 426.462 160.302 L 202.625 383.257 L 256.449 398.41 L 149.493 399.166 L 285.205 266.943 L 215.335 154.781 L 165.972 129.356 L 299.273 128.278 Z" style="stroke-width: 1; stroke-linecap: round; paint-order: fill; fill: url(&quot;#gradient-0&quot;);" transform="matrix(1, 0, 0, 1, -1.7763568394002505e-15, 0)"/>
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M 211.521 160.427 L 276.61 264.722 L 153.324 388.625 L 117.475 400 L 254.034 261.939 L 182.442 143.916 L 211.521 160.427 Z" style="stroke-width: 0px; fill: url(&quot;#gradient-1&quot;);" transform="matrix(1, 0, 0, 1, -1.7763568394002505e-15, 0)"/>
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M 175.67 142.222 L 245.134 259.642 L 120.972 386.874 L 84.249 400 L 222.558 256.859 L 157.966 131.835 L 175.67 142.222 Z" style="stroke-width: 1; fill: url(&quot;#gradient-2&quot;);" transform="matrix(1, 0, 0, 1, -1.7763568394002505e-15, 0)"/>
+</svg>
