@@ -596,15 +596,129 @@ img {
             });
         }
         
-        function bindBuyNowEvents() {
-            document.querySelectorAll('.buy-now').forEach(button => {
-                button.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const productId = this.dataset.id;
-                    window.location.href = `open.html?id=${productId}`;
-                });
-            });
+         async function buyNowProduct(productId) {
+        try {
+            // First fetch the product through proxy
+            const response = await fetch(`https://api-proxy.yunoxa1.workers.dev/rest/v1/products?id=eq.${productId}&verification=eq.1&select=*`);
+            
+            if (!response.ok) throw new Error('Failed to fetch product details');
+            
+            const [productData] = await response.json();
+            
+            if (!productData) throw new Error('Product not found');
+
+            // Use product's whatsapp_no or fallback to default
+            const whatsappNumber = productData.whatsapp_no || '94767087651';
+            const deliveryCharge = productData.delivery || 350;
+            
+            // Generate WhatsApp message
+            const productLink = `${window.location.origin}/open.html?id=${productId}`;
+            const price = productData.discount > 0 
+                ? productData.price * (1 - productData.discount/100)
+                : productData.price;
+            const totalPrice = price + deliveryCharge;
+            
+            const message = `Hello Seller! I Found This Product on Yunoxa%0A%0A` +
+                   `*Product:* ${productData.name}%0A` +
+                   `*Price:* LKR ${price.toFixed(2)}%0A` +
+                   `*Delivery:* LKR ${deliveryCharge.toFixed(2)}%0A` +
+                   `*Total:* LKR ${totalPrice.toFixed(2)}%0A%0A` +
+                   `*Product Link:* ${productLink}%0A%0A` +
+                   `I'm interested in buying this item. Please provide more details.`;
+            
+            // Open WhatsApp with the message
+            window.open(`https://api.whatsapp.com/send/?phone=${whatsappNumber}&text=${message}`, '_blank');
+            
+        } catch (error) {
+            console.error("Error processing buy now:", error);
+            showToast("Error processing your order");
         }
+    }
+
+    // Update the bindBuyNowEvents function
+    function bindBuyNowEvents() {
+        document.querySelectorAll('.buy-now').forEach(button => {
+            button.addEventListener('click', async function(e) {
+                e.preventDefault();
+                const productId = this.dataset.id;
+                await buyNowProduct(productId);
+            });
+        });
+    }
+
+    // Update the favorite item template in loadFavorites function
+    function loadFavorites() {
+        const favorites = getFavorites();
+        const favoritesGrid = document.getElementById('favorites-grid');
+        const emptyFavorites = document.getElementById('empty-favorites');
+        
+        updateFavoritesCount();
+        
+        if (favorites.length === 0) {
+            favoritesGrid.style.display = 'none';
+            emptyFavorites.style.display = 'block';
+            return;
+        }
+        
+        favoritesGrid.style.display = 'grid';
+        emptyFavorites.style.display = 'none';
+        
+        favoritesGrid.innerHTML = '';
+        
+        favorites.forEach(item => {
+            const { starHtml, rating } = generateStarRating();
+            const discount = item.discount || 0;
+            const originalPrice = item.originalPrice || item.price;
+            const displayPrice = discount > 0 ? 
+                (originalPrice * (1 - discount/100)).toFixed(2) : 
+                item.price.toFixed(2);
+            
+            const favoriteItem = document.createElement('div');
+            favoriteItem.className = 'favorite-item';
+            favoriteItem.dataset.id = item.id;
+            favoriteItem.innerHTML = `
+                <img src="${item.image || 'https://via.placeholder.com/250'}" alt="${item.name}" class="favorite-item-img">
+                <div class="favorite-item-details">
+                    <div class="favorite-item-title">${item.name}</div>
+                    <div class="favorite-item-price">
+                        LKR ${displayPrice}
+                        ${discount > 0 ? 
+                            `<span class="favorite-item-original-price">LKR ${originalPrice.toFixed(2)}</span>` : ''}
+                        ${discount > 0 ? 
+                            `<span class="favorite-item-discount">${discount}% OFF</span>` : ''}
+                    </div>
+                    <div class="product-rating">
+                        <div class="stars">${starHtml}</div>
+                        <span class="rating-count">${rating}</span>
+                    </div>
+                    <div class="favorite-item-actions">
+                        <button class="remove-favorite" data-id="${item.id}">
+                            <i class="far fa-trash-alt"></i> Remove
+                        </button>
+                        <button class="buy-now-btn" data-id="${item.id}">
+                            BUY NOW
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // Add event listeners
+            const removeBtn = favoriteItem.querySelector('.remove-favorite');
+            const productBtn = favoriteItem.querySelector('.favorite-item-img');
+            const buyNowBtn = favoriteItem.querySelector('.buy-now-btn');
+
+            removeBtn.addEventListener('click', () => removeFromFavorites(item.id));
+            productBtn.addEventListener('click', () => {
+                window.location.href = `open.html?id=${item.id}`;
+            });
+            buyNowBtn.addEventListener('click', async (e) => {
+                e.preventDefault();
+                await buyNowProduct(item.id);
+            });
+            
+            favoritesGrid.appendChild(favoriteItem);
+        });
+    }
     </script>
 </body>
 </html>

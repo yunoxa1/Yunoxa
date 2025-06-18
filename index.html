@@ -317,40 +317,60 @@
             });
         }
         
-        function bindBuyNowEvents() {
-            document.querySelectorAll('.buy-now').forEach(button => {
-                button.replaceWith(button.cloneNode(true));
-            });
-            
-            document.querySelectorAll('.buy-now').forEach(button => {
-                button.addEventListener('click', async function(e) {
-                    e.preventDefault();
-                    try {
-                        const product = JSON.parse(this.dataset.product.replace(/&apos;/g, "'"));
-                        
-                        const favorites = [{
-                            id: product.id,
-                            name: product.name,
-                            price: product.discount > 0 
-                                ? product.price * (1 - product.discount/100)
-                                : product.price,
-                            originalPrice: product.price,
-                            quantity: 1,
-                            image: product.image,
-                            discount: product.discount || 0
-                        }];
-                        
-                        localStorage.setItem('favorites', JSON.stringify(favorites));
-                        updatefavoritesCount();
-                        
-                        window.location.href = `checkout1.html?id=${product.id}`;
-                    } catch (error) {
-                        console.error("Error processing buy now:", error);
-                        showToast("Error processing your order");
+        async function bindBuyNowEvents() {
+    document.querySelectorAll('.buy-now').forEach(button => {
+        button.replaceWith(button.cloneNode(true));
+    });
+    
+    document.querySelectorAll('.buy-now').forEach(button => {
+        button.addEventListener('click', async function(e) {
+            e.preventDefault();
+            try {
+                const product = JSON.parse(this.dataset.product.replace(/&apos;/g, "'"));
+                
+                // Fetch product details through proxy
+                const response = await fetch(`${PROXY_API_URL}/rest/v1/products?id=eq.${product.id}&select=*`, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
                     }
                 });
-            });
-        }
+                
+                if (!response.ok) throw new Error('Failed to fetch product details');
+                
+                const [fullProduct] = await response.json();
+                
+                if (!fullProduct) throw new Error('Product not found');
+                
+                // Use product's whatsapp_no or fallback to default
+                const whatsappNumber = fullProduct.whatsapp_no || '94767087651';
+                const deliveryCharge = fullProduct.delivery || 350;
+                
+                // Generate WhatsApp message
+                const productLink = `${window.location.origin}/open.html?id=${product.id}`;
+                const price = product.discount > 0 
+                    ? product.price * (1 - product.discount/100)
+                    : product.price;
+                const totalPrice = price + deliveryCharge;
+                
+                const message = `Hello Seller! I Found This Product on Yunoxa%0A%0A` +
+                       `*Product:* ${product.name}%0A` +
+                       `*Price:* LKR ${price.toFixed(2)}%0A` +
+                       `*Delivery:* LKR ${deliveryCharge.toFixed(2)}%0A` +
+                       `*Total:* LKR ${totalPrice.toFixed(2)}%0A%0A` +
+                       `*Product Link:* ${productLink}%0A%0A` +
+                       `I'm interested in buying this item. Please provide more details.`;
+                
+                // Open WhatsApp with the message
+                window.open(`https://api.whatsapp.com/send/?phone=${whatsappNumber}&text=${message}`, '_blank');
+                
+            } catch (error) {
+                console.error("Error processing buy now:", error);
+                showToast("Error processing your order");
+            }
+        });
+    });
+}
         
         // Updated product loading functions using proxy
         async function fetchProducts(category = null) {
