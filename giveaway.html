@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Yunoxa Giveaway - Win Exciting Prizes!</title>
+    <title>Yunoxa Giveaway - Winner Announced!</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="Participate in Yunoxa's exciting giveaway and win amazing prizes!" name="description">
+    <meta content="Yunoxa's giveaway has ended. Congratulations to our winner Hasan Ahamed!" name="description">
 
     <!-- Favicon -->
     <link rel="icon" href="img/Favicon.svg" type="image/svg+xml">
@@ -17,8 +17,6 @@
 
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
-
-        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
         :root {
@@ -650,9 +648,6 @@
 /* Different header colors for different message types */
 .modal-header.success {
   background:linear-gradient(135deg, #ff0000 0%, #77008f 100%);
-
-
-
 }
 
 .modal-header.error {
@@ -698,6 +693,54 @@
     transform: translateY(-2px);
     box-shadow: 0 3px 10px rgba(224, 47, 47, 0.3);
 }
+
+.winner-banner {
+    background: linear-gradient(135deg, #ff0000 0%, #77008f 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    margin-bottom: 30px;
+    box-shadow: 0 5px 15px rgba(224, 47, 47, 0.2);
+}
+
+.winner-banner h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.winner-banner p {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+}
+
+.winner-profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.winner-profile-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid white;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+.winner-profile-name {
+    font-size: 1.5rem;
+    margin-top: 15px;
+    font-weight: 600;
+}
+
+.winner-profile-prize {
+    font-size: 1.1rem;
+    color: var(--yunoxa-yellow);
+    margin-top: 5px;
+}
     </style>
 </head>
 
@@ -705,166 +748,128 @@
     <div class="container">
         <!-- Giveaway Header -->
         <header class="giveaway-header">
-            <h1>Yunoxa Mega Giveaway!</h1>
-            <p>Win amazing prizes just by participating in our special promotion</p>
+            <h1>Yunoxa Giveaway Results!</h1>
+            <p>Congratulations to our winner and thank you to everyone who participated</p>
         </header>
 
-        <!-- Countdown Timer -->
+        <!-- Winner Banner -->
+        <div class="winner-banner">
+            <h2>We Have a Winner!</h2>
+            <p>The Yunoxa Mega Giveaway has concluded and we're excited to announce our winner</p>
+            
+            <div class="winner-profile">
+                <img src="img/profile.avif" alt="Hasan Ahamed" class="winner-profile-img">
+                <div class="winner-profile-name">Hasan Ahamed</div>
+                <div class="winner-profile-prize">Winner of 9D AirPods</div>
+            </div>
+        </div>
+
+        <!-- Countdown Timer - Updated to show ended -->
         <div class="countdown-container">
-            <h2 class="countdown-title">Time Remaining to Enter</h2>
-            <div class="countdown-timer" id="countdown">
-                <div class="countdown-item">
-                    <div class="countdown-value" id="days">00</div>
-                    <div class="countdown-label">Days</div>
-                </div>
-                <div class="countdown-item">
-                    <div class="countdown-value" id="hours">00</div>
-                    <div class="countdown-label">Hours</div>
-                </div>
-                <div class="countdown-item">
-                    <div class="countdown-value" id="minutes">00</div>
-                    <div class="countdown-label">Minutes</div>
-                </div>
-                <div class="countdown-item">
-                    <div class="countdown-value" id="seconds">00</div>
-                    <div class="countdown-label">Seconds</div>
+            <h2 class="countdown-title">Giveaway Status</h2>
+            <div class="countdown-timer">
+                <div style="color: var(--yunoxa-red); font-weight: bold; font-size: 1.2rem;">
+                    Giveaway has ended - Winner announced!
                 </div>
             </div>
         </div>
 
         <!-- Prize Section -->
         <section class="prize-section">
-            <h2 class="section-title">Amazing Prizes You Can Win</h2>
+            <h2 class="section-title">The Amazing Prize</h2>
             <div class="prize-grid">
-                
                 <div class="prize-card">
                     <div class="prize-image">
-                        <img src="https://ae-pic-a1.aliexpress-media.com/kf/Sf62e820a0e0748eea93937b8be94e9711.jpg_960x960q75.jpg" alt="Second Prize">
+                        <img src="https://ae-pic-a1.aliexpress-media.com/kf/Sf62e820a0e0748eea93937b8be94e9711.jpg_960x960q75.jpg" alt="Grand Prize">
                     </div>
                     <div class="prize-details">
                         <h3 class="prize-name">Grand Prize</h3>
                         <div class="prize-value">Latest 9D AirPods</div>
-                        <p class="prize-description">Stand a Chance to win an Amazing price With Yunoxa</p>
+                        <p class="prize-description">Congratulations to Hasan Ahamed for winning this amazing prize!</p>
                     </div>
                 </div>
-                
             </div>
         </section>
 
-        <!-- How to Enter Section -->
+        <!-- Winners Section -->
+        <section class="winners-section">
+            <h2 class="section-title">Our Winner</h2>
+            <div class="winners-list">
+                <div class="winner-item">
+                    <div class="winner-avatar">
+                        <img src="img/profile.avif" alt="Hasan Ahamed" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">
+                    </div>
+                    <div class="winner-details">
+                        <div class="winner-name">Hasan Ahamed</div>
+                        <div class="winner-prize">Winner of 9D AirPods</div>
+                        <div style="margin-top:5px; color:var(--yunoxa-red);">Grand Prize Winner</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How to Enter Section - Updated -->
         <section class="how-to-enter">
-            <h2 class="section-title">How to Enter</h2>
+            <h2 class="section-title">Thank You!</h2>
             <ul class="steps-list">
-                
                 <li>
-                    <div class="step-title">Complete the Entry Form</div>
-                    <div class="step-description">Fill out the simple form below with your details.</div>
-                </li>
-                
-                <li>
-                    <div class="step-title">Share on Social Media</div>
-                    <div class="step-description">Get 2 extra entries by sharing this giveaway on your social media.</div>
+                    <div class="step-title">Giveaway Completed</div>
+                    <div class="step-description">The Yunoxa Mega Giveaway has officially ended. Thank you to all participants!</div>
                 </li>
                 <li>
-                    <div class="step-title">Wait for the Draw</div>
-                    <div class="step-description">Winners will be selected randomly and notified via email.</div>
+                    <div class="step-title">Winner Announced</div>
+                    <div class="step-description">Congratulations to Hasan Ahamed for winning the grand prize!</div>
+                </li>
+                <li>
+                    <div class="step-title">Stay Tuned</div>
+                    <div class="step-description">Follow us for future giveaways and promotions.</div>
                 </li>
             </ul>
         </section>
 
-        <!-- Entry Form Section -->
-        <section class="entry-form-section">
-        <h2 class="section-title">Enter the Giveaway</h2>
-        <form class="entry-form" id="giveawayForm">
-            <div class="form-group profile-pic-upload">
-                <label>Profile Picture (Optional)</label>
-                <img id="profilePicPreview" class="profile-pic-preview" alt="Profile Preview">
-                <input type="file" id="profilePicInput" class="file-input" accept="image/*">
-                <label for="profilePicInput" class="upload-btn">
-                    <i class="fas fa-camera"></i> Choose Photo
-                </label>
+        <!-- Entry Form Section - Disabled -->
+        <section class="entry-form-section" style="opacity: 0.6; pointer-events: none;">
+            <h2 class="section-title">Giveaway Ended</h2>
+            <div style="text-align: center; padding: 30px;">
+                <p style="font-size: 1.1rem; margin-bottom: 20px;">The entry period for this giveaway has ended.</p>
+                <p>Follow us on social media to be notified about future giveaways!</p>
             </div>
-            <div class="form-group">
-                <label for="fullName">Full Name</label>
-                <input type="text" id="fullName" name="fullName" required>
-            </div>
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div class="form-group">
-                <label for="phone">Phone Number</label>
-                <input type="tel" id="phone" name="phone" required>
-            </div>
-            <div class="form-group">
-                <label for="address">Shipping Address</label>
-                <textarea id="address" name="address" required></textarea>
-            </div>
-            <div class="form-group">
-                <label for="hearAbout">How did you hear about this giveaway?</label>
-                <select id="hearAbout" name="hearAbout">
-                    <option value="">Select an option</option>
-                    <option value="social">Social Media</option>
-                    <option value="email">Email Newsletter</option>
-                    <option value="friend">Friend or Family</option>
-                    <option value="website">Yunoxa Website</option>
-                    <option value="other">Other</option>
-                </select>
-            </div>
-            <div>
-                <label>
-                    <input type="checkbox" name="terms" required> I agree to the terms and conditions
-                </label>
-            </div>
-            <button type="submit" class="submit-btn" id="submitBtn">Submit Entry</button>
-        </form>
-    </section>
+        </section>
 
         <!-- Terms Section -->
         <section class="terms-section">
             <h2 class="section-title">Terms & Conditions</h2>
             <div class="terms-content">
-                <p><strong>Eligibility:</strong> This giveaway is open to all Sri Lankan residents aged 13 years or older.</p>
+                <p><strong>Winner Announcement:</strong> The giveaway ended on June 23, 2025 and the winner has been selected.</p>
                 
-                <p><strong>Entry Period:</strong> The giveaway begins on May 25, 2025 and ends on June 23, 2025 at 11:59 PM. All entries must be received by the end of the entry period.</p>
+                <p><strong>Prize Claim:</strong> The winner has been notified and the prize has been shipped to the provided address.</p>
                 
-                <p><strong>How to Enter:</strong> Participants must complete the entry form with all required information. Only one entry per person is allowed, unless additional entries are earned through optional methods.</p>
+                <p><strong>Selection Process:</strong> Winner was selected randomly from all eligible entries received during the entry period.</p>
                 
-                <p><strong>Prize Drawing:</strong> Winners will be selected in a random drawing from all eligible entries received. The drawing will be conducted within 7 days after the giveaway ends.</p>
+                <p><strong>Verification:</strong> Winner was required to respond within 10 days to claim their prize.</p>
                 
-                <p><strong>Prize Fulfillment:</strong> Winners will be notified via email and must respond within 10 days to claim their prize. Prizes will be delivered within 30 days of winner verification.</p>
-                
-                <p><strong>General Conditions:</strong> By participating, entrants agree to these official rules. Yunoxa reserves the right to cancel or modify the giveaway if fraud or technical failures compromise its integrity.</p>
-                
-                <p><strong>Privacy:</strong> Information collected from entrants is subject to Yunoxa's privacy policy and will only be used for the purposes of this giveaway.</p>
+                <p><strong>Future Giveaways:</strong> Follow our social media channels for announcements about upcoming promotions.</p>
             </div>
         </section>
-
-        
-        
 
         <!-- FAQ Section -->
         <section class="faq-section">
             <h2 class="section-title">Frequently Asked Questions</h2>
             <div class="faq-item">
-                <div class="faq-question">When will the winners be announced? <i class="fas fa-chevron-down"></i></div>
-                <div class="faq-answer">Winners will be announced within 10 days after the giveaway ends. All winners will be notified via email and announced on our social media channels.</div>
+                <div class="faq-question">Who won the giveaway? <i class="fas fa-chevron-down"></i></div>
+                <div class="faq-answer">Hasan Ahamed was randomly selected as the winner of the grand prize - 9D AirPods.</div>
             </div>
             <div class="faq-item">
-                <div class="faq-question">How will I know if I've won? <i class="fas fa-chevron-down"></i></div>
-                <div class="faq-answer">If you're selected as a winner, we will contact you via the email address you provided in your entry. Please make sure to check your inbox (and spam folder) regularly after the giveaway ends.</div>
+                <div class="faq-question">Has the prize been delivered? <i class="fas fa-chevron-down"></i></div>
+                <div class="faq-answer">Yes, the prize has been shipped to the winner's provided address.</div>
             </div>
             <div class="faq-item">
-                <div class="faq-question">Can I enter more than once? <i class="fas fa-chevron-down"></i></div>
-                <div class="faq-answer">Only one entry per person is allowed through the form, but you can earn additional entries by sharing the giveaway on social media.</div>
+                <div class="faq-question">Will there be more giveaways? <i class="fas fa-chevron-down"></i></div>
+                <div class="faq-answer">Yes! Follow us on social media to stay updated about future giveaways and promotions.</div>
             </div>
             <div class="faq-item">
-                <div class="faq-question">When will I receive my prize if I win? <i class="fas fa-chevron-down"></i></div>
-                <div class="faq-answer">Prizes will be delivered within 90 days of winner verification. Digital prizes like gift vouchers will be emailed to winners, while physical prizes will be shipped to the address provided.</div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">Is there any cost to enter? <i class="fas fa-chevron-down"></i></div>
-                <div class="faq-answer">No, there is no cost to enter the giveaway. Participation is completely free, though you can earn additional entries by making purchases (which are optional).</div>
+                <div class="faq-question">How was the winner selected? <i class="fas fa-chevron-down"></i></div>
+                <div class="faq-answer">The winner was selected randomly from all eligible entries using a computerized random selection process.</div>
             </div>
         </section>
     </div>
@@ -905,335 +910,61 @@
         </a>
     </nav>
 
-    <script type="module" src="js/cookie.js"></script>
+    <script>
+        // FAQ Toggle
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                answer.classList.toggle('show');
+                const icon = question.querySelector('i');
+                icon.classList.toggle('fa-chevron-down');
+                icon.classList.toggle('fa-chevron-up');
+            });
+        });
 
-    <script type="module">
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+        // Simple modal system for any messages
+        function showMessage(title, message, type = 'info', buttons = []) {
+            const modal = document.getElementById('yunoxaMessageModal');
+            if (!modal) return;
 
-// Initialize Supabase
-const supabaseUrl = 'https://qopdjgfciakmvhlriixt.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFvcGRqZ2ZjaWFrbXZobHJpaXh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk0NDA2NDAsImV4cCI6MjA1NTAxNjY0MH0.5UAelwww7WpDUExqhc5dH2JhUWlGNgUNjh8fzxPNZvs';
-const supabase = createClient(supabaseUrl, supabaseKey);
+            const modalTitle = modal.querySelector('#modalTitle');
+            const modalMessage = modal.querySelector('#modalMessage');
+            const modalActions = modal.querySelector('#modalActions');
+            const modalHeader = modal.querySelector('.modal-header');
 
-// DOM Elements
-const profilePicInput = document.getElementById('profilePicInput');
-const profilePicPreview = document.getElementById('profilePicPreview');
-const giveawayForm = document.getElementById('giveawayForm');
-const submitBtn = document.getElementById('submitBtn');
-const entriesCounter = document.createElement('div');
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+            modalHeader.className = 'modal-header ' + type;
+            modalActions.innerHTML = '';
 
-// Add entries counter to the form section
-giveawayForm.parentNode.insertBefore(entriesCounter, giveawayForm);
-entriesCounter.style.textAlign = 'center';
-entriesCounter.style.margin = '20px 0';
-entriesCounter.style.fontWeight = 'bold';
-entriesCounter.style.display = 'none';
-
-// Countdown Timer - 30 days from now
-// Fixed end date (June 23, 2025 at 11:59 PM as per your terms)
-const endDate = new Date("June 23, 2025 23:59:00");
-
-function updateCountdown() {
-    const now = new Date().getTime();
-    const distance = endDate - now;
-    
-    // If giveaway has ended
-    if (distance < 0) {
-        clearInterval(countdownTimer);
-        document.getElementById("countdown").innerHTML = "<div style='color: var(--yunoxa-red); font-weight: bold;'>Giveaway has ended!</div>";
-        giveawayForm.classList.add('form-disabled');
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Giveaway Ended';
-        return;
-    }
-    
-    // Calculate time units
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-    
-    // Update display
-    document.getElementById("days").textContent = days.toString().padStart(2, "0");
-    document.getElementById("hours").textContent = hours.toString().padStart(2, "0");
-    document.getElementById("minutes").textContent = minutes.toString().padStart(2, "0");
-    document.getElementById("seconds").textContent = seconds.toString().padStart(2, "0");
-}
-
-
-updateCountdown();
-const countdownTimer = setInterval(updateCountdown, 1000);
-
-// Profile Picture Upload
-profilePicInput.addEventListener('change', (event) => {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            profilePicPreview.src = e.target.result;
-            profilePicPreview.style.display = 'block';
-        };
-        reader.readAsDataURL(file);
-    }
-});
-
-// Form Submission
-// Form Submission
-giveawayForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
-    
-    try {
-        const fullName = document.getElementById('fullName').value;
-        const email = document.getElementById('email').value;
-        const phone = document.getElementById('phone').value;
-        const address = document.getElementById('address').value;
-        const hearAbout = document.getElementById('hearAbout').value;
-        const file = profilePicInput.files[0];
-        
-        // Get referral code from URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const referralCode = urlParams.get('ref');
-        
-        // Check for existing entry
-        const { data: existingEntry, error: checkError } = await supabase
-            .from('giveaway_entries')
-            .select('email, entries, referral_code')
-            .eq('email', email)
-            .single();
-        
-        if (existingEntry && !checkError) {
-            entriesCounter.style.display = 'block';
-            entriesCounter.textContent = `You currently have ${existingEntry.entries || 1} entries`;
-            entriesCounter.style.color = 'var(--yunoxa-red)';
-            throw new Error('You have already entered this giveaway!');
-        }
-        
-        // Generate referral code
-        const userReferralCode = `${email.split('@')[0]}-${Math.random().toString(36).substring(2, 8)}`.toLowerCase();
-        
-        let profilePicUrl = null;
-        
-        if (file) {
-            const fileExt = file.name.split('.').pop();
-            const fileName = `${email}-${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
-            const filePath = `profile-pics/${fileName}`;
-            
-            const { data: uploadData, error: uploadError } = await supabase
-                .storage
-                .from('giveaway')
-                .upload(filePath, file);
-            
-            if (uploadError) throw uploadError;
-            
-            const { data: urlData } = supabase
-                .storage
-                .from('giveaway')
-                .getPublicUrl(filePath);
-            
-            profilePicUrl = urlData.publicUrl;
-        }
-        
-        // Insert new entry
-        const { data, error } = await supabase
-            .from('giveaway_entries')
-            .insert([{
-                full_name: fullName,
-                email: email,
-                phone: phone,
-                address: address,
-                hear_about: hearAbout,
-                profile_pic_url: profilePicUrl,
-                referral_code: userReferralCode,
-                referred_by: referralCode || null,
-                entries: 1,
-                created_at: new Date().toISOString()
-            }]);
-        
-        if (error) throw error;
-        
-        // Increment referrer's entries if applicable
-        if (referralCode) {
-            console.log(`Incrementing entries for referrer: ${referralCode}`);
-            const { error: incrementError } = await supabase
-                .rpc('increment_entries', { ref_code: referralCode });
-            
-            if (incrementError) {
-                console.error('Increment error:', incrementError);
-                throw incrementError;
+            if (buttons.length > 0) {
+                buttons.forEach(button => {
+                    const btn = document.createElement('button');
+                    btn.className = `yunoxa-btn ${button.primary ? 'yunoxa-btn-primary' : 'yunoxa-btn-secondary'}`;
+                    btn.textContent = button.text;
+                    btn.onclick = (e) => {
+                        e.stopPropagation();
+                        if (typeof button.action === 'function') button.action();
+                    };
+                    modalActions.appendChild(btn);
+                });
+            } else {
+                const closeBtn = document.createElement('button');
+                closeBtn.className = 'yunoxa-btn yunoxa-btn-primary';
+                closeBtn.textContent = 'OK';
+                closeBtn.onclick = () => modal.style.display = 'none';
+                modalActions.appendChild(closeBtn);
             }
+
+            modal.style.display = 'flex';
+            modal.querySelector('.close-modal').onclick = () => modal.style.display = 'none';
+            modal.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
         }
-        
-        // Hide the form and show success message with share options
-        giveawayForm.style.display = 'none';
-        
-        // Create share section
-        const shareSection = document.createElement('div');
-        shareSection.className = 'share-section';
-        shareSection.style.textAlign = 'center';
-        shareSection.style.marginTop = '30px';
-        shareSection.style.padding = '30px';
-        shareSection.style.backgroundColor = 'white';
-        shareSection.style.borderRadius = '10px';
-        shareSection.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.05)';
-        
-        shareSection.innerHTML = `
-            <h2 style="color: var(--yunoxa-red); margin-bottom: 20px;">Thanks for entering!</h2>
-            <p style="margin-bottom: 20px;">You currently have <strong>1 entry</strong> in the giveaway.</p>
-            <p style="margin-bottom: 20px;">Share your referral link to get more entries when people sign up using your link!</p>
-            <div style="margin-bottom: 20px; padding: 15px; background: #f5f5f5; border-radius: 5px; word-break: break-all;">
-                Your referral link: <br>
-                <strong>${window.location.origin}${window.location.pathname}?ref=${userReferralCode}</strong>
-            </div>
-            <button id="shareBtn" style="background:linear-gradient(135deg, #ff0000 0%, #77008f 100%); 
-                color: white; border: none; padding: 12px 25px; border-radius: 5px; 
-                font-size: 1rem; cursor: pointer; margin-bottom: 15px;">
-                <i class="fas fa-share-alt"></i> Share Now
-            </button>
-            <p style="font-size: 0.9em; color: #666;">Each successful referral gives you +1 entry</p>
-        `;
-        
-        // Insert the share section after the form section title
-        const formSection = document.querySelector('.entry-form-section');
-        formSection.appendChild(shareSection);
-        
-        // Add click handler for share button
-        document.getElementById('shareBtn').addEventListener('click', () => {
-            shareGiveaway(email, userReferralCode);
+
+        // Show a welcome message
+        window.addEventListener('DOMContentLoaded', () => {
+            showMessage('Giveaway Ended', 'The Yunoxa Mega Giveaway has concluded. Congratulations to our winner Hasan Ahamed!');
         });
-        
-    } catch (error) {
-        console.error('Error:', error);
-        if (error.message.includes('row-level security policy')) {
-            showError('Login Required', 'You need to login to join the giveaway.', [
-                { text: 'Go to Login', primary: true, action: () => window.location.href = 'login.html' },
-                { text: 'Cancel', primary: false, action: () => document.getElementById('yunoxaMessageModal').style.display = 'none' }
-            ]);
-        } else {
-            showError('Error', error.message || 'An error occurred. Please try again.');
-        }
-    } finally {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = 'Submit Entry';
-    }
-});
-
-// Share Functionality
-async function shareGiveaway(userEmail = null, referralCode = null) {
-    if (userEmail && !referralCode) {
-        const { data: userData, error: userError } = await supabase
-            .from('giveaway_entries')
-            .select('referral_code')
-            .eq('email', userEmail)
-            .single();
-        
-        if (!userError && userData) {
-            referralCode = userData.referral_code;
-        }
-    }
-    
-    if (!referralCode) {
-        referralCode = `temp-${Math.random().toString(36).substring(2, 8)}`;
-    }
-    
-    const shareUrl = `${window.location.origin}${window.location.pathname}?ref=${referralCode}`;
-    const shareData = {
-        title: 'Yunoxa Official Giveaway',
-        text: 'Enter to win amazing prizes! Use my link and I get extra entries!',
-        url: shareUrl
-    };
-
-    try {
-        if (navigator.share) {
-            await navigator.share(shareData);
-            showSuccess('Shared!', 'Thanks for sharing! You get extra entries when people use your link.');
-        } else {
-            await navigator.clipboard.writeText(shareUrl);
-            showInfo('Link Copied!', `Share this link to get more entries: ${shareUrl}`, [
-                { text: 'Open Twitter', primary: true, action: () => window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareData.text)}&url=${encodeURIComponent(shareUrl)}`, '_blank') },
-                { text: 'Close', primary: false, action: () => document.getElementById('yunoxaMessageModal').style.display = 'none' }
-            ]);
-        }
-    } catch (err) {
-        if (err.name !== 'AbortError') {
-            showError('Share Error', 'Could not share: ' + err.message);
-        }
-    }
-}
-
-// FAQ Toggle
-document.querySelectorAll('.faq-question').forEach(question => {
-    question.addEventListener('click', () => {
-        const answer = question.nextElementSibling;
-        answer.classList.toggle('show');
-        const icon = question.querySelector('i');
-        icon.classList.toggle('fa-chevron-down');
-        icon.classList.toggle('fa-chevron-up');
-    });
-});
-
-// Modal System
-function showMessage(title, message, type = 'info', buttons = []) {
-    const modal = document.getElementById('yunoxaMessageModal');
-    if (!modal) return;
-
-    const modalTitle = modal.querySelector('#modalTitle');
-    const modalMessage = modal.querySelector('#modalMessage');
-    const modalActions = modal.querySelector('#modalActions');
-    const modalHeader = modal.querySelector('.modal-header');
-
-    modalTitle.textContent = title;
-    modalMessage.textContent = message;
-    modalHeader.className = 'modal-header ' + type;
-    modalActions.innerHTML = '';
-
-    if (buttons.length > 0) {
-        buttons.forEach(button => {
-            const btn = document.createElement('button');
-            btn.className = `yunoxa-btn ${button.primary ? 'yunoxa-btn-primary' : 'yunoxa-btn-secondary'}`;
-            btn.textContent = button.text;
-            btn.onclick = (e) => {
-                e.stopPropagation();
-                if (typeof button.action === 'function') button.action();
-            };
-            modalActions.appendChild(btn);
-        });
-    } else {
-        const closeBtn = document.createElement('button');
-        closeBtn.className = 'yunoxa-btn yunoxa-btn-primary';
-        closeBtn.textContent = 'OK';
-        closeBtn.onclick = () => modal.style.display = 'none';
-        modalActions.appendChild(closeBtn);
-    }
-
-    modal.style.display = 'flex';
-    modal.querySelector('.close-modal').onclick = () => modal.style.display = 'none';
-    modal.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
-}
-
-function showSuccess(title, message, buttons = []) {
-    showMessage(title, message, 'success', buttons);
-}
-
-function showError(title, message, buttons = []) {
-    showMessage(title, message, 'error', buttons);
-}
-
-function showWarning(title, message, buttons = []) {
-    showMessage(title, message, 'warning', buttons);
-}
-
-function showInfo(title, message, buttons = []) {
-    showMessage(title, message, 'info', buttons);
-}
-
-// Initial check for referral link
-const urlParams = new URLSearchParams(window.location.search);
-if (urlParams.get('ref')) {
-    showInfo('Referred Entry', "You're entering with a referral link! The person who shared this will get extra entries if you complete your submission.");
-}
-</script>
+    </script>
 </body>
 </html>
